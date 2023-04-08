@@ -14,4 +14,17 @@
             <column name="password" type="varchar(250)"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="2" author="redas">
+        <createTable tableName="item">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="item_id_pk" />
+            </column>
+            <column name="image_url" type="varchar(250)"/>
+            <column name="title" type="varchar(250)"/>
+            <column name="description" type="varchar(250)"/>
+            <column name="category_id" type="uuid"/>
+            <column name="price" type="decimal"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -28,11 +28,11 @@ public class UserServiceImpl implements UserService{
 
     public UserDto add(CreateUserDto createUserDto) {
         User newUser = User.builder()
-                .id(UUID.randomUUID())
-                .name(createUserDto.getName())
-                .email(createUserDto.getEmail())
-                .password(createUserDto.getPassword())
-                .build();
+            .id(UUID.randomUUID())
+            .name(createUserDto.getName())
+            .email(createUserDto.getEmail())
+            .password(createUserDto.getPassword())
+            .build();
         userRepository.insert(newUser);
         return UserMapper.toDto(newUser);
     }
