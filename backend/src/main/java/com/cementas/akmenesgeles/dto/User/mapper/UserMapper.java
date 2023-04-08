@@ -1,7 +1,6 @@
-package com.cementas.akmenesgeles.dto.mapper;
+package com.cementas.akmenesgeles.dto.User.mapper;
 
-import com.cementas.akmenesgeles.dto.CreateUserDto;
-import com.cementas.akmenesgeles.dto.UserDto;
+import com.cementas.akmenesgeles.dto.User.UserDto;
 import com.cementas.akmenesgeles.model.User;
 
 public class UserMapper {

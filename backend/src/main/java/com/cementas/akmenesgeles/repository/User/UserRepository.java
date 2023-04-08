@@ -1,4 +1,4 @@
-package com.cementas.akmenesgeles.repository;
+package com.cementas.akmenesgeles.repository.User;
 
 import com.cementas.akmenesgeles.model.User;
 import org.apache.ibatis.annotations.Insert;

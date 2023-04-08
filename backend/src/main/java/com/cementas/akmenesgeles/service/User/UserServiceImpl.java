@@ -1,10 +1,10 @@
-package com.cementas.akmenesgeles.service;
+package com.cementas.akmenesgeles.service.User;
 
-import com.cementas.akmenesgeles.dto.CreateUserDto;
-import com.cementas.akmenesgeles.dto.UserDto;
-import com.cementas.akmenesgeles.dto.mapper.UserMapper;
+import com.cementas.akmenesgeles.dto.User.CreateUserDto;
+import com.cementas.akmenesgeles.dto.User.UserDto;
+import com.cementas.akmenesgeles.dto.User.mapper.UserMapper;
 import com.cementas.akmenesgeles.model.User;
-import com.cementas.akmenesgeles.repository.UserRepository;
+import com.cementas.akmenesgeles.repository.User.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

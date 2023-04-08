@@ -1,4 +1,4 @@
-package com.cementas.akmenesgeles.dto;
+package com.cementas.akmenesgeles.dto.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

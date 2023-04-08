@@ -1,7 +1,7 @@
-package com.cementas.akmenesgeles.service;
+package com.cementas.akmenesgeles.service.User;
 
-import com.cementas.akmenesgeles.dto.CreateUserDto;
-import com.cementas.akmenesgeles.dto.UserDto;
+import com.cementas.akmenesgeles.dto.User.CreateUserDto;
+import com.cementas.akmenesgeles.dto.User.UserDto;
 
 import java.util.List;
 import java.util.UUID;

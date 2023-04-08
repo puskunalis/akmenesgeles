@@ -1,8 +1,8 @@
 package com.cementas.akmenesgeles.controller;
 
-import com.cementas.akmenesgeles.dto.CreateUserDto;
-import com.cementas.akmenesgeles.dto.UserDto;
-import com.cementas.akmenesgeles.service.UserService;
+import com.cementas.akmenesgeles.dto.User.CreateUserDto;
+import com.cementas.akmenesgeles.dto.User.UserDto;
+import com.cementas.akmenesgeles.service.User.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
