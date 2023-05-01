@@ -14,8 +14,13 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-export function RegisterModal(open: boolean) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+interface RegisterProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export const RegisterModal = (props: RegisterProps) => {
+  const {onClose, isOpen} = props;
 
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
@@ -24,7 +29,7 @@ export function RegisterModal(open: boolean) {
     <Modal
       initialFocusRef={initialRef}
       finalFocusRef={finalRef}
-      isOpen={open}
+      isOpen={isOpen}
       onClose={onClose}
     >
       <ModalOverlay />

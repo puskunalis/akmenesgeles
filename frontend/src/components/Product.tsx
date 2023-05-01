@@ -49,7 +49,6 @@ function Rating({ rating, numReviews }: RatingProps) {
 
 function ProductAddToCart({ product }: { product: Item }) {
   return (
-    <SimpleGrid columns={8}>
       <Flex p={50} w="full" alignItems="center" justifyContent="center">
         <Box
           bg={useColorModeValue("white", "gray.800")}
@@ -58,10 +57,14 @@ function ProductAddToCart({ product }: { product: Item }) {
           rounded="lg"
           shadow="lg"
           position="relative"
+          width={{ base: "100%", md: "100%", lg: "400px" }}
+          margin={{ base: "0", md: "0", lg: "0 10px 20px 0" }}
         >
           <Image
             src={product.imageUrl}
             alt={`Picture of ${product.title}`}
+            width="100%"
+            height="70%"
             roundedTop="lg"
           />
 
@@ -103,7 +106,6 @@ function ProductAddToCart({ product }: { product: Item }) {
           </Box>
         </Box>
       </Flex>
-    </SimpleGrid>
   );
 }
 

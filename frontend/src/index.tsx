@@ -6,12 +6,15 @@ import { App } from "./App";
 import reportWebVitals from "./reportWebVitals";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
+import { store } from "./state/store";
+import { fetchCategories } from "./state/categories/CategoriesSlice";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Failed to find the root element");
 const root = ReactDOM.createRoot(container);
+store.dispatch(fetchCategories);
 
 root.render(
   <React.StrictMode>
