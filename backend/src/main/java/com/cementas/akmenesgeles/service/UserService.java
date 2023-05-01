@@ -1,4 +1,4 @@
-package com.cementas.akmenesgeles.service.User;
+package com.cementas.akmenesgeles.service;
 
 import com.cementas.akmenesgeles.dto.User.CreateUserDto;
 import com.cementas.akmenesgeles.dto.User.UserDto;

@@ -1,13 +1,15 @@
 package com.cementas.akmenesgeles.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,15 +18,12 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "Items")
-public class Item implements Serializable {
+@Table(name = "Categories")
+public class Category implements Serializable {
     @Id
-    @Column(nullable = false, updatable = false)
     private UUID id;
-    private String imageUrl;
-    private String title;
+    private String name;
     private String description;
-    private BigDecimal price;
-    @ManyToMany(mappedBy = "items")
-    private List<Category> categories;
+    @ManyToMany
+    private List<Item> items;
 }
