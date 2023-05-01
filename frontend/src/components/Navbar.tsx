@@ -21,9 +21,12 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
+import { useState } from "react";
+import { RegisterModal } from "./Register";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <Box>
@@ -89,11 +92,14 @@ export default function WithSubnavigation() {
             _hover={{
               bg: "green.300",
             }}
+            onClick={() => setOpen(true)}
           >
             Užsiregistruoti
           </Button>
         </Stack>
       </Flex>
+
+      <RegisterModal open={open} />
 
       <Collapse in={isOpen} animateOpacity>
         <MobileNav />
