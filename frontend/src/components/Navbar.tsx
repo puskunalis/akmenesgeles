@@ -265,7 +265,7 @@ interface NavItem {
 const NAV_ITEMS: Array<NavItem> = [
   {
     label: "Visos gėlės",
-    href: "#",
+    href: "/",
   },
   {
     label: "Kategorijos",
@@ -282,6 +282,6 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "Kontaktai",
-    href: "#",
+    href: "/kontaktai",
   },
 ];
