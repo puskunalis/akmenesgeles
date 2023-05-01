@@ -1,8 +1,11 @@
 import * as React from "react";
 import { ChakraProvider, SimpleGrid, theme } from "@chakra-ui/react";
-import Navbar from "./Navbar";
-import ProductAddToCart from "./Product";
+import Navbar from "./components/Navbar";
+import ProductAddToCart from "./components/Product";
 import { Product } from "./types";
+import { Provider } from "react-redux";
+import { store } from "./state/store";
+import { ItemsPage } from "./containers/ItemsPage";
 
 const product: Product = {
   isNew: true,
@@ -15,19 +18,12 @@ const product: Product = {
 };
 
 export const App = () => (
-  <ChakraProvider theme={theme}>
-    <Navbar />
-    <SimpleGrid columns={8}>
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-      <ProductAddToCart product={product} />
-    </SimpleGrid>
-  </ChakraProvider>
+  <Provider store={store}>
+    <ChakraProvider theme={theme}>
+      <Navbar />
+      <SimpleGrid columns={8}>
+        <ItemsPage/>
+      </SimpleGrid>
+    </ChakraProvider>
+  </Provider>
 );

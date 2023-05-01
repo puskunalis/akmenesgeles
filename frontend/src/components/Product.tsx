@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
-import { Product } from "./types";
+import { Item, Product } from "../types";
 
 interface RatingProps {
   rating: number;
@@ -46,7 +46,7 @@ function Rating({ rating, numReviews }: RatingProps) {
   );
 }
 
-function ProductAddToCart({ product }: { product: Product }) {
+function ProductAddToCart({ product }: { product: Item }) {
   return (
     <Flex p={50} w="full" alignItems="center" justifyContent="center">
       <Box
@@ -57,30 +57,14 @@ function ProductAddToCart({ product }: { product: Product }) {
         shadow="lg"
         position="relative"
       >
-        {product.isNew && (
-          <Circle
-            size="10px"
-            position="absolute"
-            top={2}
-            right={2}
-            bg="red.200"
-          />
-        )}
 
         <Image
-          src={product.imageURL}
-          alt={`Picture of ${product.name}`}
+          src={product.imageUrl}
+          alt={`Picture of ${product.title}`}
           roundedTop="lg"
         />
 
         <Box p="6">
-          <Box display="flex" alignItems="baseline">
-            {product.isNew && (
-              <Badge rounded="full" px="2" fontSize="0.8em" colorScheme="red">
-                New
-              </Badge>
-            )}
-          </Box>
           <Flex mt="1" justifyContent="space-between" alignContent="center">
             <Box
               fontSize="2xl"
@@ -89,7 +73,7 @@ function ProductAddToCart({ product }: { product: Product }) {
               lineHeight="tight"
               isTruncated
             >
-              {product.name}
+              {product.title}
             </Box>
             <Tooltip
               label="Add to cart"
@@ -105,7 +89,6 @@ function ProductAddToCart({ product }: { product: Product }) {
           </Flex>
 
           <Flex justifyContent="space-between" alignContent="center">
-            <Rating rating={product.rating} numReviews={product.numReviews} />
             <Box fontSize="2xl" color={useColorModeValue("gray.800", "white")}>
               <Box as="span" color={"gray.600"} fontSize="lg">
                 £

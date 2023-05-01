@@ -1,10 +1,12 @@
 import { ColorModeScript } from "@chakra-ui/react"
+import axios from "axios"
 import * as React from "react"
 import * as ReactDOM from "react-dom/client"
 import { App } from "./App"
 import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
 
+axios.defaults.baseURL = "http://localhost:8080";
 
 const container = document.getElementById("root")
 if (!container) throw new Error('Failed to find the root element');
