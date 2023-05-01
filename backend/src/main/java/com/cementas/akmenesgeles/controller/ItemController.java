@@ -32,7 +32,7 @@ public class ItemController {
         return itemService.getItemsByCategory(ids);
     }
 
-    @PostMapping("/{itemId}/category/{categoryId}")
+    @PutMapping("/{itemId}/category/{categoryId}")
     public Item addItemToCategory (@PathVariable UUID itemId,@PathVariable UUID categoryId) {
         return itemService.addItemToCategory(itemId, categoryId);
     }
