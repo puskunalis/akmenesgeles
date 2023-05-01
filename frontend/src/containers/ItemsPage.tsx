@@ -9,7 +9,7 @@ export const ItemsPage = () => {
 
     useEffect(() => {
         store.dispatch(fetchItems());
-    })
+    }, [])
 
     return(
         <>
