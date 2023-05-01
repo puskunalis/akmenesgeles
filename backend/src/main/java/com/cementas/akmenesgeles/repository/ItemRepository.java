@@ -3,6 +3,7 @@ package com.cementas.akmenesgeles.repository;
 import com.cementas.akmenesgeles.model.Category;
 import com.cementas.akmenesgeles.model.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -14,6 +15,6 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
     Optional<Item> getItemById(UUID id);
     void deleteItemById(UUID id);
 
-    @Query("SELECT i FROM Item i JOIN i.categories c WHERE c IN (:categories)")
-    List<Item> findByCategories(@Param("categories") List<Category> categories);
+    @Query("SELECT DISTINCT i FROM Item i JOIN i.categories c WHERE c.id IN :categoryIds")
+    List<Item> findByCategoryIds(@Param("categoryIds") List<UUID> categoryIds);
 }
