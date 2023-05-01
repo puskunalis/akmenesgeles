@@ -1,10 +1,8 @@
 package com.cementas.akmenesgeles.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -17,6 +15,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @Table(name = "Items")
+@EqualsAndHashCode
 public class Item implements Serializable {
     @Id
     @Column(nullable = false, updatable = false)
@@ -25,6 +24,6 @@ public class Item implements Serializable {
     private String title;
     private String description;
     private BigDecimal price;
-    @ManyToMany(mappedBy = "items")
+    @ManyToMany
     private List<Category> categories;
 }

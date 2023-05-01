@@ -27,6 +27,16 @@ public class ItemController {
         return itemService.getById(id);
     }
 
+    @GetMapping("/category")
+    public List<Item> getByCategoryIds(@RequestBody List<UUID> ids) {
+        return itemService.getItemsByCategory(ids);
+    }
+
+    @PutMapping("/{itemId}/category/{categoryId}")
+    public Item addItemToCategory (@PathVariable UUID itemId,@PathVariable UUID categoryId) {
+        return itemService.addItemToCategory(itemId, categoryId);
+    }
+
     @PostMapping
     public Item add(@RequestBody CreateItemDto createItemDto) {
         return itemService.add(createItemDto);

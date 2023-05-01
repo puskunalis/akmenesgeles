@@ -11,4 +11,6 @@ public interface ItemService {
     Item getById(UUID id);
     Item add(CreateItemDto createUserDto);
     void delete(UUID id);
+    Item addItemToCategory(UUID itemId, UUID categoryId);
+    List<Item> getItemsByCategory(List<UUID> categoryIds);
 }
