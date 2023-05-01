@@ -27,9 +27,14 @@ public class ItemController {
         return itemService.getById(id);
     }
 
-    @GetMapping("/category")
+    @GetMapping("/categories")
     public List<Item> getByCategoryIds(@RequestBody List<UUID> ids) {
-        return itemService.getItemsByCategory(ids);
+        return itemService.getItemsByCategories(ids);
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public List<Item> getByCategoryId(@PathVariable UUID categoryId) {
+        return itemService.getItemsByCategory(categoryId);
     }
 
     @PutMapping("/{itemId}/category/{categoryId}")

@@ -60,7 +60,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getItemsByCategory(List<UUID> categoryIds) {
+    public List<Item> getItemsByCategories(List<UUID> categoryIds) {
         return itemRepository.findByCategoryIds(categoryIds);
+    }
+
+    @Override
+    public List<Item> getItemsByCategory(UUID categoryIds) {
+        return itemRepository.findByCategoryId(categoryIds);
     }
 }

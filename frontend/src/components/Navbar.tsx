@@ -21,13 +21,21 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RegisterModal } from "./Register";
+import { useSelector } from "react-redux";
+import { fetchCategories, selectCategories } from "../state/categories/CategoriesSlice";
+import { store } from "../state/store";
+import { GetNavItems, NavItem} from "./NavItems";
+import { Link as ReactRouterLink } from "react-router-dom";
+import { AddItemModal } from "./AddItemModal";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
-  const [open, setOpen] = useState<boolean>(false);
+  const [openRegister, setOpenRegister] = useState<boolean>(false);
+  const [openAddItem, setOpenAddItem] = useState<boolean>(false);
 
+  const NAV_ITEMS = GetNavItems();
   return (
     <Box>
       <Flex
@@ -62,7 +70,7 @@ export default function WithSubnavigation() {
           />
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
-            <DesktopNav />
+            <DesktopNav NAV_ITEMS={NAV_ITEMS} />
           </Flex>
         </Flex>
 
@@ -92,23 +100,51 @@ export default function WithSubnavigation() {
             _hover={{
               bg: "green.300",
             }}
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenRegister(true)}
           >
             Užsiregistruoti
           </Button>
+          <Button
+            as={"a"}
+            display={{ base: "none", md: "inline-flex" }}
+            fontSize={"sm"}
+            fontWeight={600}
+            color={"white"}
+            bg={"green.400"}
+            href={"#"}
+            _hover={{
+              bg: "green.300",
+            }}
+            onClick={()=>setOpenAddItem(true)}
+          >
+            Prideti preke
+          </Button>
         </Stack>
       </Flex>
+ 
+      <RegisterModal 
+        onClose={() => setOpenRegister(false)}
+        isOpen={openRegister}
+      />
 
-      <RegisterModal open={open} />
+      <AddItemModal 
+        onClose={() => setOpenAddItem(false)}
+        isOpen={openAddItem}
+      />
 
       <Collapse in={isOpen} animateOpacity>
-        <MobileNav />
+        <MobileNav NAV_ITEMS={NAV_ITEMS}/>
       </Collapse>
     </Box>
   );
 }
 
-const DesktopNav = () => {
+interface NavProps {
+  NAV_ITEMS: NavItem[]
+}
+
+const DesktopNav = (props: NavProps) => {
+  const {NAV_ITEMS} = props;
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const linkHoverColor = useColorModeValue("gray.800", "white");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
@@ -120,8 +156,9 @@ const DesktopNav = () => {
           <Popover trigger={"hover"} placement={"bottom-start"}>
             <PopoverTrigger>
               <Link
+                as={ReactRouterLink}
                 p={2}
-                href={navItem.href ?? "#"}
+                to={navItem.href}
                 fontSize={"sm"}
                 fontWeight={500}
                 color={linkColor}
@@ -160,18 +197,19 @@ const DesktopNav = () => {
 const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
   return (
     <Link
-      href={href}
+      as={ReactRouterLink}
+      to={href}
       role={"group"}
       display={"block"}
       p={2}
       rounded={"md"}
-      _hover={{ bg: useColorModeValue("pink.50", "gray.900") }}
+      _hover={{ bg: useColorModeValue("green.50", "gray.900") }}
     >
       <Stack direction={"row"} align={"center"}>
         <Box>
           <Text
             transition={"all .3s ease"}
-            _groupHover={{ color: "pink.400" }}
+            _groupHover={{ color: "green.400" }}
             fontWeight={500}
           >
             {label}
@@ -187,14 +225,15 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
           align={"center"}
           flex={1}
         >
-          <Icon color={"pink.400"} w={5} h={5} as={ChevronRightIcon} />
+          <Icon color={"green.400"} w={5} h={5} as={ChevronRightIcon} />
         </Flex>
       </Stack>
     </Link>
   );
 };
 
-const MobileNav = () => {
+const MobileNav = (props: NavProps) => {
+  const {NAV_ITEMS} = props;
   return (
     <Stack
       bg={useColorModeValue("white", "gray.800")}
@@ -215,8 +254,8 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
     <Stack spacing={4} onClick={children && onToggle}>
       <Flex
         py={2}
-        as={Link}
-        href={href ?? "#"}
+        as={ReactRouterLink}
+        to={href}
         justify={"space-between"}
         align={"center"}
         _hover={{
@@ -251,7 +290,7 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
         >
           {children &&
             children.map((child) => (
-              <Link key={child.label} py={2} href={child.href}>
+              <Link key={child.label} py={2} as={ReactRouterLink} to={child.href}>
                 {child.label}
               </Link>
             ))}
@@ -260,34 +299,3 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
     </Stack>
   );
 };
-
-interface NavItem {
-  label: string;
-  subLabel?: string;
-  children?: Array<NavItem>;
-  href?: string;
-}
-
-const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: "Visos gėlės",
-    href: "/",
-  },
-  {
-    label: "Kategorijos",
-    children: [
-      {
-        label: "Gimtadieniui",
-        href: "#",
-      },
-      {
-        label: "Vestuvėms",
-        href: "#",
-      },
-    ],
-  },
-  {
-    label: "Kontaktai",
-    href: "/kontaktai",
-  },
-];

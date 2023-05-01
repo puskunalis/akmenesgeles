@@ -17,4 +17,7 @@ public interface ItemRepository extends JpaRepository<Item, UUID> {
 
     @Query("SELECT DISTINCT i FROM Item i JOIN i.categories c WHERE c.id IN :categoryIds")
     List<Item> findByCategoryIds(@Param("categoryIds") List<UUID> categoryIds);
+
+    @Query("SELECT DISTINCT i FROM Item i JOIN i.categories c WHERE c.id = :categoryId")
+    List<Item> findByCategoryId(@Param("categoryId") UUID categoryId);
 }
