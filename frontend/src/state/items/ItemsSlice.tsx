@@ -2,13 +2,14 @@ import { createAsyncThunk, createSlice, SerializedError } from "@reduxjs/toolkit
 import axios from "axios"
 import { Item } from "../../types"
 import { AsyncStatus } from "../AsyncStatus"
-import { StoreState } from "../store"
+import { store, StoreState } from "../store"
 
 export interface ItemState{
     allItems: Item[],
     categoryItems: Item[],
     status: AsyncStatus,
     error: SerializedError
+    addStatus: AsyncStatus
 }
 
 export interface NewItem {
@@ -16,6 +17,7 @@ export interface NewItem {
     description: string,
     price: number,
     categoryIds: string[]
+    imageUrl: string
 }
 
 export const fetchItems = createAsyncThunk(
@@ -42,27 +44,27 @@ export const fetchItemsByCategoryId = createAsyncThunk(
     }
 )
 
-// export const createReservation = createAsyncThunk(
-//     "items/createItem",
-//     async (newItem: NewItem) => {
-//         const {title, description, price, categoryIds} = newItem;
-//         const response = await axios
-//         .post("/api/reservation", data)
-//         .then(res => res.data)
-//         .catch(err => {
-//             errorAlert(err.response.data.message);
-//         })
+export const createItem = createAsyncThunk(
+    "items/createItem",
+    async (newItem: NewItem) => {
+        const response = await axios
+        .post("/api/v1/item", newItem)
+        .then(res => res.data)
+        .catch(err => {
+            console.error(err)
+        })
 
-//         store.dispatch(fetchReservations(data.activity_id));
-//         return response;
-//     },
-// )
+        store.dispatch(fetchItems());
+        return response;
+    },
+)
 
 const initialState: ItemState = {
     allItems: [],
     categoryItems: [],
     status: AsyncStatus.IDLE,
-    error: {}
+    error: {},
+    addStatus: AsyncStatus.IDLE
 }
 
 export const ItemsSlice = createSlice({
@@ -96,11 +98,23 @@ export const ItemsSlice = createSlice({
             .addCase(fetchItemsByCategoryId.rejected, (state, action) => {
                 state.status = AsyncStatus.FAILED;
                 state.error = action.error;
-            });;
+            })
+            .addCase(createItem.pending, (state, action) => {
+                state.addStatus = AsyncStatus.FETCHING
+            })
+            .addCase(createItem.fulfilled, (state, action) => {
+                state.addStatus = AsyncStatus.SUCCESS;
+                state.categoryItems = action.payload;
+            })
+            .addCase(createItem.rejected, (state, action) => {
+                state.addStatus = AsyncStatus.FAILED;
+                state.error = action.error;
+            });
     }
 });
 
 export const selectAllItems = (state: StoreState) => state.item.allItems;
+export const selectAddItemStatus = (state: StoreState) => state.item.addStatus;
 export const selectCategoryItems = (state: StoreState) => state.item.categoryItems;
 export const selectItemsStatus = (state: StoreState) => state.item.status;
 export const selectItemsError = (state: StoreState) => state.item.error;

@@ -20,8 +20,10 @@ public class Item implements Serializable {
     @Id
     @Column(nullable = false, updatable = false)
     private UUID id;
+    @Column(length = 1000)
     private String imageUrl;
     private String title;
+    @Column(length = 1500)
     private String description;
     private BigDecimal price;
     @ManyToMany
