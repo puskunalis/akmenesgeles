@@ -6,6 +6,7 @@ import com.cementas.akmenesgeles.model.Category;
 import com.cementas.akmenesgeles.model.Item;
 import com.cementas.akmenesgeles.repository.CategoryRepository;
 import com.cementas.akmenesgeles.repository.ItemRepository;
+import com.cementas.akmenesgeles.service.CategoryService;
 import com.cementas.akmenesgeles.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Override
     public List<Item> getAll() {
@@ -38,7 +40,7 @@ public class ItemServiceImpl implements ItemService {
                 .description(createUserDto.getDescription())
                 .price(createUserDto.getPrice())
                 .imageUrl(createUserDto.getImageUrl())
-                .categories(createUserDto.getCategories())
+                .categories(categoryService.getAllCategoriesByIds(createUserDto.getCategoryIds()))
                 .build();
         return itemRepository.save(newItem);
     }

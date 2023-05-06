@@ -18,6 +18,6 @@ public class CreateItemDto {
     private String imageUrl;
     private String title;
     private String description;
-    private List<Category> categories;
+    private List<UUID> categoryIds;
     private BigDecimal price;
 }
