@@ -10,6 +10,9 @@ export interface ItemState{
     status: AsyncStatus,
     error: SerializedError
     addStatus: AsyncStatus
+    singleItem: Item | undefined
+    singleItemStatus: AsyncStatus
+    singleItemError: SerializedError
 }
 
 export interface NewItem {
@@ -44,6 +47,18 @@ export const fetchItemsByCategoryId = createAsyncThunk(
     }
 )
 
+export const fetchItemById = createAsyncThunk(
+    "items/fetchItemById",
+    async (itemId: string) => {
+        const response = axios
+        .get(`/api/v1/item/${itemId}`)
+        .then(res => res.data)
+        .catch(err => console.log(err));
+
+        return response;
+    }
+)
+
 export const createItem = createAsyncThunk(
     "items/createItem",
     async (newItem: NewItem) => {
@@ -64,7 +79,10 @@ const initialState: ItemState = {
     categoryItems: [],
     status: AsyncStatus.IDLE,
     error: {},
-    addStatus: AsyncStatus.IDLE
+    addStatus: AsyncStatus.IDLE,
+    singleItem: undefined,
+    singleItemStatus: AsyncStatus.IDLE,
+    singleItemError: {}
 }
 
 export const ItemsSlice = createSlice({
@@ -109,6 +127,17 @@ export const ItemsSlice = createSlice({
             .addCase(createItem.rejected, (state, action) => {
                 state.addStatus = AsyncStatus.FAILED;
                 state.error = action.error;
+            })
+            .addCase(fetchItemById.pending, (state, action) => {
+                state.singleItemStatus = AsyncStatus.FETCHING
+            })
+            .addCase(fetchItemById.fulfilled, (state, action) => {
+                state.singleItemStatus = AsyncStatus.SUCCESS;
+                state.singleItem = action.payload;
+            })
+            .addCase(fetchItemById.rejected, (state, action) => {
+                state.singleItemStatus = AsyncStatus.FAILED;
+                state.singleItemError = action.error;
             });
     }
 });
@@ -118,3 +147,6 @@ export const selectAddItemStatus = (state: StoreState) => state.item.addStatus;
 export const selectCategoryItems = (state: StoreState) => state.item.categoryItems;
 export const selectItemsStatus = (state: StoreState) => state.item.status;
 export const selectItemsError = (state: StoreState) => state.item.error;
+export const selectSingleItem = (state: StoreState) => state.item.singleItem;
+export const selectSingleItemStatus = (state: StoreState) => state.item.status;
+export const selectSingleItemError = (state: StoreState) => state.item.error;
