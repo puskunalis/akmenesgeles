@@ -1,13 +1,18 @@
 package com.cementas.akmenesgeles.service;
 
 import com.cementas.akmenesgeles.dto.User.CreateUserDto;
+import com.cementas.akmenesgeles.dto.User.LoginResponseDto;
 import com.cementas.akmenesgeles.dto.User.UserDto;
+import com.cementas.akmenesgeles.model.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
-    List<UserDto> getAll();
-    UserDto getById(UUID id);
-    UserDto add(CreateUserDto createUserDto);
+    List<User> getAll();
+    Optional<User> getById(UUID id);
+    String add(CreateUserDto createUserDto);
+    LoginResponseDto login(String username, String password);
 }

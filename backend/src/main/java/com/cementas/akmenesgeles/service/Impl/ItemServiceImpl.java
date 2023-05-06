@@ -33,14 +33,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item add(CreateItemDto createUserDto) {
+    public Item add(CreateItemDto createItemDto) {
         Item newItem = Item.builder()
                 .id(UUID.randomUUID())
-                .title(createUserDto.getTitle())
-                .description(createUserDto.getDescription())
-                .price(createUserDto.getPrice())
-                .imageUrl(createUserDto.getImageUrl())
-                .categories(categoryService.getAllCategoriesByIds(createUserDto.getCategoryIds()))
+                .title(createItemDto.getTitle())
+                .description(createItemDto.getDescription())
+                .price(createItemDto.getPrice())
+                .imageUrl(createItemDto.getImageUrl())
                 .build();
         return itemRepository.save(newItem);
     }

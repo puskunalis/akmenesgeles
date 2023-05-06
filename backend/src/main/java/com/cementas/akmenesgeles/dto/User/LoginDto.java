@@ -11,11 +11,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
-    private UUID id;
-    private String name;
+public class LoginDto {
     private String username;
-    private String email;
     private String password;
-
 }
