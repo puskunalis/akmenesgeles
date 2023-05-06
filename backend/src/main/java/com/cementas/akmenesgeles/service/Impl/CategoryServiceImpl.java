@@ -7,6 +7,8 @@ import com.cementas.akmenesgeles.service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,5 +41,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(UUID id) {
         categoryRepository.deleteById(id);
+    }
+
+    public List<Category> getAllCategoriesByIds (List<UUID> categoryIds) {
+        List<Category> allCategories = new ArrayList<>(Collections.emptyList());
+
+        for(UUID id : categoryIds) {
+            allCategories.add(categoryRepository.getCategoryById(id));
+        }
+
+        return allCategories;
     }
 }
