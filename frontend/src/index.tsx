@@ -8,6 +8,7 @@ import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import { store } from "./state/store";
 import { fetchCategories } from "./state/categories/CategoriesSlice";
+import { AuthProvider } from "./auth-context";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
@@ -20,7 +21,9 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <ColorModeScript />
-      <App />
+      <AuthProvider>
+        <App />
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

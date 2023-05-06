@@ -21,19 +21,19 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RegisterModal } from "./Register";
-import { useSelector } from "react-redux";
-import { fetchCategories, selectCategories } from "../state/categories/CategoriesSlice";
-import { store } from "../state/store";
-import { GetNavItems, NavItem} from "./NavItems";
+import { GetNavItems, NavItem } from "./NavItems";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { AddItemModal } from "./AddItemModal";
+import { useAuth } from "../auth-context";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const [openRegister, setOpenRegister] = useState<boolean>(false);
   const [openAddItem, setOpenAddItem] = useState<boolean>(false);
+
+  const { isLoggedIn } = useAuth();
 
   const NAV_ITEMS = GetNavItems();
   return (
@@ -80,15 +80,34 @@ export default function WithSubnavigation() {
           direction={"row"}
           spacing={6}
         >
-          <Button
-            as={"a"}
-            fontSize={"sm"}
-            fontWeight={400}
-            variant={"link"}
-            href={"#"}
-          >
-            Prisijungti
-          </Button>
+          {!isLoggedIn && (
+            <>
+              <Button
+                as={"a"}
+                fontSize={"sm"}
+                fontWeight={400}
+                variant={"link"}
+                href={"#"}
+              >
+                Prisijungti
+              </Button>
+              <Button
+                as={"a"}
+                display={{ base: "none", md: "inline-flex" }}
+                fontSize={"sm"}
+                fontWeight={600}
+                color={"white"}
+                bg={"green.400"}
+                href={"#"}
+                _hover={{
+                  bg: "green.300",
+                }}
+                onClick={() => setOpenRegister(true)}
+              >
+                Užsiregistruoti
+              </Button>
+            </>
+          )}
           <Button
             as={"a"}
             display={{ base: "none", md: "inline-flex" }}
@@ -100,51 +119,36 @@ export default function WithSubnavigation() {
             _hover={{
               bg: "green.300",
             }}
-            onClick={() => setOpenRegister(true)}
+            onClick={() => setOpenAddItem(true)}
           >
-            Užsiregistruoti
-          </Button>
-          <Button
-            as={"a"}
-            display={{ base: "none", md: "inline-flex" }}
-            fontSize={"sm"}
-            fontWeight={600}
-            color={"white"}
-            bg={"green.400"}
-            href={"#"}
-            _hover={{
-              bg: "green.300",
-            }}
-            onClick={()=>setOpenAddItem(true)}
-          >
-            Prideti preke
+            Pridėti prekę
           </Button>
         </Stack>
       </Flex>
- 
-      <RegisterModal 
+
+      <RegisterModal
         onClose={() => setOpenRegister(false)}
         isOpen={openRegister}
       />
 
-      <AddItemModal 
+      <AddItemModal
         onClose={() => setOpenAddItem(false)}
         isOpen={openAddItem}
       />
 
       <Collapse in={isOpen} animateOpacity>
-        <MobileNav NAV_ITEMS={NAV_ITEMS}/>
+        <MobileNav NAV_ITEMS={NAV_ITEMS} />
       </Collapse>
     </Box>
   );
 }
 
 interface NavProps {
-  NAV_ITEMS: NavItem[]
+  NAV_ITEMS: NavItem[];
 }
 
 const DesktopNav = (props: NavProps) => {
-  const {NAV_ITEMS} = props;
+  const { NAV_ITEMS } = props;
   const linkColor = useColorModeValue("gray.600", "gray.200");
   const linkHoverColor = useColorModeValue("gray.800", "white");
   const popoverContentBgColor = useColorModeValue("white", "gray.800");
@@ -233,7 +237,7 @@ const DesktopSubNav = ({ label, href, subLabel }: NavItem) => {
 };
 
 const MobileNav = (props: NavProps) => {
-  const {NAV_ITEMS} = props;
+  const { NAV_ITEMS } = props;
   return (
     <Stack
       bg={useColorModeValue("white", "gray.800")}
@@ -290,7 +294,12 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
         >
           {children &&
             children.map((child) => (
-              <Link key={child.label} py={2} as={ReactRouterLink} to={child.href}>
+              <Link
+                key={child.label}
+                py={2}
+                as={ReactRouterLink}
+                to={child.href}
+              >
                 {child.label}
               </Link>
             ))}
