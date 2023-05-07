@@ -23,6 +23,7 @@ import {
 } from "@chakra-ui/icons";
 import { useState } from "react";
 import { RegisterModal } from "./Register";
+import { LoginModal } from "./Login";
 import { GetNavItems, NavItem } from "./NavItems";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { AddItemModal } from "./AddItemModal";
@@ -31,6 +32,7 @@ import { useAuth } from "../auth-context";
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const [openRegister, setOpenRegister] = useState<boolean>(false);
+  const [openLogin, setOpenLogin] = useState<boolean>(false);
   const [openAddItem, setOpenAddItem] = useState<boolean>(false);
 
   const { isLoggedIn } = useAuth();
@@ -88,6 +90,7 @@ export default function WithSubnavigation() {
                 fontWeight={400}
                 variant={"link"}
                 href={"#"}
+                onClick={() => setOpenLogin(true)}
               >
                 Prisijungti
               </Button>
@@ -130,6 +133,8 @@ export default function WithSubnavigation() {
         onClose={() => setOpenRegister(false)}
         isOpen={openRegister}
       />
+
+      <LoginModal onClose={() => setOpenLogin(false)} isOpen={openLogin} />
 
       <AddItemModal
         onClose={() => setOpenAddItem(false)}
