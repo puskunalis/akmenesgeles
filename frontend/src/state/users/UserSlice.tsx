@@ -14,7 +14,6 @@ export const fetchUser = createAsyncThunk(
     "users/fetchUser",
     async () => {
         const token = localStorage.getItem("authToken");
-        if (!token) {console.log('aaaaa'); return;}
     
         const response = axios
         .get("/api/v1/user/me", {
