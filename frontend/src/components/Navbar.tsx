@@ -30,6 +30,8 @@ import { AddItemModal } from "./AddItemModal";
 import { useAuth } from "../auth-context";
 import { useSelector } from "react-redux";
 import { selectUser, selectUserStatus } from "../state/users/UserSlice";
+import { store } from "../state/store";
+import { UserRole } from "../types";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
@@ -39,6 +41,8 @@ export default function WithSubnavigation() {
   const { isLoggedIn, logout } = useAuth();
 
   const NAV_ITEMS = GetNavItems();
+
+  const user = useSelector(selectUser);
 
   return (
     <Box>
@@ -113,7 +117,23 @@ export default function WithSubnavigation() {
               </Button>
             </>
           )}
-          {isLoggedIn && 
+          {user?.role === UserRole.ADMIN && (
+            <Button
+              as={"a"}
+              display={{ base: "none", md: "inline-flex" }}
+              fontSize={"sm"}
+              fontWeight={600}
+              color={"white"}
+              bg={"green.400"}
+              href={"admin"}
+              _hover={{
+                bg: "green.300",
+              }}
+            >
+              Administratoriaus sritis
+            </Button>
+          )}
+          {isLoggedIn && (
             <Button
               as={"a"}
               fontSize={"sm"}
@@ -123,7 +143,8 @@ export default function WithSubnavigation() {
               onClick={() => logout()}
             >
               Atsijungti
-            </Button>}
+            </Button>
+          )}
           <Button
             as={"a"}
             display={{ base: "none", md: "inline-flex" }}
