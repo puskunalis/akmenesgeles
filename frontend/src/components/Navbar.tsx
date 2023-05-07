@@ -36,13 +36,10 @@ export default function WithSubnavigation() {
   const [openRegister, setOpenRegister] = useState<boolean>(false);
   const [openLogin, setOpenLogin] = useState<boolean>(false);
   const [openAddItem, setOpenAddItem] = useState<boolean>(false);
-  const user = useSelector(selectUser);
-  const userStatus = useSelector(selectUserStatus)
   const { isLoggedIn, logout } = useAuth();
 
   const NAV_ITEMS = GetNavItems();
 
-  useEffect(()=>console.log(user), [user])
   return (
     <Box>
       <Flex
