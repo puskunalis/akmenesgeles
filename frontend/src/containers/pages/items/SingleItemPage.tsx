@@ -10,9 +10,6 @@ import {
     Heading,
     SimpleGrid,
     StackDivider,
-    useColorModeValue,
-    List,
-    ListItem,
     Spinner,
     HStack,
     Input,
@@ -21,15 +18,12 @@ import {
   import { MdLocalShipping } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { selectSingleItem, selectSingleItemStatus, fetchItemById } from '../../../state/items/ItemsSlice';
-import { useEffect, useState, useMemo } from 'react';
-import { AsyncStatus } from '../../../state/AsyncStatus';
+import { selectSingleItem, fetchItemById } from '../../../state/items/ItemsSlice';
+import { useEffect, useMemo } from 'react';
 import { store } from '../../../state/store';
-import { Item } from '../../../types';
-import { JsxElement } from 'typescript';
 import './SingleItemPage.scss';
   
-  export default function SingleItemPage (){
+  export default function SingleItemPage () {
     const { itemId } = useParams();
     const item = useSelector(selectSingleItem);
 
@@ -39,7 +33,7 @@ import './SingleItemPage.scss';
         }
     }, []);
 
-    function HookUsage() {
+    function AmountOfItems() {
         const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
           useNumberInput({
             step: 1,
@@ -113,7 +107,7 @@ import './SingleItemPage.scss';
                         </Stack>
                         <div className='amount-wrapper'>
                             <div className='amount-text'>Kiekis</div>
-                            <HookUsage/>
+                            <AmountOfItems/>
                         </div>
                         <div>
                             <Button

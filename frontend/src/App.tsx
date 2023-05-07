@@ -1,14 +1,11 @@
 import {
   ChakraProvider,
-  extendTheme,
-  SimpleGrid,
   theme,
 } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
 import { Provider } from "react-redux";
 import { store } from "./state/store";
-import { Routes, Route, Outlet, Link } from "react-router-dom";
-import { fetchCategories } from "./state/categories/CategoriesSlice";
+import { Routes, Route } from "react-router-dom";
 import { ItemsCategoryPage } from "./containers/pages/categories/ItemsCategoryPage";
 import { ItemsPageWrapper } from "./containers/pages/items/ItemsPageWrapper";
 import SingleItemPage from "./containers/pages/items/SingleItemPage";

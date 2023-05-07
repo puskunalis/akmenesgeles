@@ -1,9 +1,8 @@
 
 import * as React from 'react';
 import { useSelector } from "react-redux"
-import { useParams } from "react-router-dom"
 import { AsyncStatus } from "../../../state/AsyncStatus"
-import { fetchItems, fetchItemsByCategoryId, selectAllItems, selectItemsStatus } from "../../../state/items/ItemsSlice"
+import { fetchItems, selectAllItems, selectItemsStatus } from "../../../state/items/ItemsSlice"
 import { store } from "../../../state/store"
 import { ItemsFilterHeader } from './ItemsFilterHeader';
 import { ItemsPage } from './ItemsPage';
@@ -33,7 +32,7 @@ export const ItemsPageWrapper = () => {
         setSortedItems(items);
       } else {
         setSortedItems((prevState) =>
-        prevState.filter((item: Item) => item.title === filterValue)
+        prevState.filter((item: Item) => item.title.startsWith(filterValue))
         );
       }
     }, []);
