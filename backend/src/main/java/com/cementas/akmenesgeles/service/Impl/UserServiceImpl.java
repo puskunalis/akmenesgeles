@@ -5,6 +5,7 @@ import com.cementas.akmenesgeles.dto.User.CreateUserDto;
 import com.cementas.akmenesgeles.dto.User.LoginResponseDto;
 import com.cementas.akmenesgeles.dto.User.UserDto;
 import com.cementas.akmenesgeles.model.User;
+import com.cementas.akmenesgeles.model.UserRole;
 import com.cementas.akmenesgeles.repository.UserRepository;
 import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
@@ -50,11 +51,13 @@ public class UserServiceImpl implements UserService {
                 .username(createUserDto.getUsername())
                 .email(createUserDto.getEmail())
                 .password(passwordEncoder.encode(createUserDto.getPassword()))
+                .role(UserRole.USER)
                 .build();
         userRepository.save(newUser);
 
         return generateToken(newUser);
     }
+
 
     @Override
     public LoginResponseDto login(String username, String password) {

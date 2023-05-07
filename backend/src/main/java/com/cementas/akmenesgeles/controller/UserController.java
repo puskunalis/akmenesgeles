@@ -8,10 +8,12 @@ import com.cementas.akmenesgeles.dto.User.UserDto;
 import com.cementas.akmenesgeles.model.User;
 import com.cementas.akmenesgeles.service.UserService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Void> getMe(HttpServletRequest request) {
+    public ResponseEntity<User> getMe(HttpServletRequest request) {
         String token = request.getHeader("Authorization").replace("Bearer ", "");
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtConfig.getSecret())
@@ -63,7 +65,7 @@ public class UserController {
         Optional<User> user = userService.getById(userId);
 
         if (user.isPresent()) {
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(user.get());
         }
         return ResponseEntity.notFound().build();
     }
