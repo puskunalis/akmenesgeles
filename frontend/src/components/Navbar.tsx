@@ -32,6 +32,7 @@ import { useSelector } from "react-redux";
 import { selectUser, selectUserStatus } from "../state/users/UserSlice";
 import { store } from "../state/store";
 import { UserRole } from "../types";
+import ShoppingCartPopup from "./ShoppingCartPopup";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
@@ -160,6 +161,7 @@ export default function WithSubnavigation() {
           >
             Pridėti prekę
           </Button>
+          <ShoppingCartPopup items={[]}/>
         </Stack>
       </Flex>
 
