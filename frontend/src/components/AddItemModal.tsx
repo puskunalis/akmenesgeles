@@ -17,6 +17,7 @@ import {
   InputRightElement,
   useToast,
   Spinner,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import Select from 'react-select'
 import { useSelector } from "react-redux";
@@ -53,6 +54,25 @@ export const AddItemModal = (props: RegisterProps) => {
   const toast = useToast()
   const itemFetchStatus = useSelector(selectAddItemStatus);
   const [isLoading, setLoading] = useState(false);
+
+  const resetState = () => {
+    setSelectedCategories([]);
+    setItemName(undefined);
+    setDescription(undefined);
+    setPrice(undefined);
+    setUploadedImageUrl("");
+    setSelectedFile(null);
+    setResponse(null);
+    setLoading(false);
+    setItemNameError(undefined);
+    setItemDescriptionError(undefined);
+    setItemPriceError(undefined);
+  };
+
+  const onCloseModal = () => {
+    resetState();
+    onClose();
+  }
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     if (event.target.files && event.target.files[0]) {
@@ -107,7 +127,7 @@ export const AddItemModal = (props: RegisterProps) => {
         duration: 5000,
         isClosable: true,
       });
-      onClose();
+      onCloseModal();
     }
   }, [itemFetchStatus])
 
@@ -121,25 +141,65 @@ export const AddItemModal = (props: RegisterProps) => {
   }
   const options: OptionType[] = categories.map((category) => getOption(category));
 
+  const [itemNameError, setItemNameError] = useState<string>();
+  const handleItemNameChange = (e: any) => {
+    const value = e.target.value;
+    setItemName(value);
+
+    if (value === '') {
+      setItemNameError('Pavadinimas yra privalomas');
+    } else {
+      setItemNameError('');
+    }
+  };
+
+  const [itemDescriptionError, setItemDescriptionError] = useState<string>();
+  const handleItemDescriptionChange = (e: any) => {
+    const value = e.target.value;
+    setDescription(value);
+
+    if (value === '') {
+      setItemDescriptionError('Aprašymas yra privalomas');
+    } else {
+      setItemDescriptionError('');
+    }
+  };
+
+  const [itemPriceError, setItemPriceError] = useState<string>();
+  const handleItemPriceChange = (e: any) => {
+    const value = e.target.value;
+    const regex = /^d+(,?)(d{1,2})?$/;
+    if( regex.test(value) )
+      return setItemPriceError('Kaina neatitinka standarto')
+    setPrice(value);
+    if (value === '') {
+      setItemPriceError('Kaina yra privaloma');
+    } else {
+      setItemPriceError('');
+    }
+  };
+
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onCloseModal}
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Pridėti prekę</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
-          <FormControl>
+          <FormControl mt={4} isRequired={true} isInvalid={itemNameError !== ''}>
             <FormLabel>Pavadinimas</FormLabel>
-            <Input placeholder="Pavadinimas" onChange={e => setItemName(e.target.value)} />
+            <Input placeholder="Pavadinimas" onChange={handleItemNameChange}/>
+            <FormErrorMessage>{itemNameError}</FormErrorMessage>
           </FormControl>
-
-          <FormControl mt={4}>
+          <FormControl isRequired={true} isInvalid={itemDescriptionError !== ''}>
             <FormLabel>Aprašymas</FormLabel>
-            <Input placeholder="Aprašymas" onChange={e => setDescription(e.target.value)}/>
-
+            <Input placeholder="Aprašymas" onChange={handleItemDescriptionChange} />
+            <FormErrorMessage>{itemDescriptionError}</FormErrorMessage>
+          </FormControl>
+          <FormControl isRequired={true} isInvalid={itemPriceError !== ''}>
             <FormLabel>Kaina</FormLabel>
             <InputGroup>
                 <InputLeftElement
@@ -148,9 +208,11 @@ export const AddItemModal = (props: RegisterProps) => {
                 fontSize='1.2em'
                 children='$'
                 />
-                <Input placeholder='Kaina' onChange={e => setPrice(e.target.value)}/>
+                <Input placeholder='Kaina' onChange={handleItemPriceChange} required={true}/>
                 {/* <InputRightElement children={<CheckIcon color='green.500' />} /> */}
             </InputGroup>
+            <FormErrorMessage>{itemPriceError}</FormErrorMessage>
+          </FormControl>
 
             <FormLabel>Kategorijos</FormLabel>
             <Select
@@ -159,7 +221,7 @@ export const AddItemModal = (props: RegisterProps) => {
                 options={options} 
                 onChange={e => handleCategoriesChange(e)}
             />
-          </FormControl>
+          
           <div>
               <input type="file" onChange={handleFileChange} />
           </div>
@@ -171,10 +233,11 @@ export const AddItemModal = (props: RegisterProps) => {
             loadingText='Pridedama'
             colorScheme="green" mr={3} 
             onClick={() => handleSubmit()}
+            isDisabled={itemNameError !== '' || itemDescriptionError !== '' || itemPriceError !== ''}
           >
             Pridėti
           </Button>
-          <Button onClick={onClose}>Atšaukti</Button>
+          <Button onClick={onCloseModal}>Atšaukti</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
