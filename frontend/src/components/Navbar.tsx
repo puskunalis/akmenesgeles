@@ -30,6 +30,7 @@ import { AddItemModal } from "./AddItemModal";
 import { useAuth } from "../auth-context";
 import { useSelector } from "react-redux";
 import { selectUser, selectUserStatus } from "../state/users/UserSlice";
+import ShoppingCartPopup from "./ShoppingCartPopup";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
@@ -139,6 +140,7 @@ export default function WithSubnavigation() {
           >
             Pridėti prekę
           </Button>
+          <ShoppingCartPopup items={[]}/>
         </Stack>
       </Flex>
 
