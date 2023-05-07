@@ -21,23 +21,28 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RegisterModal } from "./Register";
 import { LoginModal } from "./Login";
 import { GetNavItems, NavItem } from "./NavItems";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { AddItemModal } from "./AddItemModal";
 import { useAuth } from "../auth-context";
+import { useSelector } from "react-redux";
+import { selectUser, selectUserStatus } from "../state/users/UserSlice";
 
 export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const [openRegister, setOpenRegister] = useState<boolean>(false);
   const [openLogin, setOpenLogin] = useState<boolean>(false);
   const [openAddItem, setOpenAddItem] = useState<boolean>(false);
-
-  const { isLoggedIn } = useAuth();
+  const user = useSelector(selectUser);
+  const userStatus = useSelector(selectUserStatus)
+  const { isLoggedIn, logout } = useAuth();
 
   const NAV_ITEMS = GetNavItems();
+
+  useEffect(()=>console.log(user), [user])
   return (
     <Box>
       <Flex
@@ -111,6 +116,17 @@ export default function WithSubnavigation() {
               </Button>
             </>
           )}
+          {isLoggedIn && 
+            <Button
+              as={"a"}
+              fontSize={"sm"}
+              fontWeight={400}
+              variant={"link"}
+              href={"#"}
+              onClick={() => logout()}
+            >
+              Atsijungti
+            </Button>}
           <Button
             as={"a"}
             display={{ base: "none", md: "inline-flex" }}

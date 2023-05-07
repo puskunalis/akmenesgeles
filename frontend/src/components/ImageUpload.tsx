@@ -1,6 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { ChangeEvent, FormEvent, useState } from "react";
 
+interface imageUploadProps {
+    handleFileChange: (event: FormEvent<HTMLFormElement>) => (string)
+}
+
 export const ImageUpload = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [response, setResponse] = useState<AxiosResponse<any> | null>(null);
@@ -37,7 +41,6 @@ export const ImageUpload = () => {
       <div>
         <form onSubmit={handleSubmit}>
           <input type="file" onChange={handleFileChange} />
-          <button type="submit">Upload</button>
         </form>
       </div>
     );
