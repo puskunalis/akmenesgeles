@@ -6,6 +6,7 @@ import { Routes, Route, Outlet, Link } from "react-router-dom";
 import { fetchCategories } from "./state/categories/CategoriesSlice";
 import { ItemsCategoryPage } from "./containers/pages/categories/ItemsCategoryPage";
 import { ItemsPageWrapper } from "./containers/pages/items/ItemsPageWrapper";
+import SingleItemPage from "./containers/pages/items/SingleItemPage";
 
 export const App = () => (
   <Provider store={store}>
@@ -16,6 +17,7 @@ export const App = () => (
           <Route index element={<ItemsPageWrapper />} />
           <Route path="kontaktai" element={<h1>Kontaktai</h1>} />
           <Route path="category/:categoryId" element={<ItemsCategoryPage />} />
+          <Route path="item/:itemId" element={<SingleItemPage/>}/>
         </Route>
       </Routes>
     </ChakraProvider>

@@ -30,9 +30,7 @@ export const ItemsPageWrapper = () => {
 
     const filter = React.useCallback((filterValue: string) => {
       if (filterValue === '') {
-        if (itemsStatus === AsyncStatus.IDLE){
-          store.dispatch(fetchItems());
-        }
+        setSortedItems(items);
       } else {
         setSortedItems((prevState) =>
         prevState.filter((item: Item) => item.title === filterValue)

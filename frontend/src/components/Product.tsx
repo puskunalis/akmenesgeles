@@ -8,11 +8,13 @@ import {
   SimpleGrid,
   Icon,
   chakra,
-  Tooltip,
+  Tooltip
 } from "@chakra-ui/react";
 import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
 import { Item } from "../types";
+import { Link } from "react-router-dom";
+import './Product.scss';
 
 interface RatingProps {
   rating: number;
@@ -49,6 +51,7 @@ function Rating({ rating, numReviews }: RatingProps) {
 
 function ProductAddToCart({ product }: { product: Item }) {
   return (
+    <Link to={`item/${product.id}`}>
       <Flex p={50} w="full" alignItems="center" justifyContent="center">
         <Box
           bg={useColorModeValue("white", "gray.800")}
@@ -58,16 +61,12 @@ function ProductAddToCart({ product }: { product: Item }) {
           shadow="lg"
           position="relative"
           width={{ base: "100%", md: "100%", lg: "400px" }}
+          height={{ base: "100%", md: "100%", lg: "400px" }}
           margin={{ base: "0", md: "0", lg: "0 10px 20px 0" }}
         >
-          <Image
-            src={product.imageUrl}
-            alt={`Picture of ${product.title}`}
-            width="100%"
-            height="70%"
-            roundedTop="lg"
-          />
-
+          <div className="image-container">
+            <img src={product.imageUrl} alt={`${product.title}`} className="image"/>
+          </div>
           <Box p="6">
             <Flex mt="1" justifyContent="space-between" alignContent="center">
               <Box
@@ -97,15 +96,13 @@ function ProductAddToCart({ product }: { product: Item }) {
                 fontSize="2xl"
                 color={useColorModeValue("gray.800", "white")}
               >
-                <Box as="span" color={"gray.600"} fontSize="lg">
-                  €
-                </Box>
-                {product.price.toFixed(2)}
+                € {product.price.toFixed(2)}
               </Box>
             </Flex>
           </Box>
         </Box>
       </Flex>
+    </Link>
   );
 }
 
