@@ -40,6 +40,7 @@ public class ItemServiceImpl implements ItemService {
                 .description(createItemDto.getDescription())
                 .price(createItemDto.getPrice())
                 .imageUrl(createItemDto.getImageUrl())
+                .categories(categoryService.getAllCategoriesByIds(createItemDto.getCategoryIds()))
                 .build();
         return itemRepository.save(newItem);
     }
