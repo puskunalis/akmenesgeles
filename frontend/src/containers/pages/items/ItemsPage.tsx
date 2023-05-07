@@ -1,8 +1,6 @@
-import * as React from 'react';
-import { Grid, SimpleGrid } from "@chakra-ui/react"
+import { Grid } from "@chakra-ui/react"
 import { Item } from '../../../types';
 import Product from '../../../components/Product';
-import ShoppingCartPopup from '../../../components/ShoppingCartPopup';
 
 export interface ItemsPageProps {
     items: Item[]
@@ -13,7 +11,7 @@ export function ItemsPage(props: ItemsPageProps) {
 
     return(
         <Grid
-            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(2, 1fr)" }}
+            templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }}
             gap={1}
             p={1}
         >
