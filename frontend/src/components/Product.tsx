@@ -6,7 +6,6 @@ import {
   chakra,
   Tooltip
 } from "@chakra-ui/react";
-import { BsStar, BsStarFill, BsStarHalf } from "react-icons/bs";
 import { FiShoppingCart } from "react-icons/fi";
 import { Item } from "../types";
 import { Link } from "react-router-dom";
@@ -15,8 +14,8 @@ import './Product.scss';
 
 function ProductAddToCart({ product }: { product: Item }) {
   return (
-    <Link to={`item/${product.id}`}>
-      <Flex p={50} w="full" alignItems="center" justifyContent="center">
+    
+      <Flex w="full" alignItems="center" justifyContent="center">
         <Box
           bg={useColorModeValue("white", "gray.800")}
           maxW="sm"
@@ -28,20 +27,24 @@ function ProductAddToCart({ product }: { product: Item }) {
           height={{ base: "100%", md: "100%", lg: "400px" }}
           margin={{ base: "0", md: "0", lg: "0 10px 20px 0" }}
         >
+        <Link to={`item/${product.id}`}>
           <div className="image-container">
             <img src={product.imageUrl} alt={`${product.title}`} className="image"/>
           </div>
+        </Link>
           <Box p="6">
             <Flex mt="1" justifyContent="space-between" alignContent="center">
-              <Box
-                fontSize="2xl"
-                fontWeight="semibold"
-                as="h4"
-                lineHeight="tight"
-                isTruncated
-              >
-                {product.title}
-              </Box>
+              <Link to={`item/${product.id}`}>
+                <Box
+                  fontSize="2xl"
+                  fontWeight="semibold"
+                  as="h4"
+                  lineHeight="tight"
+                  isTruncated
+                >
+                  {product.title}
+                </Box>
+              </Link>
               <Tooltip
                 label="Add to cart"
                 bg="white"
@@ -66,7 +69,6 @@ function ProductAddToCart({ product }: { product: Item }) {
           </Box>
         </Box>
       </Flex>
-    </Link>
   );
 }
 
