@@ -73,7 +73,7 @@ export const LoginModal = (props: LoginProps) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleLogin}>
+          <Button colorScheme="green" mr={3} onClick={handleLogin}>
             Log in
           </Button>
           <Button onClick={onClose}>Cancel</Button>

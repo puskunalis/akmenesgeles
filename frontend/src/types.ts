@@ -13,3 +13,15 @@ export interface Category {
   description: string;
   items: Item[];
 }
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+}
+
+export enum UserRole {
+  USER = "USER",
+  ADMIN = "ADMIN",
+}

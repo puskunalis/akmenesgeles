@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Grid, SimpleGrid } from "@chakra-ui/react"
 import { Item } from '../../../types';
 import Product from '../../../components/Product';
+import ShoppingCartPopup from '../../../components/ShoppingCartPopup';
 
 export interface ItemsPageProps {
     items: Item[]

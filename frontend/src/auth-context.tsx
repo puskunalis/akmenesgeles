@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { fetchUser, logoutUser } from "./state/users/UserSlice";
+import { store } from "./state/store";
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -40,10 +42,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("Error during login:", error);
     }
+    store.dispatch(fetchUser());
   };
 
   const logout = () => {
     localStorage.removeItem("authToken");
+    store.dispatch(logoutUser());
     setIsLoggedIn(false);
   };
 
@@ -57,6 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+      store.dispatch(fetchUser());
       setIsLoggedIn(true);
     } catch (error) {
       console.error("Error during fetching user data:", error);
