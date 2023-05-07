@@ -52,7 +52,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item addItemToCategory(UUID itemId, UUID categoryId) {
-        Item item = itemRepository.getItemById(itemId).orElseThrow(() -> new NotFoundException("Item by id " + itemId + "not found."));;
+        Item item = itemRepository.getItemById(itemId).orElseThrow(() -> new NotFoundException("Item by id " + itemId + "not found."));
         Category newCategory = categoryRepository.getCategoryById(categoryId);
         List<Category> categories = item.getCategories();
         categories.add(newCategory);

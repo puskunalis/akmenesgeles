@@ -1,8 +1,8 @@
 package com.cementas.akmenesgeles.controller;
 
 import com.cementas.akmenesgeles.dto.Item.CreateItemDto;
-import com.cementas.akmenesgeles.dto.Item.ItemDto;
 import com.cementas.akmenesgeles.model.Item;
+import com.cementas.akmenesgeles.service.CartItemService;
 import com.cementas.akmenesgeles.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +16,8 @@ import java.util.UUID;
 public class ItemController {
 
     private final ItemService itemService;
+
+    private final CartItemService cartItemService;
 
     @GetMapping
     public List<Item> getAll() {
@@ -49,6 +51,7 @@ public class ItemController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
+        cartItemService.deleteByItemId(id);
         itemService.delete(id);
     }
 }
