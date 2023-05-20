@@ -4,25 +4,25 @@ import com.cementas.akmenesgeles.config.JwtConfig;
 import com.cementas.akmenesgeles.dto.User.CreateUserDto;
 import com.cementas.akmenesgeles.dto.User.LoginResponseDto;
 import com.cementas.akmenesgeles.dto.User.UserDto;
+import com.cementas.akmenesgeles.model.Cart;
 import com.cementas.akmenesgeles.model.User;
 import com.cementas.akmenesgeles.model.UserRole;
+import com.cementas.akmenesgeles.repository.CartRepository;
 import com.cementas.akmenesgeles.repository.UserRepository;
 import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 // Add import for JWT generation
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import java.util.Date;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +33,8 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     private final JwtConfig jwtConfig;
+
+    private final CartRepository cartRepository;
 
     @Override
     public List<User> getAll() {
@@ -54,6 +56,11 @@ public class UserServiceImpl implements UserService {
                 .role(UserRole.USER)
                 .build();
         userRepository.save(newUser);
+
+        if(newUser.getRole() == UserRole.USER) {
+            Cart cart = new Cart(UUID.randomUUID(), newUser, new ArrayList<>());
+            cartRepository.save(cart);
+        }
 
         return generateToken(newUser);
     }

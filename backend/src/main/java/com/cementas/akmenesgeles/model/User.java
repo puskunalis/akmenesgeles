@@ -1,5 +1,6 @@
 package com.cementas.akmenesgeles.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @Table(name = "Users")
 public class User implements Serializable {
     @Id
+    @Column(name = "user_id")
     private UUID id;
     private String name;
     private String username;

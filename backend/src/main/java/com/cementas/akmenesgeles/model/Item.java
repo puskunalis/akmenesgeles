@@ -1,6 +1,5 @@
 package com.cementas.akmenesgeles.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,7 +17,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class Item implements Serializable {
     @Id
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, name = "item_id")
     private UUID id;
     @Column(length = 1000)
     private String imageUrl;
