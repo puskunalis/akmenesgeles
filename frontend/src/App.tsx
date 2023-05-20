@@ -10,8 +10,13 @@ import { ItemsCategoryPage } from "./containers/pages/categories/ItemsCategoryPa
 import { ItemsPageWrapper } from "./containers/pages/items/ItemsPageWrapper";
 import SingleItemPage from "./containers/pages/items/SingleItemPage";
 import { AdminPage } from "./containers/pages/admin/AdminPage";
+import { fetchItems } from "./state/items/ItemsSlice";
 
-export const App = () => (
+export const App = () => {
+  
+  store.dispatch(fetchItems());
+  
+  return (
   <Provider store={store}>
     <ChakraProvider theme={theme}>
       <Navbar />
@@ -26,4 +31,4 @@ export const App = () => (
       </Routes>
     </ChakraProvider>
   </Provider>
-);
+)};

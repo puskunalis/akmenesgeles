@@ -25,3 +25,17 @@ export enum UserRole {
   USER = "USER",
   ADMIN = "ADMIN",
 }
+
+export interface Cart {
+  id: string,
+  user: User,
+  items: CartItem[],
+  createdAt: Date,
+  updatedAt: Date
+}
+
+export interface CartItem {
+  id?: string,
+  item: Item,
+  quantity: number
+}

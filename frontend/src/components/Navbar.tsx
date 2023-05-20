@@ -161,7 +161,7 @@ export default function WithSubnavigation() {
           >
             Pridėti prekę
           </Button>
-          <ShoppingCartPopup items={[]}/>
+          <ShoppingCartPopup/>
         </Stack>
       </Flex>
 

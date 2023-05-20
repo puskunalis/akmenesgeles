@@ -7,12 +7,25 @@ import {
   Tooltip
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
-import { Item } from "../types";
+import { CartItem, Item } from "../types";
 import { Link } from "react-router-dom";
 import './Product.scss';
+import { useSelector } from "react-redux";
+import { CartItemForAddToCart, addItemToCart, fetchCartByCartId, selectCart, selectCartStatus } from "../state/carts/CartsSlice";
+import { store } from "../state/store";
+import { useEffect } from "react";
 
 
 function ProductAddToCart({ product }: { product: Item }) {
+  const cart = useSelector(selectCart);
+
+  const handleAddToCart = async () => {
+    if(cart) {
+      const cartItem: CartItemForAddToCart = {itemId: product.id, quantity: 1};
+      store.dispatch(addItemToCart({cartId: cart.id, item: cartItem}));
+    }
+  }
+
   return (
     
       <Flex w="full" alignItems="center" justifyContent="center">
@@ -53,7 +66,7 @@ function ProductAddToCart({ product }: { product: Item }) {
                 fontSize={"1.2em"}
               >
                 <chakra.a href={"#"} display={"flex"}>
-                  <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} />
+                  <Icon as={FiShoppingCart} h={7} w={7} alignSelf={"center"} onClick={() => handleAddToCart()}/>
                 </chakra.a>
               </Tooltip>
             </Flex>

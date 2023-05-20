@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -14,17 +14,35 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
-import { Item } from "../types";
+import { CartItem, Item } from "../types";
+import { useSelector } from "react-redux";
+import { fetchCart, selectCart, selectCartStatus } from "../state/carts/CartsSlice";
+import { AsyncStatus } from "../state/AsyncStatus";
+import { store } from "../state/store";
+import { selectUser } from "../state/users/UserSlice";
 
-export interface ShoppingCartPopupProps {
-    items: Item[]
-}
-
-const ShoppingCartPopup = ( props: ShoppingCartPopupProps ) => {
+const ShoppingCartPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const {items} = props;
   const handleClose = () => setIsOpen(false);
   const handleOpen = () => setIsOpen(true);
+  const user = useSelector(selectUser);
+  const cart = useSelector(selectCart);
+  const cartStatus = useSelector(selectCartStatus);
+
+  useEffect(() => {
+    if(user && cartStatus === AsyncStatus.IDLE) {
+      store.dispatch(fetchCart(user.id));
+    }
+  }, [user])
+  
+  const sumPrice = () => {
+    let sum = 0;
+    cart?.items?.map((item) => {
+      sum += item.item.price * item.quantity;
+    })
+    return sum;
+  }
+
 
   return (
     <>
@@ -38,17 +56,19 @@ const ShoppingCartPopup = ( props: ShoppingCartPopupProps ) => {
           <ModalHeader>Shopping Cart</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {items.map((item) => (
-              <Box key={item.id} display="flex" alignItems="center" mb={4}>
-                <Image src={item.imageUrl} alt={item.title} width={12} mr={4} />
-                <Text fontSize="lg">{item.title}</Text>
+            {cart?.items?.map((item) => (
+              <Box key={item.item.id} display="flex" alignItems="center" mb={4}>
+                <Image src={item.item.imageUrl} alt={item.item.title} width={12} mr={4} />
+                <Text fontSize="lg">{item.item.title}</Text>
                 <Box ml="auto">
-                  <Text fontSize="lg" fontWeight="bold">${item.price}</Text>
+                  <Text fontSize="lg" fontWeight="light">{item.quantity} vnt</Text>
+                  <Text fontSize="lg" fontWeight="bold">€ {item.item.price * item.quantity}</Text>
                 </Box>
               </Box>
             ))}
           </ModalBody>
           <ModalFooter>
+            <Text fontSize="lg" fontWeight="bold">Suma: €{sumPrice()}</Text>
             <Button colorScheme="green" mr={3} onClick={handleClose}>
               Continue Shopping
             </Button>
