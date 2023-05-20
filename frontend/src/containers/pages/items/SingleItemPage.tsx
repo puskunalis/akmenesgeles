@@ -19,19 +19,29 @@ import {
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { selectSingleItem, fetchItemById } from '../../../state/items/ItemsSlice';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { store } from '../../../state/store';
 import './SingleItemPage.scss';
+import { CartItemForAddToCart, addItemToCart, selectCart } from '../../../state/carts/CartsSlice';
   
   export default function SingleItemPage () {
-    const { itemId } = useParams();
+    const { itemId }= useParams();
     const item = useSelector(selectSingleItem);
+    const [quantity, setQuantity] = useState(1);
+    const cart = useSelector(selectCart);
 
     useEffect(() => {
         if (itemId){
             store.dispatch(fetchItemById(itemId));
         }
     }, []);
+
+    const handleAddToCart = () => {
+        if (item && cart){
+            const cartItem: CartItemForAddToCart = {itemId: item.id, quantity: quantity};
+            store.dispatch(addItemToCart({cartId: cart.id, item: cartItem}));
+        }
+    }
 
     function AmountOfItems() {
         const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
@@ -48,9 +58,9 @@ import './SingleItemPage.scss';
       
         return (
           <HStack maxW='320px'>
-            <Button {...dec}>-</Button>
+            <Button {...dec} onClick={() => setQuantity(quantity-1)}>-</Button>
             <Input {...input} />
-            <Button {...inc}>+</Button>
+            <Button {...inc} onClick={() => setQuantity(quantity+1)}>+</Button>
           </HStack>
         )
       }
@@ -120,7 +130,9 @@ import './SingleItemPage.scss';
                                 _hover={{
                                     transform: 'translateY(2px)',
                                     boxShadow: 'lg',
-                                }}>
+                                }}
+                                onClick={() => handleAddToCart()}
+                            >
                             Įdėti į krepšelį
                             </Button>
                             <div className='delivery-description'>

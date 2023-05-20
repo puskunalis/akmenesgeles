@@ -17,7 +17,7 @@ export function ItemsPage(props: ItemsPageProps) {
                 return (<Product product={item} key={item.id}/>)
                 })
         );
-    }, []);
+    }, [items]);
     
     return(
         <div className="items-container">

@@ -6,7 +6,8 @@ import {
 import axios from "axios";
 import { Category, Item, User } from "../../types";
 import { AsyncStatus } from "../AsyncStatus";
-import { StoreState } from "../store";
+import { store, StoreState } from "../store";
+import { fetchCart } from "../carts/CartsSlice";
 
 export interface UserState {
   user: User | undefined;
