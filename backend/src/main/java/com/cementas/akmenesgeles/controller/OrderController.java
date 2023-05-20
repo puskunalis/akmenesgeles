@@ -21,7 +21,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PutMapping("/{userId}")
+    @PostMapping("/{userId}")
     public ResponseEntity<Order> createOrder(@PathVariable UUID userId) {
         return ResponseEntity.ok(orderService.createOrder(userId));
     }
