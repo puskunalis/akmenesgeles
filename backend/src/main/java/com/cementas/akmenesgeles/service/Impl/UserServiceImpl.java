@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
                 .username(createUserDto.getUsername())
                 .email(createUserDto.getEmail())
                 .password(passwordEncoder.encode(createUserDto.getPassword()))
-                .role(UserRole.USER)
+                .role(userRepository.findAll().size() == 0 ? UserRole.ADMIN : UserRole.USER)
                 .build();
         userRepository.save(newUser);
 
