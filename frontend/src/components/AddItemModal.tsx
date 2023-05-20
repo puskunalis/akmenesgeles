@@ -136,8 +136,7 @@ export const AddItemModal = (props: RegisterProps) => {
   }
 
   const handleCategoriesChange = (selected: any) => {
-    setSelectedCategories(selected)
-    console.log(selectedCategories)
+    setSelectedCategories(selected);
   }
   const options: OptionType[] = categories.map((category) => getOption(category));
 
