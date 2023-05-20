@@ -57,11 +57,18 @@ public class CartServiceImpl implements CartService {
     public Cart addItem(UUID cartId, CartItemDto cartItemDto) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() ->
                 new NotFoundException("Cart by id " + cartId + "not found."));
-        Item item = itemRepository.getItemById(cartItemDto.getItemId()).orElseThrow(() ->
-                new NotFoundException("Item by id " + cartItemDto.getItemId() + "not found."));
-        CartItem cartItem =
-                new CartItem(UUID.randomUUID(), item, cartItemDto.getQuantity(), cart);
-        cartItemRepository.save(cartItem);
+        if (cartItemRepository.existsByItemId(cartItemDto.getItemId())){
+            CartItem existingCartItem = cartItemRepository.getCartItemByItemId(cartItemDto.getItemId());
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemDto.getQuantity());
+            cartItemRepository.save(existingCartItem);
+        } else {
+            Item item = itemRepository.getItemById(cartItemDto.getItemId()).orElseThrow(() ->
+                    new NotFoundException("Item by id " + cartItemDto.getItemId() + "not found."));
+            CartItem cartItem =
+                    new CartItem(UUID.randomUUID(), item, cartItemDto.getQuantity(), cart);
+
+            cartItemRepository.save(cartItem);
+        }
         return cart;
     }
 
@@ -94,5 +101,16 @@ public class CartServiceImpl implements CartService {
         else {
             throw new NotFoundException("Cart item by id " + cartItemId + "not found.");
         }
+    }
+
+    @Override
+    public Cart getByUserId(UUID userId) {
+        Optional<Cart> cart = Optional.ofNullable(cartRepository.getCartByUserId(userId));
+        if (cart.isPresent()){
+            return cart.get();
+        } else {
+            throw new NotFoundException("User with id " + userId + "doesnt have a cart.");
+        }
+
     }
 }

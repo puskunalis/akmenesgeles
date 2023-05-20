@@ -24,4 +24,6 @@ public interface CartService {
     CartItem updateQuantity(UUID cartId, UUID itemId, int quantity);
 
     void deleteItemFromCart(UUID cartId, UUID cartItemId);
+
+    Cart getByUserId(UUID userId);
 }

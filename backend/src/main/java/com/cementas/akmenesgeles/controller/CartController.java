@@ -34,6 +34,11 @@ public class CartController {
         return cartService.getCart(cartId);
     }
 
+    @GetMapping("/user/{userId}")
+    public Cart getCartByUserId(@PathVariable UUID userId) {
+        return cartService.getByUserId(userId);
+    }
+
     @DeleteMapping("/{cartId}")
     public void deleteCart(@PathVariable UUID cartId) {
         cartService.deleteCart(cartId);
