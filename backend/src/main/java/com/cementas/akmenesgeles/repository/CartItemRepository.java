@@ -1,5 +1,6 @@
 package com.cementas.akmenesgeles.repository;
 
+import com.cementas.akmenesgeles.model.Cart;
 import com.cementas.akmenesgeles.model.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,5 +12,5 @@ public interface CartItemRepository extends JpaRepository<CartItem, UUID> {
     CartItem getCartItemByItemId(UUID id);
     void deleteCartItemById(UUID id);
     void deleteCartItemsByItemId(UUID id);
-    boolean existsByItemId(UUID itemId);
+    boolean existsByItemIdAndCart(UUID itemId, Cart cart);
 }
