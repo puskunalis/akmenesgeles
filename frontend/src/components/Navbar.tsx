@@ -121,35 +121,43 @@ export default function WithSubnavigation() {
           {isLoggedIn && (
             <>
               {user?.role === UserRole.ADMIN && (
-                <Button
-                  as={"a"}
-                  display={{ base: "none", md: "inline-flex" }}
-                  fontSize={"sm"}
-                  fontWeight={600}
-                  color={"white"}
-                  bg={"green.400"}
-                  href={"admin"}
-                  _hover={{
-                    bg: "green.300",
-                  }}
-                >
-                  Administratoriaus sritis
-                </Button>
+                 <Link
+                 as={ReactRouterLink}
+                 to={"./admin"}
+                 display={{ base: "none", md: "inline-flex" }}
+                 fontSize={"sm"}
+                 fontWeight={600}
+                 color={"white"}
+                 bg={"green.400"}
+                 whiteSpace={"nowrap"}
+                 alignItems={"center"}
+                 paddingX={"16px"}
+                 borderRadius={"md"}
+                 _hover={{
+                   bg: "green.300",
+                 }}
+               >
+                 Administratoriaus sritis
+               </Link>
               )}
-              <Button
-                as={"a"}
+              <Link
+                as={ReactRouterLink}
+                to={"./user"}
                 display={{ base: "none", md: "inline-flex" }}
                 fontSize={"sm"}
                 fontWeight={600}
                 color={"white"}
                 bg={"green.400"}
-                href={"user"}
+                whiteSpace={"nowrap"}
+                alignItems={"center"}
+                paddingX={"16px"}
+                borderRadius={"md"}
                 _hover={{
                   bg: "green.300",
                 }}
               >
                 Vartotojo puslapis
-              </Button>
+              </Link>
               <Button
                 as={"a"}
                 fontSize={"sm"}
