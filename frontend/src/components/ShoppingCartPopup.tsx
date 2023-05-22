@@ -10,7 +10,8 @@ import {
   ModalFooter,
   Text,
   IconButton,
-  Stack
+  Stack,
+  useToast
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { useSelector } from "react-redux";
@@ -20,6 +21,8 @@ import { store } from "../state/store";
 import { selectUser } from "../state/users/UserSlice";
 import './ShoppingCartPopup.scss';
 import { CartItem } from "../containers/pages/checkout/CartItem";
+import { useNavigate } from "react-router-dom";
+import { formatPrice } from "../containers/pages/checkout/PriceTag";
 
 const ShoppingCartPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +31,8 @@ const ShoppingCartPopup = () => {
   const user = useSelector(selectUser);
   const cart = useSelector(selectCart);
   const cartStatus = useSelector(selectCartStatus);
+  const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     if(user && cartStatus === AsyncStatus.IDLE) {
@@ -43,6 +48,22 @@ const ShoppingCartPopup = () => {
     return sum;
   }
 
+  const handleToCheckout = () => {
+    if (cart?.items.length !== 0) {
+      navigate('/checkout'); 
+      handleClose();
+    } else {
+      toast({
+        title: 'Jusų krepšelis tuščias.',
+        description: "Kad galėtumėte apmokėti, pridėkite prekių į krepšelį.",
+        status: 'warning',
+        duration: 5000,
+        isClosable: true,
+    });
+    handleClose();
+    }
+    
+  }
   return (
     <>
       <IconButton
@@ -58,6 +79,7 @@ const ShoppingCartPopup = () => {
           <Stack spacing="1" id="items-container">
             {cart?.items?.map((cartItem) => (
                 <CartItem key={cartItem.id}
+                          cartItemId={cartItem.id}
                           quantity={cartItem.quantity}
                           {...cartItem.item}
                 />
@@ -65,10 +87,10 @@ const ShoppingCartPopup = () => {
             </Stack>
           </ModalBody>
           <ModalFooter id="modal-footer">
-            <Text fontSize="lg" fontWeight="bold">Suma: €{sumPrice()}</Text>
+            <Text fontSize="lg" fontWeight="bold">Suma: {formatPrice(sumPrice())}</Text>
             <div className="modal-actions">
               <Button variant='ghost'>Tęsti apsipirkimą</Button>
-              <Button colorScheme="green" onClick={handleClose}>
+              <Button colorScheme="green" onClick={handleToCheckout}>
                 Apmokėti
               </Button>
             </div>

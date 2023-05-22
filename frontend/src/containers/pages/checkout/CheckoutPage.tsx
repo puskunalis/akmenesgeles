@@ -50,6 +50,7 @@ export const CheckoutPage = () => {
             {cart?.items?.map((cartItem) => (
                 <CartItem key={cartItem.id}
                           quantity={cartItem.quantity}
+                          cartItemId={cartItem.id}
                           {...cartItem.item}
                 />
             ))}

@@ -47,11 +47,11 @@ function ProductAddToCart({ product }: { product: Item }) {
           maxW="sm"
           borderWidth="1px"
           rounded="lg"
-          shadow="lg"
           position="relative"
           width={{ base: "100%", md: "100%", lg: "400px" }}
           height={{ base: "100%", md: "100%", lg: "400px" }}
           margin={{ base: "0", md: "0", lg: "0 10px 20px 0" }}
+          className="product"
         >
         <Link to={`item/${product.id}`}>
           <div className="image-container">

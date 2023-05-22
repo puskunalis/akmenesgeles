@@ -53,7 +53,7 @@ import { Cart } from '../../../types'
         <Heading size="md">Užsakymo suvestinė</Heading>
   
         <Stack spacing="6">
-          <OrderSummaryItem label="Daiktų :" value={formatPrice(sumPrice())} />
+          <OrderSummaryItem label="Prekių suma:" value={formatPrice(sumPrice())} />
           <OrderSummaryItem label="Pristatymas: " value={formatPrice(shippingPrice)}>
           </OrderSummaryItem>
           <Flex justify="space-between">
