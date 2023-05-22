@@ -8,18 +8,18 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Box,
-  Image,
   Text,
   IconButton,
+  Stack
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
-import { CartItem, Item } from "../types";
 import { useSelector } from "react-redux";
 import { fetchCart, selectCart, selectCartStatus } from "../state/carts/CartsSlice";
 import { AsyncStatus } from "../state/AsyncStatus";
 import { store } from "../state/store";
 import { selectUser } from "../state/users/UserSlice";
+import './ShoppingCartPopup.scss';
+import { CartItem } from "../containers/pages/checkout/CartItem";
 
 const ShoppingCartPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +43,6 @@ const ShoppingCartPopup = () => {
     return sum;
   }
 
-
   return (
     <>
       <IconButton
@@ -53,26 +52,26 @@ const ShoppingCartPopup = () => {
       <Modal isOpen={isOpen} onClose={handleClose} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Shopping Cart</ModalHeader>
+          <ModalHeader>Prekių krepšelis</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {cart?.items?.map((item) => (
-              <Box key={item.item.id} display="flex" alignItems="center" mb={4}>
-                <Image src={item.item.imageUrl} alt={item.item.title} width={12} mr={4} />
-                <Text fontSize="lg">{item.item.title}</Text>
-                <Box ml="auto">
-                  <Text fontSize="lg" fontWeight="light">{item.quantity} vnt</Text>
-                  <Text fontSize="lg" fontWeight="bold">€ {item.item.price * item.quantity}</Text>
-                </Box>
-              </Box>
+          <Stack spacing="1" id="items-container">
+            {cart?.items?.map((cartItem) => (
+                <CartItem key={cartItem.id}
+                          quantity={cartItem.quantity}
+                          {...cartItem.item}
+                />
             ))}
+            </Stack>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter id="modal-footer">
             <Text fontSize="lg" fontWeight="bold">Suma: €{sumPrice()}</Text>
-            <Button colorScheme="green" mr={3} onClick={handleClose}>
-              Continue Shopping
-            </Button>
-            <Button variant="ghost">Checkout</Button>
+            <div className="modal-actions">
+              <Button variant='ghost'>Tęsti apsipirkimą</Button>
+              <Button colorScheme="green" onClick={handleClose}>
+                Apmokėti
+              </Button>
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>
