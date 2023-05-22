@@ -11,6 +11,7 @@ import { ItemsPageWrapper } from "./containers/pages/items/ItemsPageWrapper";
 import SingleItemPage from "./containers/pages/items/SingleItemPage";
 import { AdminPage } from "./containers/pages/admin/AdminPage";
 import { fetchItems } from "./state/items/ItemsSlice";
+import { CheckoutPage } from "./containers/pages/checkout/CheckoutPage";
 
 export const App = () => {
   
@@ -27,6 +28,7 @@ export const App = () => {
           <Route path="category/:categoryId" element={<ItemsCategoryPage />} />
           <Route path="item/:itemId" element={<SingleItemPage/>}/>
           <Route path="admin" element={<AdminPage />} />
+          <Route path="checkout" element={<CheckoutPage/>}/>
         </Route>
       </Routes>
     </ChakraProvider>

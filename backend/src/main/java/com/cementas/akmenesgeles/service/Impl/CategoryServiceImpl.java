@@ -4,6 +4,7 @@ import com.cementas.akmenesgeles.dto.Category.CreateCategoryDto;
 import com.cementas.akmenesgeles.model.Category;
 import com.cementas.akmenesgeles.repository.CategoryRepository;
 import com.cementas.akmenesgeles.service.CategoryService;
+import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
