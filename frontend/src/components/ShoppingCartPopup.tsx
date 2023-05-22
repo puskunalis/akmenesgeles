@@ -8,28 +8,18 @@ import {
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Box,
-  Image,
   Text,
   IconButton,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
+  Stack
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
-import { CartItem, Item } from "../types";
 import { useSelector } from "react-redux";
 import { fetchCart, selectCart, selectCartStatus } from "../state/carts/CartsSlice";
 import { AsyncStatus } from "../state/AsyncStatus";
 import { store } from "../state/store";
 import { selectUser } from "../state/users/UserSlice";
 import './ShoppingCartPopup.scss';
+import { CartItem } from "../containers/pages/checkout/CartItem";
 
 const ShoppingCartPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +43,6 @@ const ShoppingCartPopup = () => {
     return sum;
   }
 
-
   return (
     <>
       <IconButton
@@ -66,32 +55,14 @@ const ShoppingCartPopup = () => {
           <ModalHeader>Prekių krepšelis</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-          <TableContainer>
-            <Table variant='striped' colorScheme='gray'>
-              <Thead>
-                <Tr>
-                  <Th/>
-                  <Th>Prekė</Th>
-                  <Th isNumeric>Kaina</Th>
-                  <Th isNumeric>Kiekis</Th>
-                  <Th isNumeric>Viso</Th>
-                  <Th/>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {cart?.items?.map((item) => (
-                  <Tr key={item.item.id}>
-                    <Td id="item-photo-container"><Image src={item.item.imageUrl} alt={item.item.title} /></Td>
-                    <Td>{item.item.title}</Td>
-                    <Td isNumeric>{item.item.price}€</Td>
-                    <Td isNumeric>{item.quantity} vnt</Td>
-                    <Td isNumeric>{item.item.price * item.quantity}€</Td>
-                    <Td><Button/></Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <Stack spacing="1" id="items-container">
+            {cart?.items?.map((cartItem) => (
+                <CartItem key={cartItem.id}
+                          quantity={cartItem.quantity}
+                          {...cartItem.item}
+                />
+            ))}
+            </Stack>
           </ModalBody>
           <ModalFooter id="modal-footer">
             <Text fontSize="lg" fontWeight="bold">Suma: €{sumPrice()}</Text>

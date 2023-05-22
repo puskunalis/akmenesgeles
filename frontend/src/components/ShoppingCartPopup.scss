@@ -9,6 +9,7 @@
         justify-content: space-between;
     }
 }
-#item-photo-container{
-    padding: 0 0 0 5px;
+#items-container{
+    overflow-y: scroll;
+    height: 50vh;
 }
