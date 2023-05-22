@@ -12,6 +12,15 @@ import {
   Image,
   Text,
   IconButton,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
 import { CartItem, Item } from "../types";
@@ -20,6 +29,7 @@ import { fetchCart, selectCart, selectCartStatus } from "../state/carts/CartsSli
 import { AsyncStatus } from "../state/AsyncStatus";
 import { store } from "../state/store";
 import { selectUser } from "../state/users/UserSlice";
+import './ShoppingCartPopup.scss';
 
 const ShoppingCartPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,26 +63,44 @@ const ShoppingCartPopup = () => {
       <Modal isOpen={isOpen} onClose={handleClose} size="xl">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Shopping Cart</ModalHeader>
+          <ModalHeader>Prekių krepšelis</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {cart?.items?.map((item) => (
-              <Box key={item.item.id} display="flex" alignItems="center" mb={4}>
-                <Image src={item.item.imageUrl} alt={item.item.title} width={12} mr={4} />
-                <Text fontSize="lg">{item.item.title}</Text>
-                <Box ml="auto">
-                  <Text fontSize="lg" fontWeight="light">{item.quantity} vnt</Text>
-                  <Text fontSize="lg" fontWeight="bold">€ {item.item.price * item.quantity}</Text>
-                </Box>
-              </Box>
-            ))}
+          <TableContainer>
+            <Table variant='striped' colorScheme='gray'>
+              <Thead>
+                <Tr>
+                  <Th/>
+                  <Th>Prekė</Th>
+                  <Th isNumeric>Kaina</Th>
+                  <Th isNumeric>Kiekis</Th>
+                  <Th isNumeric>Viso</Th>
+                  <Th/>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {cart?.items?.map((item) => (
+                  <Tr key={item.item.id}>
+                    <Td id="item-photo-container"><Image src={item.item.imageUrl} alt={item.item.title} /></Td>
+                    <Td>{item.item.title}</Td>
+                    <Td isNumeric>{item.item.price}€</Td>
+                    <Td isNumeric>{item.quantity} vnt</Td>
+                    <Td isNumeric>{item.item.price * item.quantity}€</Td>
+                    <Td><Button/></Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter id="modal-footer">
             <Text fontSize="lg" fontWeight="bold">Suma: €{sumPrice()}</Text>
-            <Button colorScheme="green" mr={3} onClick={handleClose}>
-              Continue Shopping
-            </Button>
-            <Button variant="ghost">Checkout</Button>
+            <div className="modal-actions">
+              <Button variant='ghost'>Tęsti apsipirkimą</Button>
+              <Button colorScheme="green" onClick={handleClose}>
+                Apmokėti
+              </Button>
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>

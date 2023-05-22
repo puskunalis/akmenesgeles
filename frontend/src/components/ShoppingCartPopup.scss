@@ -1,0 +1,14 @@
+#modal-footer{
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    .modal-actions{
+        margin-top: 1rem;
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+#item-photo-container{
+    padding: 0 0 0 5px;
+}
