@@ -1,6 +1,9 @@
-import { CloseButton, Flex, Link, Select, SelectProps, useColorModeValue } from '@chakra-ui/react'
-import { PriceTag } from './PriceTag'
-import { CartProductMeta } from './CartProductMeta'
+import { CloseButton, Flex, Link, Select, SelectProps, useColorModeValue } from '@chakra-ui/react';
+import { PriceTag } from './PriceTag';
+import { CartProductMeta } from './CartProductMeta';
+import './CartItem.scss';
+import ItemAmount from '../../../components/ItemAmount';
+import * as React from 'react';
 
 type CartItemProps = {
   title: string
@@ -39,28 +42,31 @@ export const CartItem = (props: CartItemProps) => {
     onChangeQuantity,
     onClickDelete,
   } = props
+  const [currentQuantity, setCurrentQuantity] = React.useState(quantity);
   const currency = "EUR";
+  const handleQuantityChange = (value: number) => {
+    setCurrentQuantity(value);
+  };
   return (
-    <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="center">
+    <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="center" id="item-info-container">
       <CartProductMeta
         name={title}
         description={description}
         image={imageUrl}
       />
 
-      {/* Desktop */}
-      <Flex width="full" justify="space-between" display={{ base: 'none', md: 'flex' }}>
-        <QuantitySelect
-          value={quantity}
-          onChange={(e) => {
-            onChangeQuantity?.(+e.currentTarget.value)
-          }}
-        />
+      <Flex width="full" justify="space-between" display={{ base: 'none', md: 'flex' }} className="actions-container">
+        <div className="amount-changer-container">
+          <ItemAmount
+              onChange={handleQuantityChange}
+              value={currentQuantity}
+          />
+        </div>
+        
         <PriceTag price={price} currency={currency} />
         <CloseButton aria-label={`Delete ${title} from cart`} onClick={onClickDelete} />
       </Flex>
 
-      {/* Mobile */}
       <Flex
         mt="4"
         align="center"
@@ -71,11 +77,9 @@ export const CartItem = (props: CartItemProps) => {
         <Link fontSize="sm" textDecor="underline">
           Ištrinti
         </Link>
-        <QuantitySelect
-          value={quantity}
-          onChange={(e) => {
-            onChangeQuantity?.(+e.currentTarget.value)
-          }}
+        <ItemAmount
+            onChange={handleQuantityChange}
+            value={currentQuantity}
         />
         <PriceTag price={price} currency={currency} />
       </Flex>

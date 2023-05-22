@@ -46,7 +46,7 @@ export const CheckoutPage = () => {
             Pirkinių krepšelis
             </Heading>
 
-            <Stack spacing="6">
+            <Stack spacing="6" >
             {cart?.items?.map((cartItem) => (
                 <CartItem key={cartItem.id}
                           quantity={cartItem.quantity}

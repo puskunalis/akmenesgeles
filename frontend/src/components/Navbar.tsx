@@ -46,7 +46,7 @@ export default function WithSubnavigation() {
   const user = useSelector(selectUser);
 
   return (
-    <Box>
+    <Box marginBottom="15px">
       <Flex
         bg={useColorModeValue("white", "gray.800")}
         color={useColorModeValue("gray.600", "white")}
@@ -118,33 +118,49 @@ export default function WithSubnavigation() {
               </Button>
             </>
           )}
-          {user?.role === UserRole.ADMIN && (
-            <Button
-              as={"a"}
-              display={{ base: "none", md: "inline-flex" }}
-              fontSize={"sm"}
-              fontWeight={600}
-              color={"white"}
-              bg={"green.400"}
-              href={"admin"}
-              _hover={{
-                bg: "green.300",
-              }}
-            >
-              Administratoriaus sritis
-            </Button>
-          )}
           {isLoggedIn && (
-            <Button
-              as={"a"}
-              fontSize={"sm"}
-              fontWeight={400}
-              variant={"link"}
-              href={"#"}
-              onClick={() => logout()}
-            >
-              Atsijungti
-            </Button>
+            <>
+              {user?.role === UserRole.ADMIN && (
+                <Button
+                  as={"a"}
+                  display={{ base: "none", md: "inline-flex" }}
+                  fontSize={"sm"}
+                  fontWeight={600}
+                  color={"white"}
+                  bg={"green.400"}
+                  href={"admin"}
+                  _hover={{
+                    bg: "green.300",
+                  }}
+                >
+                  Administratoriaus sritis
+                </Button>
+              )}
+              <Button
+                as={"a"}
+                display={{ base: "none", md: "inline-flex" }}
+                fontSize={"sm"}
+                fontWeight={600}
+                color={"white"}
+                bg={"green.400"}
+                href={"user"}
+                _hover={{
+                  bg: "green.300",
+                }}
+              >
+                Vartotojo puslapis
+              </Button>
+              <Button
+                as={"a"}
+                fontSize={"sm"}
+                fontWeight={400}
+                variant={"link"}
+                href={"#"}
+                onClick={() => logout()}
+              >
+                Atsijungti
+              </Button>
+            </>
           )}
           <Button
             as={"a"}
