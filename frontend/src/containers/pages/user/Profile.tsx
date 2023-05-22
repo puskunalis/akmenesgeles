@@ -25,7 +25,7 @@ export function Profile(props: profileProps) {
             <Flex alignItems='center' justifyContent='center' flexDirection='row'>
                 <VStack spacing={2} textAlign='center'>
                     <Text fontSize='2xl' fontWeight='bold'>
-                    {user?.name}
+                    {user?.username}
                     </Text>
                     <Text>{user?.email}</Text>
                 </VStack>
