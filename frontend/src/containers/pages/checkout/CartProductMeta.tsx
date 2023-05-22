@@ -17,7 +17,7 @@ import {
   }
   
   export const CartProductMeta = (props: CartProductMetaProps) => {
-    const { isGiftWrapping = true, image, name, description } = props
+    const { image, name, description } = props
     return (
       <Stack direction="row" spacing="5" width="full">
         <Image

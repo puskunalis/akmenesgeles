@@ -23,6 +23,17 @@ import {
     itemId: string,
     quantity: number
   }
+
+  export interface DeleteItemFromCartData {
+    cartId: string,
+    itemId: string
+  }
+
+  export interface ChangeCartItemQuantityData {
+    cartId: string,
+    itemId: string,
+    quantity: number
+  }
   
   export const fetchCart = createAsyncThunk(
     "carts/fetchCart",
@@ -60,6 +71,27 @@ import {
         return response;
     }
   );
+
+  export const deleteItemFromCart = createAsyncThunk(
+    "carts/deleteItemFromCart",
+    async (data: DeleteItemFromCartData) => {
+      const {cartId, itemId} = data;
+      const response = await axios
+        .delete(`/api/v1/carts/${cartId}/items/${itemId}`)
+        .catch((err) => console.log(err));
+    }
+    
+  )
+
+  export const changeCartItemQuantity = createAsyncThunk(
+    "carts/changeCartItemQuantity",
+    async (data: ChangeCartItemQuantityData) => {
+      const {itemId, cartId, quantity} = data;
+      const response = await axios
+        .patch(`/api/v1/carts/${cartId}/items/${itemId}/${quantity}`)
+        .catch((err) => console.log(err));
+    }
+  )
   
   const initialState: CartState = {
     cart: undefined,
@@ -109,6 +141,26 @@ import {
         .addCase(addItemToCart.rejected, (state, action) => {
           state.status = AsyncStatus.FAILED;
           state.error = action.error;
+        })
+        .addCase(deleteItemFromCart.pending, (state, action) => {
+          state.status = AsyncStatus.FETCHING;
+        })
+        .addCase(deleteItemFromCart.fulfilled, (state, action) => {
+          state.status = AsyncStatus.SUCCESS;
+        })
+        .addCase(deleteItemFromCart.rejected, (state, action) => {
+          state.status = AsyncStatus.FAILED;
+          state.error = action.error;
+        })
+        .addCase(changeCartItemQuantity.pending, (state, action) => {
+          state.status = AsyncStatus.FETCHING;
+        })
+        .addCase(changeCartItemQuantity.fulfilled, (state, action) => {
+          state.status = AsyncStatus.SUCCESS;
+        })
+        .addCase(changeCartItemQuantity.rejected, (state, action) => {
+          state.status = AsyncStatus.FAILED;
+          state.error = action.error;
         });
     },
   });
@@ -119,4 +171,5 @@ import {
     state.cart.status;
   export const selectCartError = (state: StoreState) =>
     state.cart.error;
-  
+  export const selectCartId = (state: StoreState) =>
+    state.cart.cart?.id;

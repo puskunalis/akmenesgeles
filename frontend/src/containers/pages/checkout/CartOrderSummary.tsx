@@ -9,15 +9,22 @@ import {
   } from '@chakra-ui/react'
   import { FaArrowRight } from 'react-icons/fa'
   import { formatPrice } from './PriceTag'
+import { Cart } from '../../../types'
   
   type OrderSummaryItemProps = {
     label: string
     value?: string
     children?: React.ReactNode
+    cart?: Cart
+  }
+
+  interface OrderSummaryProps {
+    cart?: Cart
   }
   
   const OrderSummaryItem = (props: OrderSummaryItemProps) => {
     const { label, value, children } = props
+
     return (
       <Flex justify="space-between" fontSize="sm">
         <Text fontWeight="medium" color={mode('gray.600', 'gray.400')}>
@@ -28,29 +35,33 @@ import {
     )
   }
   
-  export const CartOrderSummary = () => {
+  export const CartOrderSummary = (props: OrderSummaryProps) => {
+    const {cart} = props;
+
+    const shippingPrice = 3;
+
+    const sumPrice = () => {
+      let sum = 0;
+      cart?.items?.map((item) => {
+        sum += item.item.price * item.quantity;
+      })
+      return sum;
+    }
+
     return (
       <Stack spacing="8" borderWidth="1px" rounded="lg" padding="8" width="full">
         <Heading size="md">Užsakymo suvestinė</Heading>
   
         <Stack spacing="6">
-          <OrderSummaryItem label="Subtotal" value={formatPrice(597)} />
-          <OrderSummaryItem label="Shipping + Tax">
-            <Link href="#" textDecor="underline">
-              Calculate shipping
-            </Link>
-          </OrderSummaryItem>
-          <OrderSummaryItem label="Coupon Code">
-            <Link href="#" textDecor="underline">
-              Add coupon code
-            </Link>
+          <OrderSummaryItem label="Prekių suma:" value={formatPrice(sumPrice())} />
+          <OrderSummaryItem label="Pristatymas: " value={formatPrice(shippingPrice)}>
           </OrderSummaryItem>
           <Flex justify="space-between">
             <Text fontSize="lg" fontWeight="semibold">
-              Total
+              Galutinė suma:
             </Text>
             <Text fontSize="xl" fontWeight="extrabold">
-              {formatPrice(597)}
+              {formatPrice(sumPrice() + shippingPrice)}
             </Text>
           </Flex>
         </Stack>
