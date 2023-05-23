@@ -1,19 +1,18 @@
 package com.cementas.akmenesgeles.controller;
 
 import com.cementas.akmenesgeles.config.JwtConfig;
+import com.cementas.akmenesgeles.dto.ShippingAddress.ShippingAddressDto;
 import com.cementas.akmenesgeles.dto.User.CreateUserDto;
 import com.cementas.akmenesgeles.dto.User.LoginDto;
 import com.cementas.akmenesgeles.dto.User.LoginResponseDto;
-import com.cementas.akmenesgeles.dto.User.UserDto;
+import com.cementas.akmenesgeles.model.ShippingAddress;
 import com.cementas.akmenesgeles.model.User;
 import com.cementas.akmenesgeles.service.UserService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -66,6 +65,16 @@ public class UserController {
 
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("{id}/address")
+    public ResponseEntity<ShippingAddress> addShippingAddress(@PathVariable UUID id,
+                                                              @RequestBody ShippingAddressDto shippingAddressDto) {
+        ShippingAddress shippingAddress = userService.addShippingAddress(id, shippingAddressDto);
+        if(shippingAddress != null) {
+            return ResponseEntity.ok(shippingAddress);
         }
         return ResponseEntity.notFound().build();
     }
