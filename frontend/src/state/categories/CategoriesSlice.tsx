@@ -9,6 +9,7 @@ import { AsyncStatus } from "../AsyncStatus";
 import { store, StoreState } from "../store";
 
 export interface CategoryState {
+  addStatus: AsyncStatus;
   categories: Category[];
   status: AsyncStatus;
   error: SerializedError;
@@ -32,6 +33,7 @@ export const fetchCategories = createAsyncThunk(
 );
 
 const initialState: CategoryState = {
+  addStatus: AsyncStatus.IDLE,
   categories: [],
   status: AsyncStatus.IDLE,
   error: {},
@@ -72,10 +74,22 @@ export const CategoriesSlice = createSlice({
       .addCase(fetchCategories.rejected, (state, action) => {
         state.status = AsyncStatus.FAILED;
         state.error = action.error;
+      })
+      .addCase(createCategory.pending, (state, action) => {
+        state.addStatus = AsyncStatus.FETCHING;
+      })
+      .addCase(createCategory.fulfilled, (state, action) => {
+        state.addStatus = AsyncStatus.SUCCESS;
+      })
+      .addCase(createCategory.rejected, (state, action) => {
+        state.addStatus = AsyncStatus.FAILED;
+        state.error = action.error;
       });
   },
 });
 
+export const selectAddCategoryStatus = (state: StoreState) =>
+  state.category.addStatus;
 export const selectCategories = (state: StoreState) =>
   state.category.categories;
 export const selectCategoriesStatus = (state: StoreState) =>

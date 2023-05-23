@@ -9,6 +9,7 @@ import {
   IconButton,
   Input,
   Button,
+  Grid,
 } from "@chakra-ui/react";
 import { DeleteIcon, AddIcon } from "@chakra-ui/icons";
 import { selectUser, selectUserStatus } from "../../../state/users/UserSlice";
@@ -26,13 +27,15 @@ import {
 } from "../../../state/items/ItemsSlice";
 import { store } from "../../../state/store";
 import { AsyncStatus } from "../../../state/AsyncStatus";
+import { ItemGrid } from "./ItemGrid";
+import { CategoryGrid } from "./CategoryGrid";
 
 export function AdminPage() {
   const user = useSelector(selectUser);
-  const categories = useSelector(selectCategories);
 
-  const items = useSelector(selectAllItems);
   const itemsStatus = useSelector(selectItemsStatus);
+
+  const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     if (itemsStatus === AsyncStatus.IDLE) {
@@ -46,90 +49,16 @@ export function AdminPage() {
 
   const addCategory = () => {};
 
-  return (
-    <>
-      {user?.role === UserRole.ADMIN ? (
-        <VStack spacing={100}>
-          <Heading as="h1">Administratoriaus sritis</Heading>
+    return (
+      <>
+        {user?.role === UserRole.ADMIN ? (
+          <Grid templateColumns="1fr 1fr" gap={4} justifyItems="center" paddingX="56px">
+            <CategoryGrid setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories}/>
+            <ItemGrid selectedCategories={selectedCategories}/>
+          </Grid>)
+          : <div>Prieiga draudžiama</div>
+          }
+      </>
 
-          <Box>
-            <Heading as="h2" size="lg">
-              Prekės
-            </Heading>
-            {items.map((item) => (
-              <HStack key={item.id} justifyContent="space-between">
-                <Text>{item.title}</Text>
-                <IconButton
-                  icon={<DeleteIcon />}
-                  aria-label="Delete item"
-                  onClick={() => store.dispatch(deleteItem(item.id))}
-                />
-              </HStack>
-            ))}
-          </Box>
-
-          <VStack>
-            <Box>
-              <Heading as="h2" size="lg">
-                Kategorijos
-              </Heading>
-              {categories.map((category) => (
-                <Text key={category.id}>{category.name}</Text>
-              ))}
-            </Box>
-
-            <Box>
-              <Heading as="h3" size="md">
-                Nauja kategorija
-              </Heading>
-              <VStack mt={4}>
-                <Input
-                  value={newCategoryTitle}
-                  onChange={(e) => setNewCategoryTitle(e.target.value)}
-                  placeholder="Pavadinimas"
-                />
-                <Input
-                  value={newCategoryDescription}
-                  onChange={(e) => setNewCategoryDescription(e.target.value)}
-                  placeholder="Aprašymas"
-                />
-                <Button
-                  leftIcon={<AddIcon />}
-                  colorScheme="teal"
-                  onClick={() =>
-                    store.dispatch(
-                      createCategory({
-                        name: newCategoryTitle,
-                        description: newCategoryDescription,
-                      })
-                    )
-                  }
-                >
-                  Pridėti kategoriją
-                </Button>
-              </VStack>
-            </Box>
-          </VStack>
-
-          <Box>
-            <Heading as="h2" size="lg">
-              Užsakymai
-            </Heading>
-            {items.map((item) => (
-              <HStack key={item.id} justifyContent="space-between">
-                <Text>{item.title}</Text>
-                <IconButton
-                  icon={<DeleteIcon />}
-                  aria-label="Delete item"
-                  onClick={() => store.dispatch(deleteItem(item.id))}
-                />
-              </HStack>
-            ))}
-          </Box>
-        </VStack>
-      ) : (
-        <Heading as="h1">Prieiga draudžiama!</Heading>
-      )}
-    </>
-  );
+    );
 }
