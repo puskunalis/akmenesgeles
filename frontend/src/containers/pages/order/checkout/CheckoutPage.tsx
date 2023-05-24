@@ -10,9 +10,10 @@ import {
 import { CartItem } from './CartItem'
 import { CartOrderSummary } from './CartOrderSummary'
 import { useSelector } from 'react-redux'
-import { selectCart } from '../../../state/carts/CartsSlice'
+import { selectCart } from '../../../../state/carts/CartsSlice'
 import Payment from './Payment'
-import { Step } from '../../../components/steps/Step'
+import { Step } from '../../../../components/steps/Step'
+import AddressDetailsPage from '../AddressDetailsPage'
 
 
 export const CheckoutPage = () => {
@@ -65,6 +66,5 @@ export const CheckoutPage = () => {
             </HStack>
         </Flex>
         </Stack>
-        <Payment/>
     </Box>)
 }

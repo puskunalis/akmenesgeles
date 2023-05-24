@@ -1,4 +1,6 @@
 import { Badge, Box, Center, Flex, Heading, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { CartItem, Order } from "../../../types";
+import { formatPrice } from "../order/checkout/PriceTag";
 
 enum statusColor {
     PENDING = 'yellow',
@@ -21,11 +23,26 @@ function getPurchaseStatus(status: string){
 
 
 export interface PurchaseHistoryProps{
- orders: []
+ orders: Order[];
 }
 
 
 export function PurchaseHistory(props: PurchaseHistoryProps) {
+    const {orders} = props;
+
+    
+    const calculateTotalPrice = (order: Order): number => {
+        let totalPrice = 0;
+    
+        order?.orderItems?.forEach((cartItem: CartItem) => {
+            const itemPrice = cartItem.item?.price * cartItem.quantity;
+            totalPrice += itemPrice;
+            console.log(itemPrice);
+        });
+    
+        return totalPrice;
+    }
+
     return (
     <Box width={"100%"} marginRight="56px">
         <Center>
@@ -41,48 +58,14 @@ export function PurchaseHistory(props: PurchaseHistoryProps) {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <Tr key={0} h="50px">
-                    <Td>{"fakeData"}</Td>
-                    <Td>{15}</Td>
-                    <Td>{getPurchaseStatus("PENDING")}</Td>
-                    </Tr>
-                    <Tr key={1}>
-                    <Td>{"fakeData"}</Td>
-                    <Td>{15}</Td>
-                    <Td>{getPurchaseStatus("PAID")}</Td>
-                    </Tr>
-                    <Tr key={2}>
-                    <Td>{"fakeData"}</Td>
-                    <Td>{15}</Td>
-                    <Td>{getPurchaseStatus("CONFIRMED")}</Td>
-                    </Tr>
-                    <Tr key={3}>
-                    <Td>{"fakeData"}</Td>
-                    <Td>{15}</Td>
-                    <Td>{getPurchaseStatus("SHIPPED")}</Td>
-                    </Tr>
-                    <Tr key={4}>
-                    <Td>{"fakeData"}</Td>
-                    <Td>{15}</Td>
-                    <Td>{getPurchaseStatus("DELIVERED")}</Td>
-                    </Tr>
-                    <Tr key={5}>
-                    <Td>{"fakeData"}</Td>
-                    <Td>{15}</Td>
-                    <Td>{getPurchaseStatus("CANCELLED")}</Td>
-                    </Tr>
-                    <Tr key={6}>
-                    <Td>{"fakeData"}</Td>
-                    <Td>{15}</Td>
-                    <Td>{getPurchaseStatus("REFUNDED")}</Td>
-                    </Tr>
-                {/* {orders.map((order) => (
+                
+                {orders?.map((order) => (
                     <Tr key={order.id}>
-                    <Td>{order.name}</Td>
-                    <Td>{order.price}</Td>
-                    <Td>{order.status}</Td>
+                    <Td>{}</Td>
+                    <Td>{formatPrice(calculateTotalPrice(order))}</Td>
+                    <Td>{getPurchaseStatus(order.status.toString())}</Td>
                     </Tr>
-                ))} */}
+                ))}
                 </Tbody>
             </Table>
         </Box>

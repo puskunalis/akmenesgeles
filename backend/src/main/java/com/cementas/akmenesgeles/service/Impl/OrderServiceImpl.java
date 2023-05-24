@@ -36,6 +36,12 @@ public class OrderServiceImpl implements OrderService {
         if (cart == null) {
             return null;
         }
+        Order order = Order.builder()
+                .id(UUID.randomUUID())
+                .user(user.get())
+                .status(OrderStatus.PENDING)
+                .createdAt(LocalDateTime.now(ZoneId.of("UTC")))
+                .build();
 
         List<OrderItem> orderItems = new ArrayList<>();
 
@@ -44,17 +50,13 @@ public class OrderServiceImpl implements OrderService {
                     .id(UUID.randomUUID())
                     .item(cartItem.getItem())
                     .quantity(cartItem.getQuantity())
+                    .order(order)
                     .build();
             orderItems.add(orderItem);
         }
 
-        Order order = Order.builder()
-                .id(UUID.randomUUID())
-                .user(user.get())
-                .orderItems(orderItems)
-                .status(OrderStatus.PENDING)
-                .createdAt(LocalDateTime.now(ZoneId.of("UTC")))
-                .build();
+        order.setOrderItems(orderItems);
+
         orderRepository.save(order);
         return order;
     }
