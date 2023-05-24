@@ -22,11 +22,10 @@ public class ShippingAddress implements Serializable {
     @Id
     @Column(name = "address_id")
     private UUID id;
-    private String street;
+    private String fullName;
     private String city;
     private String postalCode;
-    private String houseNumber;
-    private String apartmentNumber;
+    private String address;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

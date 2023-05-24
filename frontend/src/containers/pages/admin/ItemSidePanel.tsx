@@ -76,7 +76,6 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
         return editedTitle === item?.title && editedDescription === item?.description && editedPrice === item?.price ||
             titleError !== "" || descriptionError !== "" || priceError !== ""; 
     }, [item, editedTitle, editedDescription, titleError, descriptionError, priceError])
-    console.log("disable: ", disableSaveButton);
 
     return (   
         <Drawer isOpen={isOpen} placement="right" onClose={handleCloseSidePanel} size="md">
