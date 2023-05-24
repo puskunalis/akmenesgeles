@@ -3,9 +3,10 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { Address } from '../../../types';
 import { useState } from 'react';
 import { store } from '../../../state/store';
-import { deleteAddress, fetchAddressByUser } from '../../../state/address/AddressSlice';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../../state/users/UserSlice';
+import { deleteAddress, fetchAddressByUser } from '../../../state/address/AddressSlice';
+import React from 'react';
 
 export interface AddressListProps {
   addresses: Address[];

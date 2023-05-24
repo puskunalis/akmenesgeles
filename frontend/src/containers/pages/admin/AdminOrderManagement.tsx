@@ -2,7 +2,7 @@ import { Box, Center, Flex, Grid, Heading, Table, Tbody, Td, Th, Thead, Tr } fro
 import * as React from 'react';
 import { formatPrice } from "../order/checkout/PriceTag";
 import { calculateTotalPrice, getPurchaseStatus } from "../user/PurchaseHistory";
-import { fetchOrdersByStatus, selectOrderByStatus } from "../../../state/order/OrdersSlice";
+import { fetchOrdersByStatus, selectOrdersByStatus } from "../../../state/order/OrdersSlice";
 import { useSelector } from "react-redux";
 import { store } from "../../../state/store";
 import { OrderStatus } from "../../../types";
@@ -48,7 +48,7 @@ export interface adminItemsList{
 export function AdminOrders(props: adminItemsList) {
     const [selectedStatus, setSelectedStatus] = React.useState<OrderStatus | undefined>(undefined);
     // const [isLoading, setIsLoading] = React.useState(false);
-    const orders = useSelector(selectOrderByStatus);
+    const orders = useSelector(selectOrdersByStatus);
 
     React.useEffect(() => {
         if (selectedStatus){

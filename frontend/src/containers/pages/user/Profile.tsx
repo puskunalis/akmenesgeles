@@ -3,11 +3,11 @@ import { Box, Flex, Avatar, Text, VStack, HStack, Button, Spacer } from '@chakra
 import { User, UserRole } from '../../../types';
 import { selectUser } from '../../../state/users/UserSlice';
 import { useSelector } from 'react-redux';
-import { AddressDetailsModal } from '../order/checkout/AddressDetailsModal';
-import AddressList from './AddressList';
-import { deleteAddress, fetchAddressByUser, selectUserAddresses } from '../../../state/address/AddressSlice';
 import { store } from '../../../state/store';
 import { fetchOrdersByUserId } from '../../../state/order/OrdersSlice';
+import { fetchAddressByUser, selectUserAddresses } from '../../../state/address/AddressSlice';
+import { AddressDetailsModal } from '../order/checkout/AddressDetailsModal';
+import AddressList from './AddressList';
 
 const userData = {
     name: 'himler',
@@ -49,7 +49,7 @@ export function Profile(props: profileProps) {
             </HStack>
             <AddressList
                 addresses={addresses}
-                onDelete={() => {store.dispatch(fetchAddressByUser(user?.id))}}
+                onDelete={() => {}}
             />
         </Flex>
         <AddressDetailsModal
