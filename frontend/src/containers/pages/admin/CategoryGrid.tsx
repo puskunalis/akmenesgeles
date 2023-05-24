@@ -4,6 +4,8 @@ import { selectCategories } from "../../../state/categories/CategoriesSlice";
 import { Dispatch, SetStateAction } from "react";
 import * as React from "react";
 import { AddCategoryModal } from "../../../components/AddCategoryModal";
+import { Category } from "../../../types";
+import { CategorySidePanel } from "./CategorySidePanel";
 
 function AddCategoryModalButton() {
     const [openAddCategory, setOpenAddCategory] = React.useState<boolean>(false);
@@ -40,7 +42,16 @@ export interface CategoryGridProps{
 
 export function CategoryGrid(props: CategoryGridProps) {
     const { setSelectedCategories, selectedCategories } = props;
+    const [selectedCategory, setSelectedCategory] = React.useState<Category | undefined>(undefined);
     const categories = useSelector(selectCategories);
+
+    const handleCategoryClick = (category: Category) => {
+        setSelectedCategory(category);
+    };
+
+    const onCategoryPanelClose = () => {
+        setSelectedCategory(undefined);
+    }
 
     const handleCheckboxChange = (categoryId: string) => {
         if (selectedCategories.includes(categoryId)) {
@@ -73,7 +84,11 @@ export function CategoryGrid(props: CategoryGridProps) {
                 <Tbody>
                     {categories.map((category) => (
                     <Tr key={category.id} >
-                        <Td>{category.name}</Td>
+                        <Td>                  
+                            <Box as="button" color="blue.500" fontWeight="bold" onClick={() => handleCategoryClick(category)}>
+                                {category.name}
+                            </Box>
+                        </Td>
                         <Td maxWidth="100px"
                             overflow="hidden"
                             textOverflow="ellipsis"
@@ -88,5 +103,6 @@ export function CategoryGrid(props: CategoryGridProps) {
                 </Tbody>
             </Table>
         </Box>
+        <CategorySidePanel category={selectedCategory} isOpen={!!selectedCategory} onCLose={onCategoryPanelClose}/>
     </Box>);
 }
