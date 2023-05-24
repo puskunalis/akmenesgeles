@@ -16,6 +16,7 @@ import { CheckoutPage } from "./containers/pages/order/checkout/CheckoutPage";
 import { AddressPage } from "./containers/pages/order/AddressPage";
 import { PaymentPage } from "./containers/pages/order/PaymentPage";
 import Success from "./containers/pages/order/statusPages/Success";
+import SingleOrderPage from "./containers/pages/order/SingleOrderPage";
 
 export const App = () => {
   
@@ -37,7 +38,7 @@ export const App = () => {
           <Route path="address" element={<AddressPage/>}/>
           <Route path="payment" element={<PaymentPage/>}/>
           <Route path="success" element={<Success/>}/>
-          
+          <Route path="order/:orderId" element={<SingleOrderPage/>}/>
         </Route>
       </Routes>
     </ChakraProvider>
