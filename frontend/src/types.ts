@@ -55,7 +55,7 @@ export interface Order {
   userId: string,
   orderItems: CartItem[],
   status: OrderStatus,
-  createdAt: Date
+  createdAt: string
 }
 
 export interface Address {
@@ -65,4 +65,11 @@ export interface Address {
   postalCode: string,
   address: string
   userId?: string;
+}
+
+export interface Payment {
+  cardHolder: string,
+  cardNumber: string,
+  expiryDate: string,
+  cvv: string
 }
