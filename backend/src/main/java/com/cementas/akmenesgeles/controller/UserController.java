@@ -68,14 +68,4 @@ public class UserController {
         }
         return ResponseEntity.notFound().build();
     }
-
-    @PostMapping("{id}/address")
-    public ResponseEntity<ShippingAddress> addShippingAddress(@PathVariable UUID id,
-                                                              @RequestBody ShippingAddressDto shippingAddressDto) {
-        ShippingAddress shippingAddress = userService.addShippingAddress(id, shippingAddressDto);
-        if(shippingAddress != null) {
-            return ResponseEntity.ok(shippingAddress);
-        }
-        return ResponseEntity.notFound().build();
-    }
 }

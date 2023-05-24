@@ -57,3 +57,12 @@ export interface Order {
   status: OrderStatus,
   createdAt: Date
 }
+
+export interface Address {
+  id?: string,
+  fullName: string,
+  city: string,
+  postalCode: string,
+  address: string
+  userId?: string;
+}

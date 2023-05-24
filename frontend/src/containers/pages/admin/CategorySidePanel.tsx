@@ -58,7 +58,7 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
         return editedName === category?.name && editedDescription === category?.description ||
             nameError !== "" || descriptionError !== ""; 
     }, [category, editedName, editedDescription, nameError, descriptionError])
-    console.log("disable: ", disableSaveButton);
+
 
     return (   
         <Drawer isOpen={isOpen} placement="right" onClose={handleCloseSidePanel} size="md">

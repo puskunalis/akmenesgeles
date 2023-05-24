@@ -17,5 +17,4 @@ public interface UserService {
     Optional<User> getById(UUID id);
     String add(CreateUserDto createUserDto);
     LoginResponseDto login(String username, String password);
-    ShippingAddress addShippingAddress(UUID userId, ShippingAddressDto addressDto);
 }
