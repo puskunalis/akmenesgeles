@@ -1,9 +1,10 @@
-import { Box, Button, Center, Flex, Heading, Spacer, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Button, Center, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, Spacer, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { selectAllItems } from "../../../state/items/ItemsSlice";
 import { Item } from "../../../types";
 import * as React from "react";
 import { AddItemModal } from "../../../components/AddItemModal";
+import { ItemSidePanel } from "./ItemSidePanel";
 
 function AddItemModalButton() {
     const [openAddItem, setOpenAddItem] = React.useState<boolean>(false);
@@ -40,7 +41,16 @@ export interface ItemGridProps {
 export function ItemGrid (props: ItemGridProps) {
     const { selectedCategories } = props;
     const [filteredItems, setFilteredItems] = React.useState<Item[]>();
+    const [selectedItem, setSelectedItem] = React.useState<Item | undefined>(undefined);
     const items = useSelector(selectAllItems);
+
+    const handleItemClick = (item: Item) => {
+        setSelectedItem(item);
+    };
+
+    const onItemPanelClose = () => {
+        setSelectedItem(undefined);
+    }
 
     React.useEffect(() => {
         if (selectedCategories.length === 0){
@@ -73,7 +83,11 @@ export function ItemGrid (props: ItemGridProps) {
                 <Tbody>
                     {filteredItems?.map((item) => (
                     <Tr key={item.id} >
-                        <Td>{item.title}</Td>
+                        <Td>                  
+                            <Box as="button" color="blue.500" fontWeight="bold" onClick={() => handleItemClick(item)}>
+                                {item.title}
+                            </Box>
+                        </Td>
                         <Td>{item.price}</Td>
                         <Td maxWidth="100px"
                             overflow="hidden"
@@ -85,6 +99,7 @@ export function ItemGrid (props: ItemGridProps) {
                 </Tbody>
             </Table>
         </Box>
-     </Box>
+        <ItemSidePanel item={selectedItem} isOpen={!!selectedItem} onCLose={onItemPanelClose}/>
+    </Box>
     );
 }
