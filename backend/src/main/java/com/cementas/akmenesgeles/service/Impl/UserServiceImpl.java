@@ -1,13 +1,16 @@
 package com.cementas.akmenesgeles.service.Impl;
 
 import com.cementas.akmenesgeles.config.JwtConfig;
+import com.cementas.akmenesgeles.dto.ShippingAddress.ShippingAddressDto;
 import com.cementas.akmenesgeles.dto.User.CreateUserDto;
 import com.cementas.akmenesgeles.dto.User.LoginResponseDto;
 import com.cementas.akmenesgeles.dto.User.UserDto;
 import com.cementas.akmenesgeles.model.Cart;
+import com.cementas.akmenesgeles.model.ShippingAddress;
 import com.cementas.akmenesgeles.model.User;
 import com.cementas.akmenesgeles.model.UserRole;
 import com.cementas.akmenesgeles.repository.CartRepository;
+import com.cementas.akmenesgeles.repository.ShippingAddressRepository;
 import com.cementas.akmenesgeles.repository.UserRepository;
 import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
@@ -29,6 +32,8 @@ import org.springframework.security.core.Authentication;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final ShippingAddressRepository addressRepository;
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -77,6 +82,24 @@ public class UserServiceImpl implements UserService {
             return new LoginResponseDto(generateToken(user.get()));
         }
 
+        return null;
+    }
+
+    @Override
+    public ShippingAddress addShippingAddress(UUID userId, ShippingAddressDto addressDto) {
+        Optional<User> user = getById(userId);
+        if(user.isPresent()) {
+            ShippingAddress shippingAddress = new ShippingAddress();
+            shippingAddress.setId(UUID.randomUUID());
+            shippingAddress.setCity(addressDto.getCity());
+            shippingAddress.setStreet(addressDto.getStreet());
+            shippingAddress.setPostalCode(addressDto.getPostalCode());
+            shippingAddress.setHouseNumber(addressDto.getHouseNumber());
+            shippingAddress.setApartmentNumber(addressDto.getApartmentNumber());
+            shippingAddress.setUser(user.get());
+            addressRepository.save(shippingAddress);
+            return shippingAddress;
+        }
         return null;
     }
 

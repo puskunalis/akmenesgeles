@@ -1,8 +1,10 @@
 package com.cementas.akmenesgeles.service;
 
+import com.cementas.akmenesgeles.dto.ShippingAddress.ShippingAddressDto;
 import com.cementas.akmenesgeles.dto.User.CreateUserDto;
 import com.cementas.akmenesgeles.dto.User.LoginResponseDto;
 import com.cementas.akmenesgeles.dto.User.UserDto;
+import com.cementas.akmenesgeles.model.ShippingAddress;
 import com.cementas.akmenesgeles.model.User;
 import org.springframework.http.ResponseEntity;
 
@@ -15,4 +17,5 @@ public interface UserService {
     Optional<User> getById(UUID id);
     String add(CreateUserDto createUserDto);
     LoginResponseDto login(String username, String password);
+    ShippingAddress addShippingAddress(UUID userId, ShippingAddressDto addressDto);
 }
