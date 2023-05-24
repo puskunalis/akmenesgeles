@@ -30,7 +30,7 @@ export function UserPage() {
       if (user){
           store.dispatch(fetchOrdersByUserId(user.id));
       }
-  }, [user])
+    }, [user])
 
   return (
     <Grid templateColumns="1fr 1fr" gap={4} justifyItems="center">

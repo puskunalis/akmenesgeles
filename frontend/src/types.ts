@@ -41,13 +41,13 @@ export interface CartItem {
 }
 
 export enum OrderStatus {
-  PENDING,
-  PAID,
-  CONFIRMED,
-  SHIPPED,
-  DELIVERED,
-  CANCELLED,
-  REFUNDED
+  PENDING = "PENDING",
+  PAID = "PAID",
+  CONFIRMED = "CONFIRMED",
+  SHIPPED = "SHIPPED",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
+  REFUNDED = "REFUNDED"
 }
 
 export interface Order { 

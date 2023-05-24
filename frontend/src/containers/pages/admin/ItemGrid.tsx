@@ -71,8 +71,8 @@ export function ItemGrid (props: ItemGridProps) {
             </Box>
             <AddItemModalButton />
         </Flex>
-        <Box borderWidth="1px" borderColor="gray.200" borderRadius="md">
-            <Table >
+        <Box borderWidth="1px" borderColor="gray.200" borderRadius="md" maxHeight="70vh" overflowY="scroll">
+            <Table>
                 <Thead>
                     <Tr>
                         <Th>Pavadinimas</Th>
