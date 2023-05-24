@@ -1,0 +1,17 @@
+.order-details-wrapper{
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    padding: 2em 20vw;
+    gap: 1em;
+    .order-information-wrapper{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .total-price{
+        gap: 0.5em;
+        display: flex;
+        flex-direction: column;
+        align-self: end;
+    }
+}
