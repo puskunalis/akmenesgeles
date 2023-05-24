@@ -12,7 +12,7 @@ enum statusColor {
     REFUNDED = 'orange'
 }
 
-function getPurchaseStatus(status: string){
+export function getPurchaseStatus(status: string){
     if (statusColor.hasOwnProperty(status)) {
         const color = Object.entries(statusColor).find(([key, val]) => key === status)?.[1];
         return <Badge colorScheme={color} borderRadius={"md"}>{status}</Badge>;
@@ -26,22 +26,21 @@ export interface PurchaseHistoryProps{
  orders: Order[];
 }
 
+export function calculateTotalPrice(order: Order): number {
+    let totalPrice = 0;
+
+    order?.orderItems?.forEach((cartItem: CartItem) => {
+        const itemPrice = cartItem.item?.price * cartItem.quantity;
+        totalPrice += itemPrice;
+        console.log(itemPrice);
+    });
+
+    return totalPrice;
+}
+
 
 export function PurchaseHistory(props: PurchaseHistoryProps) {
     const {orders} = props;
-
-    
-    const calculateTotalPrice = (order: Order): number => {
-        let totalPrice = 0;
-    
-        order?.orderItems?.forEach((cartItem: CartItem) => {
-            const itemPrice = cartItem.item?.price * cartItem.quantity;
-            totalPrice += itemPrice;
-            console.log(itemPrice);
-        });
-    
-        return totalPrice;
-    }
 
     return (
     <Box width={"100%"} marginRight="56px">
