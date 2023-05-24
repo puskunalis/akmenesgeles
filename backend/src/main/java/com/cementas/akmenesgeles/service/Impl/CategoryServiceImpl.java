@@ -1,6 +1,7 @@
 package com.cementas.akmenesgeles.service.Impl;
 
 import com.cementas.akmenesgeles.dto.Category.CreateCategoryDto;
+import com.cementas.akmenesgeles.dto.Category.UpdateCategoryDto;
 import com.cementas.akmenesgeles.model.Category;
 import com.cementas.akmenesgeles.repository.CategoryRepository;
 import com.cementas.akmenesgeles.service.CategoryService;
@@ -37,6 +38,25 @@ public class CategoryServiceImpl implements CategoryService {
                 .name(createCategoryDto.getName())
                 .build();
         return categoryRepository.save(newCategory);
+    }
+
+    @Override
+    public Category update(UUID id, UpdateCategoryDto updateCategoryDto) {
+        Category category = categoryRepository.getCategoryById(id);
+
+        if(updateCategoryDto.getName() != null){
+            category.setName(updateCategoryDto.getName());
+        }
+        if(updateCategoryDto.getDescription() != null){
+            category.setName(updateCategoryDto.getDescription());
+        }
+        if(updateCategoryDto.getItems() != null) {
+            category.setItems(updateCategoryDto.getItems());
+        }
+
+        categoryRepository.save(category);
+
+        return category;
     }
 
     @Override

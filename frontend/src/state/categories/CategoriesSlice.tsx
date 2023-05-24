@@ -54,6 +54,21 @@ export const createCategory = createAsyncThunk(
   }
 );
 
+export const updateCategory = createAsyncThunk(
+  "categories/updateCategory",
+  async (category: Category) => {
+    const response = await axios
+      .put(`/api/v1/category/${category.id}`, category)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error(err);
+      });
+
+    store.dispatch(fetchCategories());
+    return response;
+  }
+);
+
 export const CategoriesSlice = createSlice({
   name: "todos",
   initialState,
@@ -82,6 +97,16 @@ export const CategoriesSlice = createSlice({
         state.addStatus = AsyncStatus.SUCCESS;
       })
       .addCase(createCategory.rejected, (state, action) => {
+        state.addStatus = AsyncStatus.FAILED;
+        state.error = action.error;
+      })
+      .addCase(updateCategory.pending, (state, action) => {
+        state.addStatus = AsyncStatus.FETCHING;
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        state.addStatus = AsyncStatus.SUCCESS;
+      })
+      .addCase(updateCategory.rejected, (state, action) => {
         state.addStatus = AsyncStatus.FAILED;
         state.error = action.error;
       });
