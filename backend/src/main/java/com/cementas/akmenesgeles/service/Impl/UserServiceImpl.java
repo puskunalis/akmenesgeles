@@ -85,24 +85,6 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
-    @Override
-    public ShippingAddress addShippingAddress(UUID userId, ShippingAddressDto addressDto) {
-        Optional<User> user = getById(userId);
-        if(user.isPresent()) {
-            ShippingAddress shippingAddress = new ShippingAddress();
-            shippingAddress.setId(UUID.randomUUID());
-            shippingAddress.setCity(addressDto.getCity());
-            shippingAddress.setStreet(addressDto.getStreet());
-            shippingAddress.setPostalCode(addressDto.getPostalCode());
-            shippingAddress.setHouseNumber(addressDto.getHouseNumber());
-            shippingAddress.setApartmentNumber(addressDto.getApartmentNumber());
-            shippingAddress.setUser(user.get());
-            addressRepository.save(shippingAddress);
-            return shippingAddress;
-        }
-        return null;
-    }
-
     private String generateToken(User user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtConfig.getExpiration());

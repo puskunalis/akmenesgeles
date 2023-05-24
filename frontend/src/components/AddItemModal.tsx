@@ -52,7 +52,7 @@ export const AddItemModal = (props: RegisterProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [response, setResponse] = useState<AxiosResponse<any> | null>(null);
   const toast = useToast()
-  const itemFetchStatus = useSelector(selectAddItemStatus);
+  const itemAddStatus = useSelector(selectAddItemStatus);
   const [isLoading, setLoading] = useState(false);
 
   const resetState = () => {
@@ -98,13 +98,7 @@ export const AddItemModal = (props: RegisterProps) => {
     } catch (error) {
       console.error(error);
     }
-    
-  }
-  useEffect(() => {
-    if (!uploadedImageUrl) {
-      return;
-    }
-  
+
     const categoryIds = selectedCategories.map(c => c.value);
     const newItem: NewItem = {
       title: itemName,
@@ -114,22 +108,19 @@ export const AddItemModal = (props: RegisterProps) => {
       imageUrl: uploadedImageUrl
     }
     
-    store.dispatch(createItem(newItem));
-  }, [uploadedImageUrl]);
-
-  useEffect(() => {
-    if(itemFetchStatus === AsyncStatus.SUCCESS){
-      setLoading(false);
+    await store.dispatch(createItem(newItem));
+    setLoading(false);
+    onCloseModal();
+    if (itemAddStatus === AsyncStatus.SUCCESS) {
       toast({
         title: 'Preke prideta.',
         description: "Preke buvo sekmingai prideta.",
         status: 'success',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
-      onCloseModal();
-    }
-  }, [itemFetchStatus])
+    } 
+  }
 
   const getOption = (category: Category) => {
     return {value: category.id, label: category.name};

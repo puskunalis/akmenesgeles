@@ -3,6 +3,11 @@ import { Box, Flex, Avatar, Text, VStack, HStack, Button, Spacer } from '@chakra
 import { User, UserRole } from '../../../types';
 import { selectUser } from '../../../state/users/UserSlice';
 import { useSelector } from 'react-redux';
+import { store } from '../../../state/store';
+import { fetchOrdersByUserId } from '../../../state/order/OrdersSlice';
+import { fetchAddressByUser, selectUserAddresses } from '../../../state/address/AddressSlice';
+import { AddressDetailsModal } from '../order/checkout/AddressDetailsModal';
+import AddressList from './AddressList';
 
 const userData = {
     name: 'himler',
@@ -19,6 +24,13 @@ export interface profileProps {
 
 export function Profile(props: profileProps) {
     const user = useSelector(selectUser);
+    const [isOpen, setOpen] = React.useState(false);
+    const addresses = useSelector(selectUserAddresses);
+
+    React.useEffect(()=>{
+        store.dispatch(fetchAddressByUser(user?.id))
+    }, [user])
+
     return (
     <Box p={5}>
         <Flex alignItems='center' justifyContent='center' flexDirection='column'>
@@ -33,9 +45,17 @@ export function Profile(props: profileProps) {
             <HStack mt={4}>
                 <Button colorScheme='green'>Tvarkyti paskyrą</Button>
                 <Spacer />
-                <Button colorScheme='green'>Pridėti mokėjimo būdų</Button>
+                <Button colorScheme='green' onClick={() => setOpen(true)}>Pridėti pristatymo adresą</Button>
             </HStack>
+            <AddressList
+                addresses={addresses}
+                onDelete={() => {}}
+            />
         </Flex>
+        <AddressDetailsModal
+            isOpen = {isOpen}
+            onClose={() => setOpen(false)}
+        />
     </Box>
   );
 }

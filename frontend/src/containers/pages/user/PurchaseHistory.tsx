@@ -26,23 +26,21 @@ export interface PurchaseHistoryProps{
  orders: Order[];
 }
 
-export function calculateTotalPrice (order: Order): number {
-        let totalPrice = 0;
-    
-        order?.orderItems?.forEach((cartItem: CartItem) => {
-            const itemPrice = cartItem.item?.price * cartItem.quantity;
-            totalPrice += itemPrice;
-            console.log(itemPrice);
-        });
-    
-        return totalPrice;
-    }
+export function calculateTotalPrice(order: Order): number {
+    let totalPrice = 0;
+
+    order?.orderItems?.forEach((cartItem: CartItem) => {
+        const itemPrice = cartItem.item?.price * cartItem.quantity;
+        totalPrice += itemPrice;
+        console.log(itemPrice);
+    });
+
+    return totalPrice;
+}
+
 
 export function PurchaseHistory(props: PurchaseHistoryProps) {
     const {orders} = props;
-
-    
-    
 
     return (
     <Box width={"100%"} marginRight="56px">

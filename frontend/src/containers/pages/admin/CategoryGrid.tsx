@@ -71,7 +71,7 @@ export function CategoryGrid(props: CategoryGridProps) {
             </Box>
             <AddCategoryModalButton />
         </Flex>
-        <Box borderWidth="1px" borderColor="gray.200" borderRadius="md">
+        <Box borderWidth="1px" borderColor="gray.200" borderRadius="md" maxHeight="70vh" overflowY="scroll">
             <Table >
                 <Thead>
                     <Tr>

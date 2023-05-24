@@ -4,6 +4,7 @@ import { CategoriesSlice, CategoryState } from "./categories/CategoriesSlice";
 import { UserSlice, UserState } from "./users/UserSlice";
 import { CartsSlice, CartState } from "./carts/CartsSlice";
 import { OrdersSlice, OrderState } from "./order/OrdersSlice";
+import { AddressSlice, AddressState } from "./address/AddressSlice";
 
 export interface StoreState {
     item: ItemState;
@@ -11,6 +12,7 @@ export interface StoreState {
     user: UserState;
     cart: CartState;
     order: OrderState;
+    address: AddressState;
 }
 
 export const store = configureStore({
@@ -20,5 +22,6 @@ export const store = configureStore({
         user: UserSlice.reducer,
         cart: CartsSlice.reducer,
         order: OrdersSlice.reducer,
+        address: AddressSlice.reducer,
     }
 })

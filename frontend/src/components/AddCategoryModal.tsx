@@ -31,7 +31,7 @@ export const AddCategoryModal = (props: ModalProps) => {
     const [description, setDescription] = useState<any>();
     const [response, setResponse] = useState<AxiosResponse<any> | null>(null);
     const toast = useToast()
-    const categoryFetchStatus = useSelector(selectAddCategoryStatus);
+    const categoryAddStatus = useSelector(selectAddCategoryStatus);
     const [isLoading, setLoading] = useState(false);
 
     const resetState = () => {
@@ -53,13 +53,9 @@ export const AddCategoryModal = (props: ModalProps) => {
             name: name,
             description: description,
         }
-        
-        store.dispatch(createCategory(newCategory));
-      };
-    
-    useEffect(() => {
-        if(categoryFetchStatus === AsyncStatus.SUCCESS){
-            setLoading(false);
+        await store.dispatch(createCategory(newCategory));
+        setLoading(false);
+        if (categoryAddStatus === AsyncStatus.SUCCESS) {
             toast({
                 title: 'Kategorija prideta.',
                 description: "Kategorija buvo sekmingai prideta.",
@@ -67,9 +63,9 @@ export const AddCategoryModal = (props: ModalProps) => {
                 duration: 3000,
                 isClosable: true,
             });
-            onCloseModal();
         }
-    }, [categoryFetchStatus])
+        onCloseModal();
+      };
 
     const [nameError, setNameError] = useState<string>();
     const handleNameChange = (e: any) => {

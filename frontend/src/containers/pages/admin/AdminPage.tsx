@@ -1,61 +1,31 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import {
-  Box,
-  Heading,
-  VStack,
-  HStack,
-  Text,
-  IconButton,
-  Input,
-  Button,
-  Grid,
-} from "@chakra-ui/react";
-import { DeleteIcon, AddIcon } from "@chakra-ui/icons";
-import { selectUser, selectUserStatus } from "../../../state/users/UserSlice";
+import { selectUser } from "../../../state/users/UserSlice";
 import { UserRole } from "../../../types";
-import {
-  createCategory,
-  selectCategories,
-} from "../../../state/categories/CategoriesSlice";
-import {
-  fetchItems,
-  fetchItemsByCategoryId,
-  selectAllItems,
-  selectItemsStatus,
-  deleteItem,
-} from "../../../state/items/ItemsSlice";
-import { store } from "../../../state/store";
-import { AsyncStatus } from "../../../state/AsyncStatus";
-import { ItemGrid } from "./ItemGrid";
-import { CategoryGrid } from "./CategoryGrid";
+import { AdminItems } from "./AdminItemManagement";
+import { AdminOrders } from "./AdminOrderManagement";
+import { Box, Flex, Switch, Text} from "@chakra-ui/react";
 
 export function AdminPage() {
   const user = useSelector(selectUser);
-
-  const itemsStatus = useSelector(selectItemsStatus);
-
-  const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
-
-  React.useEffect(() => {
-    if (itemsStatus === AsyncStatus.IDLE) {
-      store.dispatch(fetchItems());
-    }
-  }, []);
-
-  const [newCategoryTitle, setNewCategoryTitle] = React.useState("");
-  const [newCategoryDescription, setNewCategoryDescription] =
-    React.useState("");
-
-  const addCategory = () => {};
+  const [showItems, setShowItems] = React.useState(true);
+  const handleSwitchChange = () => {
+    setShowItems(!showItems);
+  };
 
     return (
       <>
         {user?.role === UserRole.ADMIN ? (
-          <Grid templateColumns="1fr 1fr" gap={4} justifyItems="center" paddingX="56px">
-            <CategoryGrid setSelectedCategories={setSelectedCategories} selectedCategories={selectedCategories}/>
-            <ItemGrid selectedCategories={selectedCategories}/>
-          </Grid>)
+          <>
+            <Flex justifyContent="center" alignItems="center" fontSize="20pt" paddingBottom={"12px"}>
+              <Text display="inline-block" paddingRight="12px" fontWeight="bold" > Užsakymai </Text>
+              <Switch isChecked={showItems} onChange={handleSwitchChange} colorScheme="teal" size="lg"/>
+              <Text display="inline-block" paddingLeft="12px"  fontWeight="bold" > Prekės </Text>
+            </Flex>
+            
+            {showItems ? <AdminItems /> : <AdminOrders />}
+          </>
+          )
           : <div>Prieiga draudžiama</div>
           }
       </>
