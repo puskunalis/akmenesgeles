@@ -34,6 +34,18 @@ export const fetchOrdersByUserId = createAsyncThunk(
     }
 );
 
+export const fetchOrderById = createAsyncThunk(
+    "orders/fetchOrderById",
+    async (orderId: string) => {
+        const response = axios
+        .get(`/api/v1/orders/${orderId}`)
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+
+        return response;
+    }
+);
+
 export const createOrder = createAsyncThunk(
     "orders/createOrder",
     async (userId: string) => {
@@ -129,6 +141,17 @@ extraReducers(builder) {
         state.status = AsyncStatus.SUCCESS;
     })
     .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.status = AsyncStatus.FAILED;
+        state.error = action.error;
+    })
+    .addCase(fetchOrderById.pending, (state, action) => {
+        state.status = AsyncStatus.FETCHING;
+    })
+    .addCase(fetchOrderById.fulfilled, (state, action) => {
+        state.status = AsyncStatus.SUCCESS;
+        state.currentOrder = action.payload;
+    })
+    .addCase(fetchOrderById.rejected, (state, action) => {
         state.status = AsyncStatus.FAILED;
         state.error = action.error;
     });
