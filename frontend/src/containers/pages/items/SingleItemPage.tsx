@@ -29,7 +29,7 @@ export default function SingleItemPage () {
     const item = useSelector(selectSingleItem);
     const [quantity, setQuantity] = useState<number>(1);
     const cart = useSelector(selectCart);
-    const cartStatus = useSelector(selectCartStatus)
+    const cartStatus = useSelector(selectCartStatus);
     const toast = useToast();
 
     useEffect(() => {
