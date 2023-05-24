@@ -39,3 +39,21 @@ export interface CartItem {
   item: Item,
   quantity: number
 }
+
+export enum OrderStatus {
+  PENDING,
+  PAID,
+  CONFIRMED,
+  SHIPPED,
+  DELIVERED,
+  CANCELLED,
+  REFUNDED
+}
+
+export interface Order { 
+  id: string,
+  userId: string,
+  orderItems: CartItem[],
+  status: OrderStatus,
+  createdAt: Date
+}

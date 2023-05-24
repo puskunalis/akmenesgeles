@@ -9,7 +9,12 @@ import {
   } from '@chakra-ui/react'
   import { FaArrowRight } from 'react-icons/fa'
   import { formatPrice } from './PriceTag'
-import { Cart } from '../../../types'
+import { Cart } from '../../../../types'
+import { useNavigate } from 'react-router-dom'
+import { store } from '../../../../state/store'
+import { createOrder } from '../../../../state/order/OrdersSlice'
+import { useSelector } from 'react-redux'
+import { selectUser } from '../../../../state/users/UserSlice'
   
   type OrderSummaryItemProps = {
     label: string
@@ -23,7 +28,7 @@ import { Cart } from '../../../types'
   }
   
   const OrderSummaryItem = (props: OrderSummaryItemProps) => {
-    const { label, value, children } = props
+    const { label, value, children } = props;
 
     return (
       <Flex justify="space-between" fontSize="sm">
@@ -37,8 +42,16 @@ import { Cart } from '../../../types'
   
   export const CartOrderSummary = (props: OrderSummaryProps) => {
     const {cart} = props;
-
+    const user = useSelector(selectUser);
     const shippingPrice = 3;
+    const navigate = useNavigate();
+
+    const handleOnClick = async () => {
+      if(user){
+        await store.dispatch(createOrder(user.id));
+        navigate('/address');
+      }
+    }
 
     const sumPrice = () => {
       let sum = 0;
@@ -65,8 +78,8 @@ import { Cart } from '../../../types'
             </Text>
           </Flex>
         </Stack>
-        <Button colorScheme="green" size="lg" fontSize="md" rightIcon={<FaArrowRight />}>
-          Apmokėti
+        <Button colorScheme="green" size="lg" fontSize="md" rightIcon={<FaArrowRight />} onClick={handleOnClick}>
+          Toliau
         </Button>
       </Stack>
     )

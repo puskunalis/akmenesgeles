@@ -20,9 +20,9 @@ import { AsyncStatus } from "../state/AsyncStatus";
 import { store } from "../state/store";
 import { selectUser } from "../state/users/UserSlice";
 import './ShoppingCartPopup.scss';
-import { CartItem } from "../containers/pages/checkout/CartItem";
+import { CartItem } from "../containers/pages/order/checkout/CartItem";
 import { useNavigate } from "react-router-dom";
-import { formatPrice } from "../containers/pages/checkout/PriceTag";
+import { formatPrice } from "../containers/pages/order/checkout/PriceTag";
 
 const ShoppingCartPopup = () => {
   const [isOpen, setIsOpen] = useState(false);

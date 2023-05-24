@@ -20,7 +20,7 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class Order implements Serializable {
     @Id
-    @Column(nullable = false, updatable = false, name = "order_id")
+    @Column(nullable = false, updatable = false)
     private UUID id;
 
     @ManyToOne
@@ -28,11 +28,12 @@ public class Order implements Serializable {
     @JsonBackReference
     private User user;
 
-    @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<OrderItem> orderItems;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 }

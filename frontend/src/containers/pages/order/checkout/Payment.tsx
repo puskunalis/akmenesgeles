@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Box, Flex, Text, Image, Button, Input } from "@chakra-ui/react";
 import { FiCreditCard } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 
 const PaymentCard = () => {
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCVV] = useState("");
+  const navigate = useNavigate();
 
   const handleCardNumberChange = (e: any) => {
     const formattedCardNumber = formatCardNumber(e.target.value);
@@ -110,9 +112,9 @@ const PaymentCard = () => {
         colorScheme="green"
         size="md"
         w="100%"
-        onClick={() => {}}
+        onClick={() => navigate('/success')}
       >
-        Pay Now
+        Apmokėti
       </Button>
     </Box>
   );

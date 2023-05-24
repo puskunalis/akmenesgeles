@@ -2,10 +2,10 @@ import { CloseButton, Flex, Link, Select, SelectProps, useColorModeValue } from 
 import { PriceTag } from './PriceTag';
 import { CartProductMeta } from './CartProductMeta';
 import './CartItem.scss';
-import ItemAmount from '../../../components/ItemAmount';
+import ItemAmount from '../../../../components/ItemAmount';
 import * as React from 'react';
-import { store } from '../../../state/store';
-import { changeCartItemQuantity, deleteItemFromCart, fetchCartByCartId, selectCartId } from '../../../state/carts/CartsSlice';
+import { store } from '../../../../state/store';
+import { changeCartItemQuantity, deleteItemFromCart, fetchCartByCartId, selectCartId } from '../../../../state/carts/CartsSlice';
 import { useSelector } from 'react-redux';
 
 type CartItemProps = {
