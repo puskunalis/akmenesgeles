@@ -5,7 +5,7 @@ import { selectUser } from '../../../state/users/UserSlice';
 import { useSelector } from 'react-redux';
 import { AddressDetailsModal } from '../order/checkout/AddressDetailsModal';
 import AddressList from './AddressList';
-import { fetchAddressByUser, selectUserAddresses } from '../../../state/address/AddressSlice';
+import { deleteAddress, fetchAddressByUser, selectUserAddresses } from '../../../state/address/AddressSlice';
 import { store } from '../../../state/store';
 import { fetchOrdersByUserId } from '../../../state/order/OrdersSlice';
 
@@ -49,7 +49,7 @@ export function Profile(props: profileProps) {
             </HStack>
             <AddressList
                 addresses={addresses}
-                onDelete={() => {}}
+                onDelete={() => {store.dispatch(fetchAddressByUser(user?.id))}}
             />
         </Flex>
         <AddressDetailsModal

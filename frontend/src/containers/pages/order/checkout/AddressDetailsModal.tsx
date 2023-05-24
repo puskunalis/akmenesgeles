@@ -19,6 +19,7 @@ export const AddressDetailsModal = (props: AddressDetailsModalProps) => {
           <ModalBody>
             <AddressDetailsPage
             isCheckout = {false}
+            onClose={onClose}
             />
           </ModalBody>
         </ModalContent>

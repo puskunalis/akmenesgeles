@@ -16,7 +16,7 @@ import {
 
   
   export const fetchAddressByUser = createAsyncThunk(
-    "categories/fetchCategories",
+    "address/fetchAddressByUser",
     async (userId: string | undefined) => {
       if(userId) {
         const response = axios
@@ -36,7 +36,7 @@ import {
   };
   
   export const createAddress = createAsyncThunk(
-    "categories/createAddress",
+    "address/createAddress",
     async (newAddress: Address) => {
       const response = await axios
         .post("/api/v1/address", newAddress)
@@ -49,6 +49,17 @@ import {
       return response;
     }
   );
+
+  export const deleteAddress = createAsyncThunk(
+    "address/deleteAddress",
+    async (addressId: string) => {
+      const response = await axios
+        .delete(`/api/v1/address/${addressId}`)
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  )
   
   
   export const AddressSlice = createSlice({
@@ -79,6 +90,16 @@ import {
           state.status = AsyncStatus.SUCCESS;
         })
         .addCase(createAddress.rejected, (state, action) => {
+          state.status = AsyncStatus.FAILED;
+          state.error = action.error;
+        })
+        .addCase(deleteAddress.pending, (state, action) => {
+          state.status = AsyncStatus.FETCHING;
+        })
+        .addCase(deleteAddress.fulfilled, (state, action) => {
+          state.status = AsyncStatus.SUCCESS;
+        })
+        .addCase(deleteAddress.rejected, (state, action) => {
           state.status = AsyncStatus.FAILED;
           state.error = action.error;
         });

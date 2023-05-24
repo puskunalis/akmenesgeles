@@ -9,10 +9,11 @@ import { selectUser } from "../../../state/users/UserSlice";
 
 export interface AddressDetailsPageProps {
   isCheckout: boolean;
+  onClose?: () => void;
 }
 
 const AddressDetailsPage = (props: AddressDetailsPageProps) => {
-  const { isCheckout } = props;
+  const { isCheckout, onClose } = props;
   const navigate = useNavigate();
 
   const [fullName, setFullName] = useState("");
@@ -32,6 +33,10 @@ const AddressDetailsPage = (props: AddressDetailsPageProps) => {
     }
 
     store.dispatch(createAddress(newAddress));
+
+    if(onClose){ 
+      onClose();
+    }
   };
 
   return (
