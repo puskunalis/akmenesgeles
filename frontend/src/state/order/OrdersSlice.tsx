@@ -137,7 +137,7 @@ extraReducers(builder) {
 
 export const selectCurrentOrder = (state: StoreState) => 
     state.order.currentOrder;
-export const selectUserByStatus = (state: StoreState) => 
+export const selectOrderByStatus = (state: StoreState) => 
     state.order.ordersByStatus;
 export const selectUserOrders = (state: StoreState) => 
     state.order.userOrders;
