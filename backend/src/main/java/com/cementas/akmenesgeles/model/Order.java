@@ -36,4 +36,8 @@ public class Order implements Serializable {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @OneToOne
+    @JoinColumn(name = "address_id", nullable = true)
+    private ShippingAddress address;
 }

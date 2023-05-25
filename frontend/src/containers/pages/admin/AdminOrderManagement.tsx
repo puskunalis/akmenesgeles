@@ -6,6 +6,7 @@ import { fetchOrdersByStatus, selectOrdersByStatus } from "../../../state/order/
 import { useSelector } from "react-redux";
 import { store } from "../../../state/store";
 import { OrderStatus } from "../../../types";
+import { getKeyByValue } from "../order/checkout/Payment";
 
 
 interface statusSelectProps {
@@ -52,7 +53,7 @@ export function AdminOrders(props: adminItemsList) {
 
     React.useEffect(() => {
         if (selectedStatus){
-            store.dispatch(fetchOrdersByStatus(selectedStatus));
+            store.dispatch(fetchOrdersByStatus(getKeyByValue(selectedStatus) as OrderStatus));
         }
       }, [selectedStatus])
     

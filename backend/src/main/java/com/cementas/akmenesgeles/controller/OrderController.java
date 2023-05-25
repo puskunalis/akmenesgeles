@@ -21,9 +21,9 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PostMapping("/{userId}")
-    public ResponseEntity<Order> createOrder(@PathVariable UUID userId) {
-        return ResponseEntity.ok(orderService.createOrder(userId));
+    @PostMapping("/{userId}/{addressId}")
+    public ResponseEntity<Order> createOrder(@PathVariable UUID userId, @PathVariable UUID addressId) {
+        return ResponseEntity.ok(orderService.createOrder(userId, addressId));
     }
 
     @GetMapping("/{id}")

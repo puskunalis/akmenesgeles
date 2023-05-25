@@ -9,7 +9,7 @@ import {
   } from '@chakra-ui/react'
   import { FaArrowRight } from 'react-icons/fa'
   import { formatPrice } from './PriceTag'
-import { Cart } from '../../../../types'
+import { Cart, SHIPPING_PRICE } from '../../../../types'
 import { useNavigate } from 'react-router-dom'
 import { store } from '../../../../state/store'
 import { createOrder } from '../../../../state/order/OrdersSlice'
@@ -48,7 +48,6 @@ import { selectUser } from '../../../../state/users/UserSlice'
 
     const handleOnClick = async () => {
       if(user){
-        await store.dispatch(createOrder(user.id));
         navigate('/address');
       }
     }
@@ -67,14 +66,14 @@ import { selectUser } from '../../../../state/users/UserSlice'
   
         <Stack spacing="6">
           <OrderSummaryItem label="Prekių suma:" value={formatPrice(sumPrice())} />
-          <OrderSummaryItem label="Pristatymas: " value={formatPrice(shippingPrice)}>
+          <OrderSummaryItem label="Pristatymas: " value={formatPrice(SHIPPING_PRICE)}>
           </OrderSummaryItem>
           <Flex justify="space-between">
             <Text fontSize="lg" fontWeight="semibold">
               Galutinė suma:
             </Text>
             <Text fontSize="xl" fontWeight="extrabold">
-              {formatPrice(sumPrice() + shippingPrice)}
+              {formatPrice(sumPrice() + SHIPPING_PRICE)}
             </Text>
           </Flex>
         </Stack>

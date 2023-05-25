@@ -92,6 +92,15 @@ import {
         .catch((err) => console.log(err));
     }
   )
+
+  export const deleteCart = createAsyncThunk(
+    "carts/deleteCart",
+    async (cartId: string) => {
+      const response = await axios
+      .delete(`/api/v1/carts/${cartId}`)
+    }
+    
+  )
   
   const initialState: CartState = {
     cart: undefined,
@@ -159,6 +168,16 @@ import {
           state.status = AsyncStatus.SUCCESS;
         })
         .addCase(changeCartItemQuantity.rejected, (state, action) => {
+          state.status = AsyncStatus.FAILED;
+          state.error = action.error;
+        })
+        .addCase(deleteCart.pending, (state, action) => {
+          state.status = AsyncStatus.FETCHING;
+        })
+        .addCase(deleteCart.fulfilled, (state, action) => {
+          state.status = AsyncStatus.SUCCESS;
+        })
+        .addCase(deleteCart.rejected, (state, action) => {
           state.status = AsyncStatus.FAILED;
           state.error = action.error;
         });

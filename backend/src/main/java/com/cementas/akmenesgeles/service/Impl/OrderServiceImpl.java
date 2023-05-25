@@ -4,6 +4,7 @@ import com.cementas.akmenesgeles.model.*;
 import com.cementas.akmenesgeles.repository.OrderRepository;
 import com.cementas.akmenesgeles.service.CartService;
 import com.cementas.akmenesgeles.service.OrderService;
+import com.cementas.akmenesgeles.service.ShippingAddressService;
 import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,16 @@ public class OrderServiceImpl implements OrderService {
 
     private final CartService cartService;
 
+    private final ShippingAddressService shippingAddressService;
+
     @Override
-    public Order createOrder(UUID userId) {
+    public Order createOrder(UUID userId, UUID addressId) {
         Optional<User> user = userService.getById(userId);
         if (user.isEmpty()) {
             return null;
         }
+
+        ShippingAddress address = shippingAddressService.getById(addressId);
 
         Cart cart = cartService.getByUserId(userId);
         if (cart == null) {
@@ -41,6 +46,7 @@ public class OrderServiceImpl implements OrderService {
                 .user(user.get())
                 .status(OrderStatus.PENDING)
                 .createdAt(LocalDateTime.now(ZoneId.of("UTC")))
+                .address(address)
                 .build();
 
         List<OrderItem> orderItems = new ArrayList<>();
