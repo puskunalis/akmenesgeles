@@ -33,13 +33,12 @@ export default function ShoppingCartPopup() {
   const cartStatus = useSelector(selectCartStatus);
   const navigate = useNavigate();
   const toast = useToast();
-
   useEffect(() => {
     if(user && cartStatus === AsyncStatus.IDLE) {
       store.dispatch(fetchCart(user.id));
     }
   }, [user]);
-  
+
   const sumPrice = () => {
     let sum = 0;
     cart?.items?.map((item) => {

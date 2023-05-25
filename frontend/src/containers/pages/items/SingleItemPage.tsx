@@ -31,18 +31,14 @@ export default function SingleItemPage () {
     const cart = useSelector(selectCart);
     const cartStatus = useSelector(selectCartStatus);
     const toast = useToast();
-
     useEffect(() => {
         if (itemId) {
         store.dispatch(fetchItemById(itemId));
         }
-
         return () => {
         setQuantity(1);
         };
     }, [itemId]);
-
-
     const handleAddToCart = async () => {
         if (item && cart){
             const cartItem: CartItemForAddToCart = {itemId: item.id, quantity: quantity};
