@@ -21,7 +21,6 @@ export default function ProductAddToCart({ product }: { product: Item }) {
   const cart = useSelector(selectCart);
   const cartStatus = useSelector(selectCartStatus);
   const toast = useToast();
-
   const handleAddToCart = async () => {
     if(cart) {
       const cartItem: CartItemForAddToCart = {itemId: product.id, quantity: 1};

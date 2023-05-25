@@ -17,7 +17,7 @@ import { AddressPage } from "./containers/pages/order/AddressPage";
 import { PaymentPage } from "./containers/pages/order/PaymentPage";
 import Success from "./containers/pages/order/statusPages/Success";
 import SingleOrderPage from "./containers/pages/order/SingleOrderPage";
-import Contacts from "./containers/pages/Contacts";
+import { AuthorizedPageWrapper } from "./containers/pages/AuthorizedPageWrapper"
 
 export const App = () => {
   store.dispatch(fetchItems());
@@ -32,13 +32,13 @@ export const App = () => {
           <Route path="allItems" element={<ItemsPageWrapper />} /> 
           <Route path="category/:categoryId" element={<ItemsCategoryPage />} />
           <Route path="item/:itemId" element={<SingleItemPage/>}/>
-          <Route path="admin" element={<AdminPage />} />
-          <Route path="user" element={<UserPage />} />
+          <Route path="admin" element={<AuthorizedPageWrapper><AdminPage /></AuthorizedPageWrapper>} />
+          <Route path="user" element={<AuthorizedPageWrapper><UserPage /></AuthorizedPageWrapper>} />
           <Route path="checkout" element={<CheckoutPage/>}/>
           <Route path="address" element={<AddressPage/>}/>
           <Route path="payment" element={<PaymentPage/>}/>
           <Route path="success" element={<Success/>}/>
-          <Route path="order/:orderId" element={<SingleOrderPage/>}/>
+          <Route path="order/:orderId" element={<AuthorizedPageWrapper><SingleOrderPage/></AuthorizedPageWrapper>}/>
         </Route>
       </Routes>
     </ChakraProvider>
