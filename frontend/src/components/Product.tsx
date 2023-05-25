@@ -8,17 +8,16 @@ import {
   useToast
 } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
-import { CartItem, Item } from "../types";
+import { Item } from "../types";
 import { Link } from "react-router-dom";
 import './Product.scss';
 import { useSelector } from "react-redux";
-import { CartItemForAddToCart, addItemToCart, fetchCartByCartId, selectCart, selectCartStatus } from "../state/carts/CartsSlice";
+import { CartItemForAddToCart, addItemToCart, selectCart, selectCartStatus } from "../state/carts/CartsSlice";
 import { store } from "../state/store";
-import { useEffect } from "react";
 import { AsyncStatus } from "../state/AsyncStatus";
 
 
-function ProductAddToCart({ product }: { product: Item }) {
+export default function ProductAddToCart({ product }: { product: Item }) {
   const cart = useSelector(selectCart);
   const cartStatus = useSelector(selectCartStatus);
   const toast = useToast();
@@ -29,18 +28,17 @@ function ProductAddToCart({ product }: { product: Item }) {
       await store.dispatch(addItemToCart({cartId: cart.id, item: cartItem}));
       if(cartStatus === AsyncStatus.SUCCESS){
         toast({
-            title: 'Prekė prideta į krepšelį.',
-            description: "Prekė buvo sekmingai prideta į krepšelį.",
+            title: 'Prekė pridėta į krepšelį.',
+            description: "Prekė buvo sėkmingai pridėta į krepšelį.",
             status: 'success',
-            duration: 5000,
+            duration: 3000,
             isClosable: true,
         });
-    }
+      }
     }
   }
 
   return (
-    
       <Flex w="full" alignItems="center" justifyContent="center">
         <Box
           bg={useColorModeValue("white", "gray.800")}
@@ -53,7 +51,7 @@ function ProductAddToCart({ product }: { product: Item }) {
           margin={{ base: "0", md: "0", lg: "0 10px 20px 0" }}
           className="product"
         >
-        <Link to={`item/${product.id}`}>
+        <Link to={`/item/${product.id}`}>
           <div className="image-container">
             <img src={product.imageUrl} alt={`${product.title}`} className="image"/>
           </div>
@@ -83,7 +81,6 @@ function ProductAddToCart({ product }: { product: Item }) {
                 </chakra.a>
               </Tooltip>
             </Flex>
-
             <Flex justifyContent="space-between" alignContent="center">
               <Box
                 fontSize="2xl"
@@ -97,5 +94,3 @@ function ProductAddToCart({ product }: { product: Item }) {
       </Flex>
   );
 }
-
-export default ProductAddToCart;
