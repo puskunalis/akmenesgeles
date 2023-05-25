@@ -24,7 +24,7 @@ import { CartItem } from "../containers/pages/order/checkout/CartItem";
 import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../containers/pages/order/checkout/PriceTag";
 
-const ShoppingCartPopup = () => {
+export default function ShoppingCartPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
   const handleOpen = () => setIsOpen(true);
@@ -33,18 +33,17 @@ const ShoppingCartPopup = () => {
   const cartStatus = useSelector(selectCartStatus);
   const navigate = useNavigate();
   const toast = useToast();
-
   useEffect(() => {
     if(user && cartStatus === AsyncStatus.IDLE) {
       store.dispatch(fetchCart(user.id));
     }
-  }, [user])
-  
+  }, [user]);
+
   const sumPrice = () => {
     let sum = 0;
     cart?.items?.map((item) => {
       sum += item.item.price * item.quantity;
-    })
+    });
     return sum;
   }
 
@@ -52,18 +51,19 @@ const ShoppingCartPopup = () => {
     if (cart?.items.length !== 0) {
       navigate('/checkout'); 
       handleClose();
-    } else {
+    }
+    else {
       toast({
-        title: 'Jusų krepšelis tuščias.',
+        title: 'Jūsų krepšelis tuščias.',
         description: "Kad galėtumėte apmokėti, pridėkite prekių į krepšelį.",
         status: 'warning',
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
-    });
-    handleClose();
+      });
+      handleClose();
     }
-    
   }
+
   return (
     <>
       <IconButton
@@ -100,5 +100,3 @@ const ShoppingCartPopup = () => {
     </>
   );
 };
-
-export default ShoppingCartPopup;
