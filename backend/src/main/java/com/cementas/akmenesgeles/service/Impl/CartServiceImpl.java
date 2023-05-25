@@ -5,11 +5,14 @@ import com.cementas.akmenesgeles.exception.NotFoundException;
 import com.cementas.akmenesgeles.model.Cart;
 import com.cementas.akmenesgeles.model.CartItem;
 import com.cementas.akmenesgeles.model.Item;
+import com.cementas.akmenesgeles.model.User;
 import com.cementas.akmenesgeles.repository.CartItemRepository;
 import com.cementas.akmenesgeles.repository.CartRepository;
 import com.cementas.akmenesgeles.repository.ItemRepository;
+import com.cementas.akmenesgeles.repository.UserRepository;
 import com.cementas.akmenesgeles.service.CartService;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
 
@@ -26,12 +30,8 @@ public class CartServiceImpl implements CartService {
 
     private final ItemRepository itemRepository;
 
-    @Autowired
-    public CartServiceImpl(CartRepository cartRepository, CartItemRepository cartItemRepository, ItemRepository itemRepository) {
-        this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
-        this.itemRepository = itemRepository;
-    }
+    private final UserRepository userRepository;
+
 
     public Cart initialCart() {
         Cart cart = new Cart(UUID.randomUUID(), new ArrayList<>());
@@ -50,6 +50,10 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void deleteCart(UUID cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new NotFoundException("Cart by id " + cartId + "not found."));
+
+        Cart newCart = new Cart(UUID.randomUUID(), cart.getUser(), new ArrayList<>());
+        cartRepository.save(newCart);
+
         cartItemRepository.deleteAll(cart.getItems());
         cartRepository.deleteCartById(cartId);
     }
@@ -111,7 +115,7 @@ public class CartServiceImpl implements CartService {
         if (cart.isPresent()){
             return cart.get();
         } else {
-            throw new NotFoundException("User with id " + userId + "doesnt have a cart.");
+            throw new NotFoundException("User with id " + userId + " doesnt have a cart.");
         }
 
     }

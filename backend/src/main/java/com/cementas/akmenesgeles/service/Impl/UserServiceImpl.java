@@ -62,10 +62,8 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(newUser);
 
-        if(newUser.getRole() == UserRole.USER) {
-            Cart cart = new Cart(UUID.randomUUID(), newUser, new ArrayList<>());
-            cartRepository.save(cart);
-        }
+        Cart cart = new Cart(UUID.randomUUID(), newUser, new ArrayList<>());
+        cartRepository.save(cart);
 
         return generateToken(newUser);
     }

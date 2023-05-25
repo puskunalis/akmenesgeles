@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface ShippingAddressRepository extends JpaRepository<ShippingAddress, UUID> {
     List<ShippingAddress> getAllByUser(User user);
+    ShippingAddress getById(UUID id);
 }

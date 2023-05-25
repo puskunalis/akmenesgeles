@@ -22,6 +22,11 @@ export interface UpdateOrderStatusData {
     status: OrderStatus
 }
 
+export interface CreateOrderData {
+    userId: string,
+    addressId: string
+}
+
 export const fetchOrdersByUserId = createAsyncThunk(
     "orders/fetchOrdersByUserId",
     async (userId: string) => {
@@ -48,9 +53,10 @@ export const fetchOrderById = createAsyncThunk(
 
 export const createOrder = createAsyncThunk(
     "orders/createOrder",
-    async (userId: string) => {
+    async (data: CreateOrderData) => {
+        const {userId, addressId} = data;
         const response = axios
-        .post(`/api/v1/orders/${userId}`)
+        .post(`/api/v1/orders/${userId}/${addressId}`)
         .then((res) => res.data)
         .catch((err) => console.log(err));
 

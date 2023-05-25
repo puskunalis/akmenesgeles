@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,7 +29,8 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
 
     @Override
     public ShippingAddress getById(UUID id) {
-        return shippingAddressRepository.getById(id);
+
+        return shippingAddressRepository.findById(id).orElseThrow();
     }
 
     @Override

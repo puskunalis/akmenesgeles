@@ -8,6 +8,7 @@ import { store } from '../../../state/store';
 import { calculateTotalPrice, getPurchaseStatus } from '../user/PurchaseHistory';
 import './SingleOrderPage.scss';
 import { selectUser } from '../../../state/users/UserSlice';
+import { SHIPPING_PRICE } from '../../../types';
 import { OrderStatus, UserRole } from '../../../types';
 
 export const SingleOrderPage = () =>{
@@ -162,7 +163,7 @@ export const SingleOrderPage = () =>{
                             <strong>Pristatymas: </strong>€ 3.00
                         </Text>
                         <Text>
-                            <strong>Iš viso: </strong>€ {(totalOrderPrice + 3).toFixed(2)}
+                            <strong>Iš viso: </strong>€ {(totalOrderPrice + SHIPPING_PRICE).toFixed(2)}
                         </Text>
                     </div>
                     
