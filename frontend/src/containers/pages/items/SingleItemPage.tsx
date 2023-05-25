@@ -13,7 +13,7 @@ import {
     Spinner,
     useToast
   } from '@chakra-ui/react';
-  import { MdLocalShipping } from 'react-icons/md';
+import { MdLocalShipping } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { selectSingleItem, fetchItemById } from '../../../state/items/ItemsSlice';
@@ -58,9 +58,10 @@ export default function SingleItemPage () {
             }
         }
     }
+
     const handleQuantityChange = (value: number) => {
         setQuantity(value);
-    };
+    }
 
     const itemContent = useMemo(() => {
         if(item && item.id === itemId){
@@ -107,7 +108,7 @@ export default function SingleItemPage () {
                             />
                         }>
                         <VStack spacing={{ base: 4, sm: 6 }}>
-                            <Text fontSize={'lg'} >
+                            <Text fontSize={'lg'} alignSelf="baseline">
                             {item.description}
                             </Text>
                         </VStack>
@@ -140,13 +141,12 @@ export default function SingleItemPage () {
                                 <Text>Pristatymas per 2-3 darbo dienas</Text>
                             </div>
                         </div>
-                        
                     </Stack>
                     </SimpleGrid>
                 </Container>
             );
         }
-        else{
+        else {
             return (
                 <div className='spinner-container'>
                     <Spinner
@@ -159,7 +159,7 @@ export default function SingleItemPage () {
                 </div>
             );
         }
-    }, [item, itemId, quantity])
+    }, [item, itemId, quantity]);
 
     return (itemContent);
 }
