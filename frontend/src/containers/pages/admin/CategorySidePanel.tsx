@@ -78,8 +78,6 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
                 isClosable: true,
             });
             
-        } else {
-            console.log("fak");
         }
         
         

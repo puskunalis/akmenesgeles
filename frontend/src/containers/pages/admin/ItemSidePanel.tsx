@@ -1,8 +1,10 @@
-import { Box, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, Button, Flex, FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react"
+import { Box, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, Button, Flex, FormControl, FormErrorMessage, FormLabel, useToast } from "@chakra-ui/react"
 import { Item } from "../../../types";
 import * as React from 'react';
-import { deleteItem } from "../../../state/items/ItemsSlice";
+import { deleteItem, selectSingleItemStatus, updateItem } from "../../../state/items/ItemsSlice";
 import { store } from "../../../state/store";
+import { useSelector } from "react-redux";
+import { AsyncStatus } from "../../../state/AsyncStatus";
 
 export interface ItemSidePanelProps {
     isOpen: boolean;
@@ -19,6 +21,8 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
     const [descriptionError, setDescriptionError] = React.useState<string>("");
     const [priceError, setPriceError] = React.useState<string>("");
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const itemEditStatus = useSelector(selectSingleItemStatus);
+    const toast = useToast();
 
 
     React.useEffect( () => {
@@ -68,29 +72,45 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
         if(!item)
             return;
 
-        // item.description = editedDescription ?? item.description;
-        // item.title = editedTitle ?? item.title;
-        // item.price = editedPrice ?? item.price;
-
-        // setIsLoading(true);
-        // await store.dispatch(updateItem(item));
-        // setIsLoading(false);
-        // if (categoryAddStatus === AsyncStatus.SUCCESS) {
-        //     toast({
-        //         title: 'Kategorija prideta.',
-        //         description: "Kategorija buvo sekmingai prideta.",
-        //         status: 'success',
-        //         duration: 3000,
-        //         isClosable: true,
-        //     });
-        // }
+        setIsLoading(true);
+        await store.dispatch(updateItem({
+            itemId: item.id,
+            item: {
+                id: item.id,
+                title: editedTitle ?? item.title,
+                description: editedDescription ?? item.description,
+                price: editedPrice ?? item.price,
+                imageUrl: item.imageUrl,
+                categories: item.categories,
+            }
+        }));
+        setIsLoading(false);
+        if (itemEditStatus === AsyncStatus.SUCCESS) {
+            toast({
+                title: 'Prekė pakeista.',
+                description: "Prekė buvo sekmingai pakeista.",
+                status: 'success',
+                duration: 1000,
+                isClosable: true,
+            });
+        } else if (itemEditStatus === AsyncStatus.FAILED) {
+            toast({
+                title: 'Prekės pakeisti nepavyko.',
+                description: "Prekė nebuvo pakeista.",
+                status: 'success',
+                duration: 1000,
+                isClosable: true,
+            });
+            
+        }
 
         handleCloseSidePanel();
     }
     
-    const handleDelete = () => {
-        if (item)
-            store.dispatch(deleteItem(item.id))
+    const handleDelete = async () => {
+        if (!item)
+            return;
+        store.dispatch(deleteItem(item.id))
         handleCloseSidePanel();
     }
 
@@ -139,7 +159,7 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
                         </Button>
                     </Flex>
                     <Flex justifyContent="flex-end" paddingY={"12px"}>
-                        <Button colorScheme="red" mr={2} onClick={() => handleDelete()}>
+                        <Button colorScheme="red" mr={2} onClick={() =>  handleDelete()} isLoading={isLoading}>
                             Ištrinti
                         </Button>
                     </Flex>
