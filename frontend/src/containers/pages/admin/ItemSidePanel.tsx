@@ -51,26 +51,30 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
     }
 
     const handlePriceChange = (e: any) => {
-        const value = parseFloat(e.currentTarget.value);
-        if (Number.isNaN(value)){
-            setPriceError("Kaina turi būti skaičius");
+        const value = e.currentTarget.value;
+        const regex = /^\d+(\.?\d?\d?)?$/;
+        const newValue = value.replace(/,/g, '.');
+        if (newValue === "") {
+            setPriceError("Kaina negali būti tuščia");
+        } else if (!regex.test(newValue)) {
+            setPriceError("Kaina neatitinka standarto");
         } else {
             setPriceError("");
-            setEditedPrice(value);
+            setEditedPrice(parseFloat(newValue));
         }
-            
     }
 
     const handleSave = async () => {
         if(!item)
             return;
 
-        item.description = editedDescription ?? item.description;
-        item.title = editedTitle ?? item.title;
-        item.price = editedPrice ?? item.price;
+        // item.description = editedDescription ?? item.description;
+        // item.title = editedTitle ?? item.title;
+        // item.price = editedPrice ?? item.price;
 
         // setIsLoading(true);
         // await store.dispatch(updateItem(item));
+        // setIsLoading(false);
         // if (categoryAddStatus === AsyncStatus.SUCCESS) {
         //     toast({
         //         title: 'Kategorija prideta.',

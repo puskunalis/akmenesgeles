@@ -9,17 +9,20 @@ export interface ItemsFilterHeaderProps {
 
 export function ItemsFilterHeader(props: ItemsFilterHeaderProps){
     const {sort, filter} = props;
+    const [sortValue, setSortValue] = React.useState<string>("asc")
     const [filterValue, setFilterValue] = React.useState('');
 
     const handleSortChange = (e: any) => {
-      const selectedValue = e.target.value;
-    
-      if (selectedValue === 'asc') {
+      setSortValue(e.target.value);
+    };
+
+    React.useEffect( () => {
+      if (sortValue === 'asc') {
         sort((a: Item, b: Item) => a.price - b.price);
-      } else if (selectedValue === 'desc') {
+      } else if (sortValue === 'desc') {
         sort((a: Item, b: Item) => b.price - a.price);
       }
-    };
+    }, [sortValue, filterValue]);
 
     const handleFilterChange = (e: any) => {
       const newFilterValue: string = e.target.value;

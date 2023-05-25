@@ -5,8 +5,9 @@
     padding: 2em 20vw;
     gap: 1em;
     .order-information-wrapper{
+        padding-top: 2rem;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
     .total-price{
         gap: 0.5em;

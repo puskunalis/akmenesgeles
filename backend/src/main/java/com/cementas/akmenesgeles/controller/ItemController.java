@@ -40,8 +40,13 @@ public class ItemController {
     }
 
     @PutMapping("/{itemId}/category/{categoryId}")
-    public Item addItemToCategory (@PathVariable UUID itemId,@PathVariable UUID categoryId) {
+    public Item addItemToCategory(@PathVariable UUID itemId,@PathVariable UUID categoryId) {
         return itemService.addItemToCategory(itemId, categoryId);
+    }
+
+    @PutMapping("/{id}")
+    public Item update(@PathVariable UUID id, @RequestBody CreateItemDto createItemDto){
+        return itemService.update(id, createItemDto);
     }
 
     @PostMapping

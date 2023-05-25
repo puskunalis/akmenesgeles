@@ -5,6 +5,8 @@ import com.cementas.akmenesgeles.dto.ShippingAddress.ShippingAddressDto;
 import com.cementas.akmenesgeles.dto.User.CreateUserDto;
 import com.cementas.akmenesgeles.dto.User.LoginDto;
 import com.cementas.akmenesgeles.dto.User.LoginResponseDto;
+import com.cementas.akmenesgeles.dto.User.UserDto;
+import com.cementas.akmenesgeles.dto.User.mapper.UserMapper;
 import com.cementas.akmenesgeles.model.ShippingAddress;
 import com.cementas.akmenesgeles.model.User;
 import com.cementas.akmenesgeles.service.UserService;
@@ -33,10 +35,10 @@ public class UserController {
 //        return userService.getAll();
 //    }
 //
-//    @GetMapping("/{id}")
-//    public UserDto getById(@PathVariable UUID id) {
-//        return userService.getById(id);
-//    }
+    @GetMapping("/{id}")
+    public UserDto getById(@PathVariable UUID id) {
+        return UserMapper.toDto(userService.getById(id).orElseThrow());
+    }
 
     @PostMapping
     public String add(@RequestBody CreateUserDto createUserDto) {

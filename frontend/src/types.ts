@@ -41,13 +41,13 @@ export interface CartItem {
 }
 
 export enum OrderStatus {
-  PENDING = "PENDING",
-  PAID = "PAID",
-  CONFIRMED = "CONFIRMED",
-  SHIPPED = "SHIPPED",
-  DELIVERED = "DELIVERED",
-  CANCELLED = "CANCELLED",
-  REFUNDED = "REFUNDED"
+  PENDING = "NEUŽBAIGTA",
+  PAID = "APMOKĖTA",
+  CONFIRMED = "PATVIRTINTA",
+  SHIPPED = "IŠSIŲSTA",
+  DELIVERED = "PRISTATYTA",
+  CANCELLED = "ATŠAUKTA",
+  REFUNDED = "GRĄŽINTA"
 }
 
 export interface Order { 
@@ -55,7 +55,8 @@ export interface Order {
   userId: string,
   orderItems: CartItem[],
   status: OrderStatus,
-  createdAt: string
+  createdAt: string,
+  address: Address,
 }
 
 export interface Address {
@@ -73,3 +74,5 @@ export interface Payment {
   expiryDate: string,
   cvv: string
 }
+
+export const SHIPPING_PRICE = 2.99;

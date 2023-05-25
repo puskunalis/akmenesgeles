@@ -1,6 +1,7 @@
 import { Badge, Box, Center, Flex, Heading, Table, TableCaption, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { CartItem, Order } from "../../../types";
+import { CartItem, Order, OrderStatus, SHIPPING_PRICE } from "../../../types";
 import { formatPrice } from "../order/checkout/PriceTag";
+import { useNavigate } from "react-router-dom";
 
 enum statusColor {
     PENDING = 'yellow',
@@ -15,7 +16,11 @@ enum statusColor {
 export function getPurchaseStatus(status: string){
     if (statusColor.hasOwnProperty(status)) {
         const color = Object.entries(statusColor).find(([key, val]) => key === status)?.[1];
-        return <Badge colorScheme={color} borderRadius={"md"}>{status}</Badge>;
+        return (
+            <Badge colorScheme={color} borderRadius={"md"}>
+                {Object.entries(OrderStatus).find(([key,val]) => key === status)?.[1]}
+            </Badge>
+        );
       }
     
       return <div> error </div>;
@@ -26,7 +31,7 @@ export interface PurchaseHistoryProps{
  orders: Order[];
 }
 
-export function calculateTotalPrice(order: Order): number {
+export function calculateTotalPrice(order?: Order): number {
     let totalPrice = 0;
 
     order?.orderItems?.forEach((cartItem: CartItem) => {
@@ -40,6 +45,7 @@ export function calculateTotalPrice(order: Order): number {
 
 export function PurchaseHistory(props: PurchaseHistoryProps) {
     const {orders} = props;
+    const navigate = useNavigate();
 
     return (
     <Box width={"100%"} marginRight="56px">
@@ -58,10 +64,10 @@ export function PurchaseHistory(props: PurchaseHistoryProps) {
                 <Tbody>
                 
                 {orders?.map((order) => (
-                    <Tr key={order.id}>
+                    <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
                     <Td>{}</Td>
-                    <Td>{formatPrice(calculateTotalPrice(order))}</Td>
-                    <Td>{getPurchaseStatus(order.status.toString())}</Td>
+                    <Td>{formatPrice(calculateTotalPrice(order) + SHIPPING_PRICE)}</Td>
+                    <Td>{getPurchaseStatus(order.status)}</Td>
                     </Tr>
                 ))}
                 </Tbody>

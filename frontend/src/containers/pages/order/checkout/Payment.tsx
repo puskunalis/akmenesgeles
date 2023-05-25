@@ -1,12 +1,30 @@
 import { useState } from "react";
-import { Box, Flex, Text, Image, Button, Input, useToast } from "@chakra-ui/react";
+import { Box, Flex, Text, Image, Button, Input, useToast, Heading, Container } from "@chakra-ui/react";
 import { FiCreditCard } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { OrderStatus, Payment } from "../../../../types";
+import { OrderStatus, Payment, SHIPPING_PRICE } from "../../../../types";
 import { useSelector } from "react-redux";
 import { selectCurrentOrder, updateOrderStatus } from "../../../../state/order/OrdersSlice";
 import { store } from "../../../../state/store";
+import { calculateTotalPrice } from "../../user/PurchaseHistory";
+import { formatPrice } from "./PriceTag";
+
+export function getKeyByValue(value: string) {
+  const indexOfS = Object.values(OrderStatus).indexOf(value as unknown as OrderStatus);
+
+  const key = Object.keys(OrderStatus)[indexOfS];
+
+  return key;
+}
+
+export function getValueByKey(key: string) {
+  const indexOfS = Object.keys(OrderStatus).indexOf(key as unknown as OrderStatus);
+
+  const value = Object.values(OrderStatus)[indexOfS];
+
+  return value;
+}
 
 const PaymentCard = () => {
   const [cardHolder, setCardHolder] = useState("");
@@ -63,7 +81,7 @@ const PaymentCard = () => {
       }
       store.dispatch(updateOrderStatus({
         orderId: order.id,
-        status: OrderStatus.PAID
+        status: getKeyByValue(OrderStatus.PAID) as OrderStatus
       }));
 
       setLoading(false);
@@ -166,7 +184,10 @@ const PaymentCard = () => {
           />
         </Box>
       </Flex>
-
+      <Container centerContent padding={2}>
+        <Heading size='md' paddingTop={2}>Suma: {formatPrice(calculateTotalPrice(order) + SHIPPING_PRICE)}</Heading>
+      </Container>
+      
       <Button
         isLoading = {isLoading}
         mt={6}

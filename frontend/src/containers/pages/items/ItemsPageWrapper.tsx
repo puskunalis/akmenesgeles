@@ -31,9 +31,10 @@ export const ItemsPageWrapper = () => {
       if (filterValue === '') {
         setSortedItems(items);
       } else {
-        setSortedItems((prevState) =>
-        prevState.filter((item: Item) => item.title.startsWith(filterValue))
-        );
+        setSortedItems(items.filter( item => item.title.startsWith(filterValue)))
+        // setSortedItems((prevState) =>
+        // prevState.filter((item: Item) => item.title.startsWith(filterValue))
+        // );
       }
     }, []);
 
