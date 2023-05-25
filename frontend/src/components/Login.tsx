@@ -11,6 +11,7 @@ import {
   FormLabel,
   Input,
   ModalFooter,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useAuth } from "../auth-context";
 
@@ -25,58 +26,90 @@ export const LoginModal = (props: LoginProps) => {
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
-  const [username, setUsername] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [username, setUsername] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
 
   const { login } = useAuth();
 
   const handleLogin = async () => {
     try {
       login(username, password);
-      onClose();
+      onCloseModal();
     } catch (error) {
       console.error("Login failed:", error);
     }
   };
+
+  const [usernameError, setUsernameError] = React.useState<string | undefined>(undefined)
+  const handleChangeUsername = (value: string) => {
+    setUsername(value);
+    if (value === '')
+      setUsernameError("Vartotojo vardas negali būti tuščias");
+    else
+      setUsernameError("");
+  }
+
+  const [passwordError, setPasswordError] = React.useState<string | undefined>(undefined)
+  const handleChangePassword = (value: string) => {
+    setPassword(value);
+    if (value === '')
+      setPasswordError("Slaptažodis negali būti tuščias");
+    else
+      setPasswordError("");
+  }
+
+  const resetState = () => {
+    setUsername("");
+    setPassword("");
+    setUsernameError(undefined);
+    setPasswordError(undefined);
+  };
+
+  const onCloseModal = () => {
+    resetState();
+    onClose();
+  }
 
   return (
     <Modal
       initialFocusRef={initialRef}
       finalFocusRef={finalRef}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onCloseModal}
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Log in</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
-          <FormControl>
+          <FormControl isRequired={true} isInvalid={usernameError === undefined ? false : usernameError !== ''}>
             <FormLabel>Username</FormLabel>
             <Input
               ref={initialRef}
               placeholder="Username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => handleChangeUsername(e.target.value)}
             />
+            <FormErrorMessage>{usernameError}</FormErrorMessage>
           </FormControl>
 
-          <FormControl mt={4}>
+          <FormControl mt={4} isRequired={true} isInvalid={passwordError === undefined ? false : passwordError !== ''}>
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => handleChangePassword(e.target.value)}
             />
+            <FormErrorMessage>{passwordError}</FormErrorMessage>
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="green" mr={3} onClick={handleLogin}>
+          <Button colorScheme="green" mr={3} onClick={handleLogin} isDisabled={usernameError !== '' || passwordError !== ''}>
             Log in
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onCloseModal}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

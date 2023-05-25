@@ -11,6 +11,7 @@ import {
   FormLabel,
   Input,
   ModalFooter,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useAuth } from "../auth-context";
@@ -40,59 +41,107 @@ export const RegisterModal = (props: RegisterProps) => {
         password,
       });
       login(username, password);
-      onClose();
+      onCloseModal();
     } catch (error) {
       console.error("Registration failed:", error);
     }
   };
+
+  const [usernameError, setUsernameError] = React.useState<string | undefined>(undefined)
+  const handleChangeUsername = (value: string) => {
+    setUsername(value);
+    if (value === '')
+      setUsernameError("Vartotojo vardas negali būti tuščias");
+    else
+      setUsernameError("");
+  }
+
+  const [emailError, setEmailError] = React.useState<string | undefined>(undefined)
+  const handleChangeEmail = (value: string) => {
+    setEmail(value);
+    const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if (value === '')
+      setEmailError("Elektroninis paštas negali būti tuščias");
+    else if (!emailRegex.test(value))
+      setEmailError("Elektroninis paštas neatitinka standaro patikrinkite ar yra @");
+    else
+      setEmailError("");
+      
+  }
+
+  const [passwordError, setPasswordError] = React.useState<string | undefined>(undefined)
+  const handleChangePassword = (value: string) => {
+    setPassword(value);
+    if (value === '')
+      setPasswordError("Slaptažodis negali būti tuščias");
+    else
+      setPasswordError("");
+  }
+
+  const resetState = () => {
+    setUsername("");
+    setPassword("");
+    setEmail("");
+    setUsernameError(undefined);
+    setEmailError(undefined);
+    setPasswordError(undefined);
+  };
+
+  const onCloseModal = () => {
+    resetState();
+    onClose();
+  }
 
   return (
     <Modal
       initialFocusRef={initialRef}
       finalFocusRef={finalRef}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={onCloseModal}
     >
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Create a new account</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
-          <FormControl>
+          <FormControl isRequired={true} isInvalid={usernameError === undefined ? false : usernameError !== ''}>
             <FormLabel>Username</FormLabel>
             <Input
               ref={initialRef}
               placeholder="Username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => handleChangeUsername(e.target.value)}
             />
+            <FormErrorMessage>{usernameError}</FormErrorMessage>
           </FormControl>
 
-          <FormControl mt={4}>
+          <FormControl mt={4} isRequired={true} isInvalid={emailError === undefined ? false : emailError !== ''}>
             <FormLabel>Email</FormLabel>
             <Input
               placeholder="Email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => handleChangeEmail(e.target.value)}
             />
+            <FormErrorMessage>{emailError}</FormErrorMessage>
           </FormControl>
 
-          <FormControl mt={4}>
+          <FormControl mt={4} isRequired={true} isInvalid={passwordError === undefined ? false : passwordError !== ''}>
             <FormLabel>Password</FormLabel>
             <Input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => handleChangePassword(e.target.value)}
             />
+            <FormErrorMessage>{passwordError}</FormErrorMessage>
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleRegister}>
+          <Button colorScheme="blue" mr={3} onClick={handleRegister} isDisabled={usernameError !== '' || passwordError !== '' || emailError !== ''}>
             Register
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onCloseModal}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
