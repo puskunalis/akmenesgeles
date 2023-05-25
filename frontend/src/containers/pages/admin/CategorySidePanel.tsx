@@ -1,6 +1,10 @@
-import { Box, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, Button, Flex, FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react"
+import { Box, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, Button, Flex, FormControl, FormErrorMessage, FormLabel, useToast } from "@chakra-ui/react"
 import { Category } from "../../../types";
 import * as React from 'react';
+import { store } from "../../../state/store";
+import { useSelector } from "react-redux";
+import { selectAddCategoryStatus, updateCategory } from "../../../state/categories/CategoriesSlice";
+import { AsyncStatus } from "../../../state/AsyncStatus";
 
 export interface CategorySidePanelProps {
     isOpen: boolean;
@@ -14,7 +18,9 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
     const [editedDescription, setEditedDescription] = React.useState(category?.description);
     const [nameError, setNameError] = React.useState<string>("");
     const [descriptionError, setDescriptionError] = React.useState<string>("");
-    const [isLoadingChange, setIsLoadingChange] = React.useState<boolean>(false);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const categoryAddStatus = useSelector(selectAddCategoryStatus);
+    const toast = useToast()
 
     React.useEffect( () => {
         setEditedName(category?.name);
@@ -43,7 +49,39 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
             setDescriptionError("");
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if(!category)
+            return;
+
+        setIsLoading(true);
+        await store.dispatch(updateCategory({
+            description: editedDescription ?? category.description,
+            name: editedName ?? category.name,
+            id: category.id,
+            items: [],
+        }));
+        setIsLoading(false);
+        if (categoryAddStatus === AsyncStatus.SUCCESS) {
+            toast({
+                title: 'Kategorija pakeista.',
+                description: "Kategorija buvo sekmingai pakeista.",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+        } else if (categoryAddStatus === AsyncStatus.FAILED) {
+            toast({
+                title: 'Kategorijos pakeisti nepavyko.',
+                description: "Kategorija nebuvo pakeista.",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            
+        } else {
+            console.log("fak");
+        }
+        
         
         handleCloseSidePanel();
     }
@@ -81,10 +119,11 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
                     </FormControl>
 
                     <Flex justifyContent="flex-end" paddingY={"12px"}>
-                        <Button colorScheme="blue" 
+                        <Button colorScheme="green" 
                             isDisabled={disableSaveButton} 
                             marginRight={"12px"}
                             onClick={() => handleSave()}
+                            isLoading={isLoading}
                         >
                             Išsaugoti
                         </Button>

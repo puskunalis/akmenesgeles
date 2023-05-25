@@ -64,7 +64,7 @@ export const updateCategory = createAsyncThunk(
         console.error(err);
       });
 
-    store.dispatch(fetchCategories());
+    await store.dispatch(fetchCategories());
     return response;
   }
 );

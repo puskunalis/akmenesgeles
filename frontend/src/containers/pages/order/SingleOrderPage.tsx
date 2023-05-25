@@ -1,14 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, Spinner, Image } from '@chakra-ui/react';
+import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, Spinner, Image, Select, useToast } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { selectCurrentOrder } from '../../../state/order/OrdersSlice';
+import { selectCurrentOrder, updateOrderStatus } from '../../../state/order/OrdersSlice';
 import { fetchOrderById } from '../../../state/order/OrdersSlice';
 import { store } from '../../../state/store';
 import { calculateTotalPrice, getPurchaseStatus } from '../user/PurchaseHistory';
 import './SingleOrderPage.scss';
 import { selectUser } from '../../../state/users/UserSlice';
 import { SHIPPING_PRICE } from '../../../types';
+import { OrderStatus, UserRole } from '../../../types';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
@@ -19,7 +20,33 @@ export const SingleOrderPage = () =>{
     }
     const shippingAddress = "adresas";
     const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
-
+    const allStatuses = 
+        Object.keys(OrderStatus).filter((status) => {
+        return isNaN(Number(status));
+    });
+    const toast = useToast()
+    
+    function onStatusChange (e: ChangeEvent<HTMLSelectElement>) {
+        if(orderId){
+            const status = e.target.value as OrderStatus;
+            if(status !== order?.status.toString()){
+                store.dispatch(updateOrderStatus(
+                    {
+                        orderId: orderId, 
+                        status: status
+                    }
+                ));
+                toast({
+                    title: 'Statusas pakeistas',
+                    description: "Statusas buvo sėkmingai pridėta.",
+                    status: 'success',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+    }
+        
     const user = useSelector(selectUser);
 
     useEffect(() => {
@@ -32,6 +59,20 @@ export const SingleOrderPage = () =>{
         if (order) {
             setTotalOrderPrice(calculateTotalPrice(order));
         }
+    }, [order]);
+
+    const statusElements = useMemo(() =>{
+        
+        if(order){
+            return (
+                allStatuses.map(status =>
+                (<>
+                {order.status.toString() !== status  && <option>{status}</option>}
+                </>)) 
+            );
+        }
+        return <></>;
+
     }, [order]);
 
     const orderContent = useMemo(() => {
@@ -49,7 +90,14 @@ export const SingleOrderPage = () =>{
                             <strong>
                                 Užsakymo statusas: 
                             </strong>
-                            <Text>{getPurchaseStatus(order.status.toString())}</Text>
+                            {
+                                user.role == UserRole.ADMIN ?
+                                <Select placeholder={order.status.toString()} width={"60%"} onChange={e => onStatusChange(e)}>
+                                    {statusElements}
+                                </Select> :
+                                <Text>{getPurchaseStatus(order.status.toString())}</Text>
+                            }
+                            
                         </div>
                         <div>
                             <strong>
@@ -77,9 +125,9 @@ export const SingleOrderPage = () =>{
                                 <Tr>
                                     <Th></Th>
                                     <Th>Prekės pavadinimas</Th>
-                                    <Th>Kiekis</Th>
-                                    <Th>Vieneto kaina</Th>
-                                    <Th>Viso</Th>
+                                    <Th isNumeric>Kiekis</Th>
+                                    <Th isNumeric>Vieneto kaina</Th>
+                                    <Th isNumeric>Viso</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -99,9 +147,9 @@ export const SingleOrderPage = () =>{
                                         />
                                     </Td>
                                     <Td><Link to={`/item/${item.item.id}`}>{item.item.title}</Link></Td>
-                                    <Td>{item.quantity}</Td>
-                                    <Td>€ {item.item.price.toFixed(2)}</Td>
-                                    <Td>€ {(item.quantity * item.item.price).toFixed(2)}</Td>
+                                    <Td isNumeric>{item.quantity}</Td>
+                                    <Td isNumeric>€ {item.item.price.toFixed(2)}</Td>
+                                    <Td isNumeric>€ {(item.quantity * item.item.price).toFixed(2)}</Td>
                                 </Tr>
                                 ))}
                             </Tbody>
@@ -135,7 +183,7 @@ export const SingleOrderPage = () =>{
                 </div>
             );
         }
-    }, [order, orderId, totalOrderPrice, user])
+    }, [order, orderId, totalOrderPrice, user]);
     return (orderContent);
 };
 

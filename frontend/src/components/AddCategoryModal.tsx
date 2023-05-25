@@ -67,9 +67,9 @@ export const AddCategoryModal = (props: ModalProps) => {
         onCloseModal();
       };
 
-    const [nameError, setNameError] = useState<string>();
+    const [nameError, setNameError] = useState<string | undefined>(undefined);
     const handleNameChange = (e: any) => {
-        const value = e.target.value;
+        const value = e.currentTarget.value;
         setName(value);
 
         if (value === '') {
@@ -79,9 +79,9 @@ export const AddCategoryModal = (props: ModalProps) => {
         }
     };
 
-    const [descriptionError, setDescriptionError] = useState<string>();
+    const [descriptionError, setDescriptionError] = useState<string | undefined>(undefined);
     const handleDescriptionChange = (e: any) => {
-        const value = e.target.value;
+        const value = e.currentTarget.value;
         setDescription(value);
 
         if (value === '') {
@@ -103,12 +103,12 @@ export const AddCategoryModal = (props: ModalProps) => {
             <ModalBody pb={6}>
             <FormControl mt={4} isRequired={true} isInvalid={nameError !== ''}>
                 <FormLabel>Pavadinimas</FormLabel>
-                <Input placeholder="Pavadinimas" onChange={handleNameChange}/>
+                <Input placeholder="Pavadinimas" onInput={handleNameChange}/>
                 <FormErrorMessage>{nameError}</FormErrorMessage>
             </FormControl>
             <FormControl isRequired={true} isInvalid={descriptionError !== ''}>
                 <FormLabel>Aprašymas</FormLabel>
-                <Input placeholder="Aprašymas" onChange={handleDescriptionChange} />
+                <Input placeholder="Aprašymas" onInput={handleDescriptionChange} />
                 <FormErrorMessage>{descriptionError}</FormErrorMessage>
             </FormControl>
             </ModalBody>
