@@ -18,7 +18,7 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
     const [titleError, setTitleError] = React.useState<string>("");
     const [descriptionError, setDescriptionError] = React.useState<string>("");
     const [priceError, setPriceError] = React.useState<string>("");
-    const [isLoadingChange, setIsLoadingChange] = React.useState<boolean>(false);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
 
     React.useEffect( () => {
@@ -61,7 +61,25 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
             
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if(!item)
+            return;
+
+        item.description = editedDescription ?? item.description;
+        item.title = editedTitle ?? item.title;
+        item.price = editedPrice ?? item.price;
+
+        // setIsLoading(true);
+        // await store.dispatch(updateItem(item));
+        // if (categoryAddStatus === AsyncStatus.SUCCESS) {
+        //     toast({
+        //         title: 'Kategorija prideta.',
+        //         description: "Kategorija buvo sekmingai prideta.",
+        //         status: 'success',
+        //         duration: 3000,
+        //         isClosable: true,
+        //     });
+        // }
 
         handleCloseSidePanel();
     }
@@ -73,9 +91,9 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
     }
 
     const disableSaveButton = React.useMemo( () => {
-        return editedTitle === item?.title && editedDescription === item?.description && editedPrice === item?.price ||
+        return (editedTitle === item?.title && editedDescription === item?.description && editedPrice === item?.price) ||
             titleError !== "" || descriptionError !== "" || priceError !== ""; 
-    }, [item, editedTitle, editedDescription, titleError, descriptionError, priceError])
+    }, [item, editedTitle, editedDescription, editedPrice, titleError, descriptionError, priceError])
 
     return (   
         <Drawer isOpen={isOpen} placement="right" onClose={handleCloseSidePanel} size="md">
@@ -105,7 +123,7 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
                     
 
                     <Flex justifyContent="flex-end" paddingY={"12px"}>
-                        <Button colorScheme="blue" 
+                        <Button colorScheme="green" 
                             isDisabled={disableSaveButton} 
                             marginRight={"12px"}
                             onClick={() => handleSave()}

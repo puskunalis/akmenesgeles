@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
             category.setName(updateCategoryDto.getName());
         }
         if(updateCategoryDto.getDescription() != null){
-            category.setName(updateCategoryDto.getDescription());
+            category.setDescription(updateCategoryDto.getDescription());
         }
         if(updateCategoryDto.getItems() != null) {
             category.setItems(updateCategoryDto.getItems());
