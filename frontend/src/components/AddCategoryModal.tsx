@@ -101,12 +101,12 @@ export const AddCategoryModal = (props: ModalProps) => {
             <ModalHeader>Pridėti kategorija</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
-            <FormControl mt={4} isRequired={true} isInvalid={nameError !== ''}>
+            <FormControl mt={4} isRequired={true} isInvalid={nameError === undefined ? false : nameError !== ''}>
                 <FormLabel>Pavadinimas</FormLabel>
                 <Input placeholder="Pavadinimas" onInput={handleNameChange}/>
                 <FormErrorMessage>{nameError}</FormErrorMessage>
             </FormControl>
-            <FormControl isRequired={true} isInvalid={descriptionError !== ''}>
+            <FormControl isRequired={true} isInvalid={descriptionError === undefined ? false : descriptionError !== ''}>
                 <FormLabel>Aprašymas</FormLabel>
                 <Input placeholder="Aprašymas" onInput={handleDescriptionChange} />
                 <FormErrorMessage>{descriptionError}</FormErrorMessage>

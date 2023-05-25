@@ -165,15 +165,16 @@ export const AddItemModal = (props: RegisterProps) => {
   const [itemPriceError, setItemPriceError] = useState<string | undefined>(undefined);
   const handleItemPriceChange = (e: any) => {
     const value = e.currentTarget.value;
-    const regex = /^d+(,?)(d{1,2})?$/;
-    if( regex.test(value) )
-      return setItemPriceError('Kaina neatitinka standarto')
-    setPrice(value);
-    if (value === '') {
+    const newValue = value.replace(/,/g, '.');
+    setPrice(parseFloat(newValue));
+    const regex = /^\d+(\.?\d?\d?)?$/;
+
+    if (newValue === '') 
       setItemPriceError('Kaina yra privaloma');
-    } else {
+    else if( !regex.test(newValue) )
+      setItemPriceError('Kaina neatitinka standarto (naudokite . vietoj ,)"')
+    else 
       setItemPriceError('');
-    }
   };
 
   return (
@@ -186,17 +187,17 @@ export const AddItemModal = (props: RegisterProps) => {
         <ModalHeader>Pridėti prekę</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
-          <FormControl mt={4} isRequired={true} isInvalid={itemNameError !== ''}>
+          <FormControl mt={4} isRequired={true} isInvalid={itemNameError === undefined ? false : itemNameError !== ''}>
             <FormLabel>Pavadinimas</FormLabel>
             <Input placeholder="Pavadinimas" onInput={handleItemNameChange}/>
             <FormErrorMessage>{itemNameError}</FormErrorMessage>
           </FormControl>
-          <FormControl isRequired={true} isInvalid={itemDescriptionError !== ''}>
+          <FormControl isRequired={true} isInvalid={itemDescriptionError === undefined ? false : itemDescriptionError !== ''}>
             <FormLabel>Aprašymas</FormLabel>
             <Input placeholder="Aprašymas" onInput={handleItemDescriptionChange} />
             <FormErrorMessage>{itemDescriptionError}</FormErrorMessage>
           </FormControl>
-          <FormControl isRequired={true} isInvalid={itemPriceError !== ''}>
+          <FormControl isRequired={true} isInvalid={itemPriceError === undefined ? false : itemPriceError !== ''}>
             <FormLabel>Kaina</FormLabel>
             <InputGroup>
                 <InputLeftElement
