@@ -3,7 +3,7 @@ import {
   theme,
 } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "./state/store";
 import { Routes, Route } from "react-router-dom";
 import { ItemsCategoryPage } from "./containers/pages/categories/ItemsCategoryPage";
@@ -17,9 +17,9 @@ import { AddressPage } from "./containers/pages/order/AddressPage";
 import { PaymentPage } from "./containers/pages/order/PaymentPage";
 import Success from "./containers/pages/order/statusPages/Success";
 import SingleOrderPage from "./containers/pages/order/SingleOrderPage";
+import Contacts from "./containers/pages/Contacts";
 
 export const App = () => {
-  
   store.dispatch(fetchItems());
   
   return (
@@ -28,8 +28,8 @@ export const App = () => {
       <Navbar />
       <Routes>
           <Route path="/">
-          <Route index element={<ItemsPageWrapper />} />
-          <Route path="kontaktai" element={<h1>Kontaktai</h1>} />
+          <Route index element={<Contacts />} /> 
+          <Route path="allItems" element={<ItemsPageWrapper />} /> 
           <Route path="category/:categoryId" element={<ItemsCategoryPage />} />
           <Route path="item/:itemId" element={<SingleItemPage/>}/>
           <Route path="admin" element={<AdminPage />} />

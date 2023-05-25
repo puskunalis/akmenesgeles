@@ -27,16 +27,6 @@ export const CheckoutPage = () => {
         px={{ base: '4', md: '8', lg: '12' }}
         py={{ base: '6', md: '8', lg: '12' }}
         >
-        {/* <Box mx="auto" maxW="3xl" py="10" px={{ base: '6', md: '8' }}>
-            <nav aria-label="Progress steps">
-            <HStack as="ol" listStyleType="none" spacing="0">
-                <Step isCurrent>Krepšelio peržiūra</Step>
-                <Step >Adresas</Step>
-                <Step>Apmokėjimas</Step>
-                <Step>Patvirtinimas</Step>
-            </HStack>
-            </nav>
-        </Box> */}
         <Stack
         direction={{ base: 'column', lg: 'row' }}
         align={{ lg: 'flex-start' }}
