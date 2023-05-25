@@ -138,9 +138,9 @@ export const AddItemModal = (props: RegisterProps) => {
   }
   const options: OptionType[] = categories.map((category) => getOption(category));
 
-  const [itemNameError, setItemNameError] = useState<string>();
+  const [itemNameError, setItemNameError] = useState<string | undefined>(undefined);
   const handleItemNameChange = (e: any) => {
-    const value = e.target.value;
+    const value = e.currentTarget.value;
     setItemName(value);
 
     if (value === '') {
@@ -150,9 +150,9 @@ export const AddItemModal = (props: RegisterProps) => {
     }
   };
 
-  const [itemDescriptionError, setItemDescriptionError] = useState<string>();
+  const [itemDescriptionError, setItemDescriptionError] = useState<string | undefined>(undefined);
   const handleItemDescriptionChange = (e: any) => {
-    const value = e.target.value;
+    const value = e.currentTarget.value;
     setDescription(value);
 
     if (value === '') {
@@ -162,9 +162,9 @@ export const AddItemModal = (props: RegisterProps) => {
     }
   };
 
-  const [itemPriceError, setItemPriceError] = useState<string>();
+  const [itemPriceError, setItemPriceError] = useState<string | undefined>(undefined);
   const handleItemPriceChange = (e: any) => {
-    const value = e.target.value;
+    const value = e.currentTarget.value;
     const regex = /^d+(,?)(d{1,2})?$/;
     if( regex.test(value) )
       return setItemPriceError('Kaina neatitinka standarto')
@@ -188,12 +188,12 @@ export const AddItemModal = (props: RegisterProps) => {
         <ModalBody pb={6}>
           <FormControl mt={4} isRequired={true} isInvalid={itemNameError !== ''}>
             <FormLabel>Pavadinimas</FormLabel>
-            <Input placeholder="Pavadinimas" onChange={handleItemNameChange}/>
+            <Input placeholder="Pavadinimas" onInput={handleItemNameChange}/>
             <FormErrorMessage>{itemNameError}</FormErrorMessage>
           </FormControl>
           <FormControl isRequired={true} isInvalid={itemDescriptionError !== ''}>
             <FormLabel>Aprašymas</FormLabel>
-            <Input placeholder="Aprašymas" onChange={handleItemDescriptionChange} />
+            <Input placeholder="Aprašymas" onInput={handleItemDescriptionChange} />
             <FormErrorMessage>{itemDescriptionError}</FormErrorMessage>
           </FormControl>
           <FormControl isRequired={true} isInvalid={itemPriceError !== ''}>
@@ -205,7 +205,7 @@ export const AddItemModal = (props: RegisterProps) => {
                 fontSize='1.2em'
                 children='$'
                 />
-                <Input placeholder='Kaina' onChange={handleItemPriceChange} required={true}/>
+                <Input placeholder='Kaina' onInput={handleItemPriceChange} required={true}/>
                 {/* <InputRightElement children={<CheckIcon color='green.500' />} /> */}
             </InputGroup>
             <FormErrorMessage>{itemPriceError}</FormErrorMessage>

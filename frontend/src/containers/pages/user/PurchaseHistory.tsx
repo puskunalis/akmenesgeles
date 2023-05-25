@@ -32,7 +32,6 @@ export function calculateTotalPrice(order: Order): number {
     order?.orderItems?.forEach((cartItem: CartItem) => {
         const itemPrice = cartItem.item?.price * cartItem.quantity;
         totalPrice += itemPrice;
-        console.log(itemPrice);
     });
 
     return totalPrice;
