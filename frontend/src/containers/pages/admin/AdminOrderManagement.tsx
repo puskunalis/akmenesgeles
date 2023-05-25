@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Grid, Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Center, Flex, Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import * as React from 'react';
 import { formatPrice } from "../order/checkout/PriceTag";
 import { calculateTotalPrice, getPurchaseStatus } from "../user/PurchaseHistory";
