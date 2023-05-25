@@ -1,13 +1,22 @@
 import { useState } from "react";
-import { Box, Flex, Text, Image, Button, Input } from "@chakra-ui/react";
+import { Box, Flex, Text, Image, Button, Input, useToast } from "@chakra-ui/react";
 import { FiCreditCard } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { OrderStatus, Payment } from "../../../../types";
+import { useSelector } from "react-redux";
+import { selectCurrentOrder, updateOrderStatus } from "../../../../state/order/OrdersSlice";
+import { store } from "../../../../state/store";
 
 const PaymentCard = () => {
+  const [cardHolder, setCardHolder] = useState("");
   const [cardNumber, setCardNumber] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const [cvv, setCVV] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
+  const order = useSelector(selectCurrentOrder)
 
   const handleCardNumberChange = (e: any) => {
     const formattedCardNumber = formatCardNumber(e.target.value);
@@ -23,6 +32,44 @@ const PaymentCard = () => {
     const formattedCVV = formatCVV(e.target.value);
     setCVV(formattedCVV);
   };
+
+  const handleCardHolderName = (e: any) => {
+    setCardHolder(e.target.value);
+  }
+
+  const handlePay = async () => {
+    if (cardHolder && cardNumber && expiryDate && cvv && order) {
+      setLoading(true);
+
+      const paymentInfo: Payment = {
+        cardHolder: cardHolder,
+        cardNumber: cardNumber,
+        expiryDate: expiryDate,
+        cvv: cvv
+      }
+      try {
+        await axios.post('/api/v1/pay', paymentInfo);
+      } catch (error) {
+        setLoading(false);
+          toast({
+            title: 'Mokejimas nepavyko',
+            description: "Mokejimo kortelė buvo atmesta",
+            status: 'error',
+            duration: 3000,
+            isClosable: true,
+          });
+
+          return;
+      }
+      store.dispatch(updateOrderStatus({
+        orderId: order.id,
+        status: OrderStatus.PAID
+      }));
+
+      setLoading(false);
+      navigate('/success')
+    }
+  }
 
   const formatCardNumber = (value: string) => {
     const numericValue = value.replace(/\D/g, "");
@@ -62,6 +109,19 @@ const PaymentCard = () => {
       </Flex>
 
       <Box>
+        <Text fontSize="sm" fontWeight="bold" color="gray.500" mb={2}>
+          Vardas, Pavardė
+        </Text>
+        <Input
+          type="text"
+          value={cardHolder}
+          onChange={handleCardHolderName}
+          fontSize="md"
+          color="gray.800"
+          placeholder="Vardas Pavardė"
+          maxLength={19}
+        />
+
         <Text fontSize="sm" fontWeight="bold" color="gray.500" mb={2}>
           Kortelės numeris
         </Text>
@@ -108,11 +168,12 @@ const PaymentCard = () => {
       </Flex>
 
       <Button
+        isLoading = {isLoading}
         mt={6}
         colorScheme="green"
         size="md"
         w="100%"
-        onClick={() => navigate('/success')}
+        onClick={handlePay}
       >
         Apmokėti
       </Button>

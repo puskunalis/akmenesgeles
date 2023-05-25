@@ -12,7 +12,10 @@ import { selectUser } from '../../../state/users/UserSlice';
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
     const order = useSelector(selectCurrentOrder);
-    const orderDate = new Date().toISOString();
+    let orderDate: string;
+    if (order) {
+       orderDate = new Date(order?.createdAt).toLocaleString();
+    }
     const shippingAddress = "adresas";
     const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
 

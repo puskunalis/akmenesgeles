@@ -98,7 +98,11 @@ export const AddItemModal = (props: RegisterProps) => {
     } catch (error) {
       console.error(error);
     }
-
+  }
+  useEffect(() => {
+    if (!uploadedImageUrl) {
+      return;
+    }
     const categoryIds = selectedCategories.map(c => c.value);
     const newItem: NewItem = {
       title: itemName,
@@ -107,11 +111,12 @@ export const AddItemModal = (props: RegisterProps) => {
       categoryIds: categoryIds,
       imageUrl: uploadedImageUrl
     }
-    
-    await store.dispatch(createItem(newItem));
-    setLoading(false);
-    onCloseModal();
-    if (itemAddStatus === AsyncStatus.SUCCESS) {
+
+    store.dispatch(createItem(newItem));
+  }, [uploadedImageUrl]);
+
+  useEffect(() => {
+    if (itemAddStatus === AsyncStatus.SUCCESS && uploadedImageUrl) {
       toast({
         title: 'Preke prideta.',
         description: "Preke buvo sekmingai prideta.",
@@ -119,8 +124,10 @@ export const AddItemModal = (props: RegisterProps) => {
         duration: 3000,
         isClosable: true,
       });
-    } 
-  }
+      setLoading(false);
+      onCloseModal();
+    }
+  },[itemAddStatus])
 
   const getOption = (category: Category) => {
     return {value: category.id, label: category.name};
