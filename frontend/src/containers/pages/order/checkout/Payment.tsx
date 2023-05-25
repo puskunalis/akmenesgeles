@@ -18,6 +18,14 @@ export function getKeyByValue(value: string) {
   return key;
 }
 
+export function getValueByKey(key: string) {
+  const indexOfS = Object.keys(OrderStatus).indexOf(key as unknown as OrderStatus);
+
+  const value = Object.values(OrderStatus)[indexOfS];
+
+  return value;
+}
+
 const PaymentCard = () => {
   const [cardHolder, setCardHolder] = useState("");
   const [cardNumber, setCardNumber] = useState("");
