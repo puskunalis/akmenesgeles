@@ -53,7 +53,7 @@ function ProductAddToCart({ product }: { product: Item }) {
           margin={{ base: "0", md: "0", lg: "0 10px 20px 0" }}
           className="product"
         >
-        <Link to={`item/${product.id}`}>
+        <Link to={`/item/${product.id}`}>
           <div className="image-container">
             <img src={product.imageUrl} alt={`${product.title}`} className="image"/>
           </div>
