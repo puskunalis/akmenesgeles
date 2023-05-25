@@ -14,4 +14,5 @@ public interface ItemService {
     Item addItemToCategory(UUID itemId, UUID categoryId);
     List<Item> getItemsByCategories(List<UUID> categoryIds);
     List<Item> getItemsByCategory(UUID categoryIds);
+    Item update(UUID id, CreateItemDto createItemDto);
 }

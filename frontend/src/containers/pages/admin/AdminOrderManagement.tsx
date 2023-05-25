@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { store } from "../../../state/store";
 import { OrderStatus } from "../../../types";
 import { getKeyByValue } from "../order/checkout/Payment";
+import { useNavigate } from "react-router-dom";
 
 
 interface statusSelectProps {
@@ -50,6 +51,7 @@ export function AdminOrders(props: adminItemsList) {
     const [selectedStatus, setSelectedStatus] = React.useState<OrderStatus | undefined>(undefined);
     // const [isLoading, setIsLoading] = React.useState(false);
     const orders = useSelector(selectOrdersByStatus);
+    const navigate = useNavigate();
 
     React.useEffect(() => {
         if (selectedStatus){
@@ -76,7 +78,7 @@ export function AdminOrders(props: adminItemsList) {
                     </Thead>
                     <Tbody>
                         {orders?.map((order) => (
-                            <Tr key={order.id}>
+                            <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
                                 <Td>{}</Td>
                                 <Td>{formatPrice(calculateTotalPrice(order))}</Td>
                                 <Td>{getPurchaseStatus(order.status.toString())}</Td>

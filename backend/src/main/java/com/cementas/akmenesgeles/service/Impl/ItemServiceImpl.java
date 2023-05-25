@@ -11,6 +11,7 @@ import com.cementas.akmenesgeles.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,5 +70,28 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> getItemsByCategory(UUID categoryIds) {
         return itemRepository.findByCategoryId(categoryIds);
+    }
+
+    @Override
+    public Item update(UUID id, CreateItemDto createItemDto) {
+        Item item = itemRepository.getItemById(id).orElseThrow();
+
+        if(createItemDto.getCategoryIds() != null){
+            List<Category> categories = categoryService.getAllCategoriesByIds(createItemDto.getCategoryIds());
+            item.setCategories(categories);
+        }
+        if(createItemDto.getDescription() != null){
+            item.setDescription(createItemDto.getDescription());
+        }
+        if(createItemDto.getTitle() != null){
+            item.setTitle(createItemDto.getTitle());
+        }
+        if(createItemDto.getPrice() != null){
+            item.setPrice(createItemDto.getPrice());
+        }
+
+        itemRepository.save(item);
+
+        return item;
     }
 }

@@ -8,8 +8,10 @@ import { store } from '../../../state/store';
 import { calculateTotalPrice, getPurchaseStatus } from '../user/PurchaseHistory';
 import './SingleOrderPage.scss';
 import { selectUser } from '../../../state/users/UserSlice';
-import { SHIPPING_PRICE } from '../../../types';
+import { SHIPPING_PRICE, User } from '../../../types';
 import { OrderStatus, UserRole } from '../../../types';
+import axios from 'axios';
+import { getKeyByValue, getValueByKey } from './checkout/Payment';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
@@ -18,13 +20,10 @@ export const SingleOrderPage = () =>{
     if (order) {
        orderDate = new Date(order?.createdAt).toLocaleString();
     }
-    const shippingAddress = "adresas";
     const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
-    const allStatuses = 
-        Object.keys(OrderStatus).filter((status) => {
-        return isNaN(Number(status));
-    });
-    const toast = useToast()
+    const allStatuses = Object.values(OrderStatus);
+    const toast = useToast();
+    
     
     function onStatusChange (e: ChangeEvent<HTMLSelectElement>) {
         if(orderId){
@@ -33,7 +32,7 @@ export const SingleOrderPage = () =>{
                 store.dispatch(updateOrderStatus(
                     {
                         orderId: orderId, 
-                        status: status
+                        status: getKeyByValue(status) as OrderStatus
                     }
                 ));
                 toast({
@@ -67,7 +66,7 @@ export const SingleOrderPage = () =>{
             return (
                 allStatuses.map(status =>
                 (<>
-                {order.status.toString() !== status  && <option>{status}</option>}
+                {getValueByKey(order.status) !== status  && <option>{status}</option>}
                 </>)) 
             );
         }
@@ -78,6 +77,7 @@ export const SingleOrderPage = () =>{
     const orderContent = useMemo(() => {
         if(order && order.id === orderId && user){
             return (
+                
                 <div className='order-details-wrapper'>
                     <Text>
                         Užsakymo nr.: <strong>{order.id}</strong> 
@@ -92,7 +92,7 @@ export const SingleOrderPage = () =>{
                             </strong>
                             {
                                 user.role == UserRole.ADMIN ?
-                                <Select placeholder={order.status.toString()} width={"60%"} onChange={e => onStatusChange(e)}>
+                                <Select placeholder={getValueByKey(order.status.toString())} width={"60%"} onChange={e => onStatusChange(e)}>
                                     {statusElements}
                                 </Select> :
                                 <Text>{getPurchaseStatus(order.status.toString())}</Text>
@@ -103,14 +103,10 @@ export const SingleOrderPage = () =>{
                             <strong>
                                 Pristatymo informacija:
                             </strong>
-                            <Text>{user.email}</Text>
-                        </div>
-                        <div>
-                            <strong>
-                                Mokėjimo informacija:
-                            </strong>
-                            <Text>{user.username}</Text>
-                            <Text>{shippingAddress}</Text>
+                            <Text>{order.address.fullName}</Text>
+                            <Text>{order.address.address}</Text>
+                            <Text>{order.address.city}</Text>
+                            <Text>{order.address.postalCode}</Text>
                         </div>
                         
                     </div>

@@ -27,6 +27,11 @@ export interface NewItem {
   imageUrl: string;
 }
 
+export interface UpdateItemData {
+  itemId: string;
+  item: Item;
+}
+
 export const fetchItems = createAsyncThunk("items/fetchItems", async () => {
   const response = axios
     .get("/api/v1/item")
@@ -90,6 +95,20 @@ export const deleteItem = createAsyncThunk(
   }
 );
 
+export const updateItem = createAsyncThunk(
+  "items/updateItem",
+  async (data: UpdateItemData) => {
+    const {itemId, item} = data;
+    const response = await axios
+      .put(`/api/v1/item/${itemId}`, item)
+      .then(resp => resp.data)
+      .catch(err => console.log(err))
+
+    store.dispatch(fetchItems());
+    return response;
+  }
+)
+
 const initialState: ItemState = {
   allItems: [],
   categoryItems: [],
@@ -152,6 +171,16 @@ export const ItemsSlice = createSlice({
         state.singleItem = action.payload;
       })
       .addCase(fetchItemById.rejected, (state, action) => {
+        state.singleItemStatus = AsyncStatus.FAILED;
+        state.singleItemError = action.error;
+      })
+      .addCase(updateItem.pending, (state, action) => {
+        state.singleItemStatus = AsyncStatus.FETCHING;
+      })
+      .addCase(updateItem.fulfilled, (state, action) => {
+        state.singleItemStatus = AsyncStatus.SUCCESS;
+      })
+      .addCase(updateItem.rejected, (state, action) => {
         state.singleItemStatus = AsyncStatus.FAILED;
         state.singleItemError = action.error;
       });
