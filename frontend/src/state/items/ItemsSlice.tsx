@@ -35,29 +35,29 @@ export interface UpdateItemData {
 export const fetchItems = createAsyncThunk(
   "items/fetchItems",
   async () => {
-    return axiosGet("/api/v1/item");
+    return await axiosGet("/api/v1/item");
   }
 );
 
 export const fetchItemsByCategoryId = createAsyncThunk(
   "items/fetchItemsByCategoryId",
   async (categoryId: string) => {
-    return axiosGet(`/api/v1/item/category/${categoryId}`);
+    return await axiosGet(`/api/v1/item/category/${categoryId}`);
   }
 );
 
 export const fetchItemById = createAsyncThunk(
   "items/fetchItemById",
   async (itemId: string) => {
-    return axiosGet(`/api/v1/item/${itemId}`);
+    return await axiosGet(`/api/v1/item/${itemId}`);
   }
 );
 
 export const createItem = createAsyncThunk(
   "items/createItem",
   async (newItem: NewItem) => {
-    const response = axiosPost("/api/v1/item", newItem);
-    store.dispatch(fetchItems());
+    const response = await axiosPost("/api/v1/item", newItem);
+    await store.dispatch(fetchItems());
     return response;
   }
 );
@@ -65,8 +65,8 @@ export const createItem = createAsyncThunk(
 export const deleteItem = createAsyncThunk(
   "items/deleteItem",
   async (itemId: string) => {
-    const response = axiosDelete("/api/v1/item/" + itemId);
-    store.dispatch(fetchItems());
+    const response = await axiosDelete("/api/v1/item/" + itemId);
+    await store.dispatch(fetchItems());
     return response;
   }
 );
@@ -75,8 +75,8 @@ export const updateItem = createAsyncThunk(
   "items/updateItem",
   async (data: UpdateItemData) => {
     const {itemId, item} = data;
-    const response = axiosPut(`/api/v1/item/${itemId}`, item);
-    store.dispatch(fetchItems());
+    const response = await axiosPut(`/api/v1/item/${itemId}`, item);
+    await store.dispatch(fetchItems());
     return response;
   }
 )
@@ -178,6 +178,21 @@ export const ItemsSlice = createSlice({
         }
       })
       .addCase(updateItem.rejected, (state, action) => {
+        state.singleItemStatus = AsyncStatus.FAILED;
+        state.singleItemError = action.error;
+      })
+      .addCase(deleteItem.pending, (state, _) => {
+        state.singleItemStatus = AsyncStatus.FETCHING;
+      })
+      .addCase(deleteItem.fulfilled, (state, action) => {
+        if(action.payload && action.payload.status < 300){
+          state.singleItemStatus = AsyncStatus.SUCCESS;
+        }
+        else {
+          state.singleItemStatus = AsyncStatus.BADREQUEST;
+        }
+      })
+      .addCase(deleteItem.rejected, (state, action) => {
         state.singleItemStatus = AsyncStatus.FAILED;
         state.singleItemError = action.error;
       });
