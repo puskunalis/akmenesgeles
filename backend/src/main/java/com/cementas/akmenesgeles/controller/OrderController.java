@@ -4,6 +4,8 @@ import com.cementas.akmenesgeles.model.Order;
 import com.cementas.akmenesgeles.model.OrderStatus;
 import com.cementas.akmenesgeles.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,11 +57,16 @@ public class OrderController {
 
     @PutMapping("/{id}/status/{status}")
     public ResponseEntity<Order> updateOrderStatus(@PathVariable UUID id, @PathVariable OrderStatus status) {
-        Order order = orderService.updateOrderStatus(id, status);
-        if (order == null) {
-            return ResponseEntity.notFound().build();
+        try {
+            Order order = orderService.updateOrderStatus(id, status);
+
+            if (order == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(order);
+        } catch (OptimisticLockingFailureException e) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(409)).build();
         }
-        return ResponseEntity.ok(order);
     }
 
     @DeleteMapping("/{id}")
