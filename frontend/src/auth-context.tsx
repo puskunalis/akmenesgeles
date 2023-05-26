@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { fetchUser, logoutUser } from "./state/users/UserSlice";
 import { store } from "./state/store";
+import { useNavigate } from "react-router-dom";
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -24,6 +25,8 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     fetchUserData();
   }, []);
@@ -43,12 +46,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.error("Error during login:", error);
     }
     store.dispatch(fetchUser());
+
+    navigate('/');
+    window.location.reload();
   };
 
   const logout = () => {
     localStorage.removeItem("authToken");
     store.dispatch(logoutUser());
     setIsLoggedIn(false);
+    
+    navigate('/');
+    window.location.reload();
   };
 
   const fetchUserData = async () => {

@@ -1,5 +1,7 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box, Heading, Link, Text, useColorModeValue as mode } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
+import { Router } from 'react-router-dom';
+import { Link as ReactRouterLink } from "react-router-dom";
 
 export default function Success() {
   return (
@@ -9,10 +11,15 @@ export default function Success() {
         Užsakymas patvirtintas!
       </Heading>
       <Text color={'gray.500'}>
-        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy
-        eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-        voluptua.
+        Jūsų užsakymas sėkmingai apmokėtas ir patvirtintas! Užsakymo eigą galite stebėti vartotojo puslapyje.
       </Text>
+      <Link 
+        color={mode('blue.500', 'blue.200')}
+        as={ReactRouterLink} 
+        to="/"
+      >
+        Grįžti į pradžios puslapį
+      </Link>
     </Box>
   );
 }

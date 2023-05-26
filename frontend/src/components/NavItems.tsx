@@ -36,16 +36,12 @@ export const GetNavItems = () => {
 
     return useMemo(() => ([
         {
-        label: "Visos gėlės",
-        href: "/",
+        label: "Visos prekės",
+        href: "/allItems",
         },
         {
         label: "Kategorijos",
         children: categoriesMenu,
-        },
-        {
-        label: "Kontaktai",
-        href: "/kontaktai",
         },
     ]) as NavItem[], [categories])
 };
