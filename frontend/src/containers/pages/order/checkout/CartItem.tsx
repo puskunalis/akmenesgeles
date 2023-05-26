@@ -66,7 +66,6 @@ export const CartItem = (props: CartItemProps) => {
   }
 
   return (
-    // <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="center" id="item-info-container">
     <Grid templateColumns={"1fr auto"} id="item-info-container">
       <CartProductMeta
         name={title}
