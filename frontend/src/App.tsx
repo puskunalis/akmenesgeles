@@ -20,7 +20,7 @@ import SingleOrderPage from "./containers/pages/order/SingleOrderPage";
 import { AuthorizedPageWrapper } from "./containers/pages/AuthorizedPageWrapper";
 import UnauthorizedPage from "./containers/pages/UnauthorizedPage";
 import NotFoundPage from "./containers/pages/NotFoundPage";
-import Contacts from "./containers/pages/Contacts";
+import HomePage from "./containers/pages/HomePage";
 
 
 export const App = () => {
@@ -32,7 +32,7 @@ export const App = () => {
       <Navbar />
       <Routes>
           <Route path="/">
-              <Route index element={<Contacts />} /> 
+              <Route index element={<HomePage />} /> 
               <Route path="allItems" element={<ItemsPageWrapper />} /> 
               <Route path="category/:categoryId" element={<ItemsCategoryPage />} />
               <Route path="item/:itemId" element={<SingleItemPage/>}/>
