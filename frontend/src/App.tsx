@@ -3,7 +3,7 @@ import {
   theme,
 } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "./state/store";
 import { Routes, Route } from "react-router-dom";
 import { ItemsCategoryPage } from "./containers/pages/categories/ItemsCategoryPage";
@@ -20,6 +20,7 @@ import SingleOrderPage from "./containers/pages/order/SingleOrderPage";
 import { AuthorizedPageWrapper } from "./containers/pages/AuthorizedPageWrapper";
 import UnauthorizedPage from "./containers/pages/UnauthorizedPage";
 import NotFoundPage from "./containers/pages/NotFoundPage";
+import Contacts from "./containers/pages/Contacts";
 
 
 export const App = () => {
@@ -45,8 +46,8 @@ export const App = () => {
               <Route element={<UnauthorizedPage/>}/>
               <Route path="*" element={<NotFoundPage />} />
           </Route>
-        </Route>
       </Routes>
     </ChakraProvider>
   </Provider>
-)};
+  );
+}
