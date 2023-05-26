@@ -3,7 +3,7 @@ import {
   theme,
 } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { store } from "./state/store";
 import { Routes, Route } from "react-router-dom";
 import { ItemsCategoryPage } from "./containers/pages/categories/ItemsCategoryPage";
@@ -49,4 +49,5 @@ export const App = () => {
       </Routes>
     </ChakraProvider>
   </Provider>
-)};
+  );
+}
