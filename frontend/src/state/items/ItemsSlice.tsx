@@ -56,8 +56,8 @@ export const fetchItemById = createAsyncThunk(
 export const createItem = createAsyncThunk(
   "items/createItem",
   async (newItem: NewItem) => {
-    const response = axiosPost("/api/v1/item", newItem);
-    store.dispatch(fetchItems());
+    const response = await axiosPost("/api/v1/item", newItem);
+    await store.dispatch(fetchItems());
     return response;
   }
 );

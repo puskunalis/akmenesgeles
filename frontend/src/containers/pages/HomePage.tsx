@@ -15,11 +15,6 @@ export default function HomePage() {
     const navigate = useNavigate();
     const [openRegister, setOpenRegister] = React.useState(false);
 
-    React.useEffect(() => {
-        if (itemsStatus === AsyncStatus.IDLE){
-            store.dispatch(fetchItems);
-        }
-    }, [itemsStatus]);
 
     React.useEffect(() => {
         if(user) {
