@@ -71,7 +71,7 @@ export function AdminOrders(props: adminItemsList) {
                 <Table >
                     <Thead>
                         <Tr>
-                            <Th>Data</Th>
+                            <Th>Užsakymo data</Th>
                             <Th>Kaina</Th>
                             <Th>Statusas</Th>
                         </Tr>
@@ -79,7 +79,7 @@ export function AdminOrders(props: adminItemsList) {
                     <Tbody>
                         {orders?.map((order) => (
                             <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
-                                <Td>{}</Td>
+                                <Td>{new Date(order?.createdAt).toLocaleString()}</Td>
                                 <Td>{formatPrice(calculateTotalPrice(order))}</Td>
                                 <Td>{getPurchaseStatus(order.status.toString())}</Td>
                             </Tr>
