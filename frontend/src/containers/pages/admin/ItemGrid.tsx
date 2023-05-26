@@ -36,13 +36,13 @@ function AddItemModalButton() {
 
 export interface ItemGridProps {
     selectedCategories: string[];
+    items: Item[];
 }
 
 export function ItemGrid (props: ItemGridProps) {
-    const { selectedCategories } = props;
+    const { selectedCategories, items } = props;
     const [filteredItems, setFilteredItems] = React.useState<Item[]>();
     const [selectedItem, setSelectedItem] = React.useState<Item | undefined>(undefined);
-    const items = useSelector(selectAllItems);
 
     const handleItemClick = (item: Item) => {
         setSelectedItem(item);
