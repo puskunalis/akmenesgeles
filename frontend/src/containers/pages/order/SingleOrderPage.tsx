@@ -12,6 +12,7 @@ import { SHIPPING_PRICE, User } from '../../../types';
 import { OrderStatus, UserRole } from '../../../types';
 import axios from 'axios';
 import { getKeyByValue, getValueByKey } from './checkout/Payment';
+import { formatPrice } from './checkout/PriceTag';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
@@ -156,7 +157,7 @@ export const SingleOrderPage = () =>{
                             <strong>Prekių kaina: </strong>€ {totalOrderPrice.toFixed(2)}
                         </Text>
                         <Text>
-                            <strong>Pristatymas: </strong>€ 3.00
+                            <strong>Pristatymas: </strong> {formatPrice(SHIPPING_PRICE)}
                         </Text>
                         <Text>
                             <strong>Iš viso: </strong>€ {(totalOrderPrice + SHIPPING_PRICE).toFixed(2)}
