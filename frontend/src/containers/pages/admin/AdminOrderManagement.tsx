@@ -8,6 +8,7 @@ import { store } from "../../../state/store";
 import { OrderStatus } from "../../../types";
 import { getKeyByValue } from "../order/checkout/Payment";
 import { useNavigate } from "react-router-dom";
+import { adjustTimeZone } from "../../../utils/DateUtils";
 
 
 interface statusSelectProps {
@@ -79,7 +80,7 @@ export function AdminOrders(props: adminItemsList) {
                     <Tbody>
                         {orders?.map((order) => (
                             <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
-                                <Td>{new Date(order?.createdAt).toLocaleString()}</Td>
+                                <Td>{adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false})}</Td>
                                 <Td>{formatPrice(calculateTotalPrice(order))}</Td>
                                 <Td>{getPurchaseStatus(order.status.toString())}</Td>
                             </Tr>

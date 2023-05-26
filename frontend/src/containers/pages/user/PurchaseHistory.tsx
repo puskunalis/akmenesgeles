@@ -2,6 +2,7 @@ import { Badge, Box, Center, Flex, Heading, Table, TableCaption, Tbody, Td, Th, 
 import { CartItem, Order, OrderStatus, SHIPPING_PRICE } from "../../../types";
 import { formatPrice } from "../order/checkout/PriceTag";
 import { useNavigate } from "react-router-dom";
+import { adjustTimeZone } from "../../../utils/DateUtils";
 
 enum statusColor {
     PENDING = 'yellow',
@@ -46,6 +47,7 @@ export function calculateTotalPrice(order?: Order): number {
 export function PurchaseHistory(props: PurchaseHistoryProps) {
     const {orders} = props;
     const navigate = useNavigate();
+    const timeZoneOffset = new Date().getTimezoneOffset();
 
     return (
     <Box width={"100%"} marginRight="56px">
@@ -65,7 +67,7 @@ export function PurchaseHistory(props: PurchaseHistoryProps) {
                 
                 {orders?.map((order) => (
                     <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
-                    <Td>{new Date(order?.createdAt).toLocaleString()}</Td>
+                    <Td>{adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false})}</Td>
                     <Td>{formatPrice(calculateTotalPrice(order) + SHIPPING_PRICE)}</Td>
                     <Td>{getPurchaseStatus(order.status)}</Td>
                     </Tr>

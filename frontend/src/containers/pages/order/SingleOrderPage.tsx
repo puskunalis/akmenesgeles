@@ -18,7 +18,7 @@ export const SingleOrderPage = () =>{
     const order = useSelector(selectCurrentOrder);
     let orderDate: string;
     if (order) {
-       orderDate = new Date(order?.createdAt).toLocaleString();
+       orderDate = new Date(order?.createdAt).toLocaleString("en-US", {hour12: false, timeZone:'UTC'});
     }
     const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
     const allStatuses = Object.values(OrderStatus);
