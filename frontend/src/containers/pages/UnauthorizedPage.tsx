@@ -1,4 +1,4 @@
-import { Box, Heading, Image } from '@chakra-ui/react';
+import { Box, Heading } from '@chakra-ui/react';
 import { Link } from "react-router-dom";
 
 export default function UnauthorizedPage(){
