@@ -56,7 +56,7 @@ export function PurchaseHistory(props: PurchaseHistoryProps) {
             <Table >
                 <Thead>
                     <Tr>
-                        <Th>Data</Th>
+                        <Th>Užsakymo data</Th>
                         <Th>Kaina</Th>
                         <Th>Statusas</Th>
                     </Tr>
@@ -65,7 +65,7 @@ export function PurchaseHistory(props: PurchaseHistoryProps) {
                 
                 {orders?.map((order) => (
                     <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
-                    <Td>{}</Td>
+                    <Td>{new Date(order?.createdAt).toLocaleString()}</Td>
                     <Td>{formatPrice(calculateTotalPrice(order) + SHIPPING_PRICE)}</Td>
                     <Td>{getPurchaseStatus(order.status)}</Td>
                     </Tr>
