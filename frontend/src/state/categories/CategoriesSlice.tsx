@@ -3,10 +3,10 @@ import {
   createSlice,
   SerializedError,
 } from "@reduxjs/toolkit";
-import axios from "axios";
-import { Category, Item } from "../../types";
+import { Category } from "../../types";
 import { AsyncStatus } from "../AsyncStatus";
 import { store, StoreState } from "../store";
+import { axiosGet, axiosPost, axiosPut, axiosDelete } from "../AxiosRequests";
 
 export interface CategoryState {
   addStatus: AsyncStatus;
@@ -23,11 +23,7 @@ export interface NewCategory {
 export const fetchCategories = createAsyncThunk(
   "categories/fetchCategories",
   async () => {
-    const response = axios
-      .get("/api/v1/category")
-      .then((res) => res.data)
-      .catch((err) => console.log(err));
-
+    const response = await axiosGet("/api/v1/category");
     return response;
   }
 );
@@ -42,14 +38,8 @@ const initialState: CategoryState = {
 export const createCategory = createAsyncThunk(
   "categories/createCategory",
   async (newCategory: NewCategory) => {
-    const response = await axios
-      .post("/api/v1/category", newCategory)
-      .then((res) => res.data)
-      .catch((err) => {
-        console.error(err);
-      });
-
-    store.dispatch(fetchCategories());
+    const response = await axiosPost("/api/v1/category", newCategory);
+    await store.dispatch(fetchCategories());
     return response;
   }
 );
@@ -57,13 +47,7 @@ export const createCategory = createAsyncThunk(
 export const updateCategory = createAsyncThunk(
   "categories/updateCategory",
   async (category: Category) => {
-    const response = await axios
-      .put(`/api/v1/category/${category.id}`, category)
-      .then((res) => res.data)
-      .catch((err) => {
-        console.error(err);
-      });
-
+    const response = await axiosPut(`/api/v1/category/${category.id}`, category);
     await store.dispatch(fetchCategories());
     return response;
   }
@@ -72,13 +56,7 @@ export const updateCategory = createAsyncThunk(
 export const deleteCategory = createAsyncThunk(
   "categories/deleteCategory",
   async (categoryId: string) => {
-    const response = await axios
-      .delete(`/api/v1/category/${categoryId}`)
-      .then((res) => res.data)
-      .catch((err) => {
-        console.error(err);
-      });
-
+    const response = await axiosDelete(`/api/v1/category/${categoryId}`);
     await store.dispatch(fetchCategories());
     return response;
   }
@@ -94,35 +72,65 @@ export const CategoriesSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchCategories.pending, (state, action) => {
+      .addCase(fetchCategories.pending, (state, _) => {
         state.status = AsyncStatus.FETCHING;
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
-        state.status = AsyncStatus.SUCCESS;
-        state.categories = action.payload;
+        if(action.payload && action.payload.status < 300){
+          state.status = AsyncStatus.SUCCESS;
+          state.categories = action.payload.data;
+        }
+        else {
+          state.status = AsyncStatus.BADREQUEST;
+        }
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.status = AsyncStatus.FAILED;
         state.error = action.error;
       })
-      .addCase(createCategory.pending, (state, action) => {
+      .addCase(createCategory.pending, (state, _) => {
         state.addStatus = AsyncStatus.FETCHING;
       })
       .addCase(createCategory.fulfilled, (state, action) => {
-        state.addStatus = AsyncStatus.SUCCESS;
+        if(action.payload && action.payload.status < 300){
+          state.addStatus = AsyncStatus.SUCCESS;
+        }
+        else {
+          state.addStatus = AsyncStatus.BADREQUEST;
+        }
       })
       .addCase(createCategory.rejected, (state, action) => {
         state.addStatus = AsyncStatus.FAILED;
         state.error = action.error;
       })
-      .addCase(updateCategory.pending, (state, action) => {
+      .addCase(updateCategory.pending, (state, _) => {
         state.addStatus = AsyncStatus.FETCHING;
       })
       .addCase(updateCategory.fulfilled, (state, action) => {
-        state.addStatus = AsyncStatus.SUCCESS;
+        if(action.payload && action.payload.status < 300){
+          state.addStatus = AsyncStatus.SUCCESS;
+        }
+        else {
+          state.addStatus = AsyncStatus.BADREQUEST;
+        }
       })
       .addCase(updateCategory.rejected, (state, action) => {
         state.addStatus = AsyncStatus.FAILED;
+        state.error = action.error;
+      })
+      .addCase(deleteCategory.pending, (state, _) => {
+        state.status = AsyncStatus.FETCHING;
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        if(action.payload && action.payload.status < 300){
+          state.status = AsyncStatus.SUCCESS;
+        }
+        else {
+          state.status = AsyncStatus.BADREQUEST;
+        }
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.status = AsyncStatus.FAILED;
         state.error = action.error;
       });
   },

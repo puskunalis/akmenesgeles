@@ -59,3 +59,18 @@ export function axiosDelete(url: string) {
     .catch((err) => console.log(err));
     return response;
 }
+
+export function axiosPatch(url: string) {
+    const response = axios
+    .patch(url, undefined, { validateStatus: function (status) {
+        return status >= 200 && status < 500;
+    } })
+    .then((res) => (
+        {
+        status: res.status,
+        data: res.data
+        }
+        ))
+    .catch((err) => console.log(err));
+    return response;
+}

@@ -4,10 +4,9 @@ import {
   SerializedError,
 } from "@reduxjs/toolkit";
 import axios from "axios";
-import { Category, Item, User } from "../../types";
+import { User } from "../../types";
 import { AsyncStatus } from "../AsyncStatus";
-import { store, StoreState } from "../store";
-import { fetchCart } from "../carts/CartsSlice";
+import { StoreState } from "../store";
 
 export interface UserState {
   user: User | undefined;
@@ -17,14 +16,16 @@ export interface UserState {
 
 export const fetchUser = createAsyncThunk("users/fetchUser", async () => {
   const token = localStorage.getItem("authToken");
-
-  const response = axios
+  const response = await axios
     .get("/api/v1/user/me", {
+      validateStatus: function (status) {
+        return status >= 200 && status < 500;
+      },
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then((res) => res.data)
+    .then((res) => res)
     .catch((err) => console.log(err));
 
   return response;
@@ -50,12 +51,17 @@ export const UserSlice = createSlice({
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchUser.pending, (state, action) => {
+      .addCase(fetchUser.pending, (state, _) => {
         state.status = AsyncStatus.FETCHING;
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
-        state.status = AsyncStatus.SUCCESS;
-        state.user = action.payload;
+        if(action.payload && action.payload.status < 300){
+          state.status = AsyncStatus.SUCCESS;
+          state.user = action.payload.data;
+        }
+        else {
+            state.status = AsyncStatus.BADREQUEST;
+        }
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = AsyncStatus.FAILED;
