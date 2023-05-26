@@ -24,16 +24,18 @@ export const ItemsCategoryPage = () => {
         if (params.categoryId){
             store.dispatch(fetchItemsByCategoryId(params.categoryId));
         }
-    },  [params]);
+    },  [params.categoryId]);
 
     const category = useMemo(() =>{
-        return categories.filter((category) => category.id === params.categoryId)[0];
+        if(params.categoryId){
+            return categories.filter((category) => category.id === params.categoryId)[0];
+        }
     }, [categories, params]);
 
     return(
         <Flex direction="column" mb={4} p={1}>
             {category && <Text fontSize="xl" alignSelf="center" justifyContent="center">{category.name}</Text>}
-            <ItemsPage items={items}/>
+            {items && <ItemsPage items={items}/>}
         </Flex>
     );
 }

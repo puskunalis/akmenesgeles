@@ -6,10 +6,9 @@ import { fetchItems, selectAllItems, selectItemsStatus } from "../../../state/it
 import { store } from "../../../state/store"
 import { ItemsFilterHeader } from './ItemsFilterHeader';
 import { ItemsPage } from './ItemsPage';
-import { Item } from '../../../types';
 
 export const ItemsPageWrapper = () => {
-    const items = useSelector(selectAllItems)
+    const items = useSelector(selectAllItems);
     const itemsStatus = useSelector(selectItemsStatus);
     const [sortedItems, setSortedItems] = React.useState(items);
 
@@ -17,7 +16,7 @@ export const ItemsPageWrapper = () => {
         if (itemsStatus === AsyncStatus.IDLE){
             store.dispatch(fetchItems());
         }
-    }, [])
+    }, []);
 
     React.useEffect(() => {
         setSortedItems(items);
@@ -32,9 +31,6 @@ export const ItemsPageWrapper = () => {
         setSortedItems(items);
       } else {
         setSortedItems(items.filter( item => item.title.startsWith(filterValue)))
-        // setSortedItems((prevState) =>
-        // prevState.filter((item: Item) => item.title.startsWith(filterValue))
-        // );
       }
     }, []);
 
