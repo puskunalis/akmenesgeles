@@ -1,15 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import SpinnerWrapper from '../../components/SpinnerWrapper';
-import * as React from 'react';
+import { Box, Heading } from '@chakra-ui/react';
+import { Link } from "react-router-dom";
 
-export default function NotFoundPage(){
-  const navigate = useNavigate();
-
-  React.useEffect(()=>{
-    navigate("/");
-  }, []);
-
+export default function NotFoundPage() {
   return (
-    <SpinnerWrapper/>
+    <Box textAlign="center" mt={20}>
+      <Heading as="h1" size="xl" mb={6}>
+        Puslapis neegzistuoja
+      </Heading>
+      <Link to={"/"}>
+        Grįžti į pagrindinį puslapį
+      </Link>
+    </Box>
   );
 }

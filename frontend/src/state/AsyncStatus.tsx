@@ -3,4 +3,5 @@ export enum AsyncStatus {
     FETCHING,
     SUCCESS,
     FAILED,
+    BADREQUEST,
 }
