@@ -20,6 +20,7 @@ import SingleOrderPage from "./containers/pages/order/SingleOrderPage";
 import { AuthorizedPageWrapper } from "./containers/pages/AuthorizedPageWrapper";
 import UnauthorizedPage from "./containers/pages/UnauthorizedPage";
 import NotFoundPage from "./containers/pages/NotFoundPage";
+import Contacts from "./containers/pages/Contacts";
 
 
 export const App = () => {
@@ -45,7 +46,6 @@ export const App = () => {
               <Route element={<UnauthorizedPage/>}/>
               <Route path="*" element={<NotFoundPage />} />
           </Route>
-        </Route>
       </Routes>
     </ChakraProvider>
   </Provider>
