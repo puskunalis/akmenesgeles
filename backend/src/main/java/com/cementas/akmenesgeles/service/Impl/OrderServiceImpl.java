@@ -84,15 +84,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order updateOrderStatus(UUID id, OrderStatus status) {
-        Optional<Order> order = orderRepository.getOrderById(id);
-        if (order.isEmpty()) {
-            return null;
-        }
-
-        order.get().setStatus(status);
-        orderRepository.save(order.get());
-
-        return order.get();
+            Optional<Order> order = orderRepository.getOrderById(id);
+            if (order.isEmpty()) {
+                return null;
+            }
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+            }
+            order.get().setStatus(status);
+            orderRepository.save(order.get());
+            return order.get();
     }
 
     @Override

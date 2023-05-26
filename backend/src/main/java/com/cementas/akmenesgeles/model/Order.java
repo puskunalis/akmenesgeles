@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -40,4 +39,7 @@ public class Order implements Serializable {
     @OneToOne
     @JoinColumn(name = "address_id", nullable = true)
     private ShippingAddress address;
+
+    @Version
+    private Long version;
 }
