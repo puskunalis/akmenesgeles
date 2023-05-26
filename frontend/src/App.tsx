@@ -3,7 +3,7 @@ import {
   theme,
 } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
-import { Provider } from "react-redux";
+import { Provider, useSelector } from "react-redux";
 import { store } from "./state/store";
 import { Routes, Route } from "react-router-dom";
 import { ItemsCategoryPage } from "./containers/pages/categories/ItemsCategoryPage";
@@ -21,8 +21,8 @@ import { AuthorizedPageWrapper } from "./containers/pages/AuthorizedPageWrapper"
 import UnauthorizedPage from "./containers/pages/UnauthorizedPage";
 import NotFoundPage from "./containers/pages/NotFoundPage";
 
+
 export const App = () => {
-  
   store.dispatch(fetchItems());
   
   return (
@@ -31,8 +31,8 @@ export const App = () => {
       <Navbar />
       <Routes>
           <Route path="/">
-              <Route index element={<ItemsPageWrapper />} />
-              <Route path="kontaktai" element={<h1>Kontaktai</h1>} />
+              <Route index element={<Contacts />} /> 
+              <Route path="allItems" element={<ItemsPageWrapper />} /> 
               <Route path="category/:categoryId" element={<ItemsCategoryPage />} />
               <Route path="item/:itemId" element={<SingleItemPage/>}/>
               <Route path="admin" element={<AuthorizedPageWrapper><AdminPage /></AuthorizedPageWrapper>} />
@@ -45,6 +45,7 @@ export const App = () => {
               <Route element={<UnauthorizedPage/>}/>
               <Route path="*" element={<NotFoundPage />} />
           </Route>
+        </Route>
       </Routes>
     </ChakraProvider>
   </Provider>

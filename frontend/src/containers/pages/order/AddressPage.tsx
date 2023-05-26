@@ -1,7 +1,7 @@
 import { Button, Card, CardBody, CardHeader, Container, Fade, Heading, ScaleFade, Stack, Text } from "@chakra-ui/react"
 import AddressDetailsPage from "./AddressDetailsPage"
 import { useSelector } from "react-redux"
-import { selectUserAddresses } from "../../../state/address/AddressSlice"
+import { fetchAddressByUser, selectUserAddresses } from "../../../state/address/AddressSlice"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { store } from "../../../state/store"
@@ -15,6 +15,10 @@ export const AddressPage = () => {
     const navigate = useNavigate();
     const user = useSelector(selectUser);
     const cart = useSelector(selectCart);
+
+    useEffect(() => {
+        store.dispatch(fetchAddressByUser(user?.id))
+    }, [])
 
     const isSelected = (addressId: string | undefined) => {
         if (addressId && addressId === selectedAddress) {

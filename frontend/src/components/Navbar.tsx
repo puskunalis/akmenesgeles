@@ -74,7 +74,8 @@ export default function WithSubnavigation() {
         <Flex flex={{ base: 1 }} justify={{ base: "center", md: "start" }}>
           <Avatar
             size={"sm"}
-            src="https://www.akmene.lt/static/themes/site/img/site_logo.png"
+            src="https://cdn-icons-png.flaticon.com/512/678/678100.png"
+            
           />
 
           <Flex display={{ base: "none", md: "flex" }} ml={10}>
@@ -169,7 +170,8 @@ export default function WithSubnavigation() {
               </Button>
             </>
           )}
-          <ShoppingCartPopup/>
+          
+          {isLoggedIn && <ShoppingCartPopup/>}
         </Stack>
       </Flex>
 
