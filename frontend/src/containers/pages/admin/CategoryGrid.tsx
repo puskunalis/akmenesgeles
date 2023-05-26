@@ -4,8 +4,9 @@ import { selectCategories } from "../../../state/categories/CategoriesSlice";
 import { Dispatch, SetStateAction } from "react";
 import * as React from "react";
 import { AddCategoryModal } from "../../../components/AddCategoryModal";
-import { Category } from "../../../types";
+import { Category, Item } from "../../../types";
 import { CategorySidePanel } from "./CategorySidePanel";
+import { selectCategoryItems } from "../../../state/items/ItemsSlice";
 
 function AddCategoryModalButton() {
     const [openAddCategory, setOpenAddCategory] = React.useState<boolean>(false);
@@ -36,15 +37,16 @@ function AddCategoryModalButton() {
 }
 
 export interface CategoryGridProps{
- setSelectedCategories: Dispatch<SetStateAction<string[]>>;
- selectedCategories: string[];
+    setSelectedCategories: Dispatch<SetStateAction<string[]>>;
+    selectedCategories: string[];
+    items: Item[];
 }
 
 export function CategoryGrid(props: CategoryGridProps) {
-    const { setSelectedCategories, selectedCategories } = props;
+    const { setSelectedCategories, selectedCategories, items } = props;
     const [selectedCategory, setSelectedCategory] = React.useState<Category | undefined>(undefined);
     const categories = useSelector(selectCategories);
-
+    
     const handleCategoryClick = (category: Category) => {
         setSelectedCategory(category);
     };
@@ -60,6 +62,10 @@ export function CategoryGrid(props: CategoryGridProps) {
           setSelectedCategories([...selectedCategories, categoryId]);
         }
     };
+
+    const calculateItems = (category: Category) => {
+        return items.filter(item => item.categories ? item.categories.some(cat => JSON.stringify(cat) === JSON.stringify(category))  : 0).length;
+    }
     
     return (
     <Box width={"100%"}>
@@ -94,7 +100,7 @@ export function CategoryGrid(props: CategoryGridProps) {
                             textOverflow="ellipsis"
                             whiteSpace="nowrap"
                         >{category.description}</Td>
-                        <Td>{category.items ? category.items.length.toString() : 0}</Td>
+                        <Td>{calculateItems(category)}</Td>
                         <Td>
                             <Checkbox colorScheme="teal"  onChange={() => handleCheckboxChange(category.id)}/>
                         </Td>

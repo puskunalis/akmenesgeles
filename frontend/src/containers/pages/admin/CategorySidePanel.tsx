@@ -3,7 +3,7 @@ import { Category } from "../../../types";
 import * as React from 'react';
 import { store } from "../../../state/store";
 import { useSelector } from "react-redux";
-import { selectAddCategoryStatus, updateCategory } from "../../../state/categories/CategoriesSlice";
+import { deleteCategory, selectAddCategoryStatus, updateCategory } from "../../../state/categories/CategoriesSlice";
 import { AsyncStatus } from "../../../state/AsyncStatus";
 
 export interface CategorySidePanelProps {
@@ -85,8 +85,9 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
     }
     
     const handleDelete = () => {
-        if (category)
-            // store.dispatch(deleteCategory(category.id));
+        if (!category)
+            return;
+        store.dispatch(deleteCategory(category.id));
         handleCloseSidePanel();
     }
 

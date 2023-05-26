@@ -69,6 +69,21 @@ export const updateCategory = createAsyncThunk(
   }
 );
 
+export const deleteCategory = createAsyncThunk(
+  "categories/deleteCategory",
+  async (categoryId: string) => {
+    const response = await axios
+      .delete(`/api/v1/category/${categoryId}`)
+      .then((res) => res.data)
+      .catch((err) => {
+        console.error(err);
+      });
+
+    await store.dispatch(fetchCategories());
+    return response;
+  }
+);
+
 export const CategoriesSlice = createSlice({
   name: "todos",
   initialState,
