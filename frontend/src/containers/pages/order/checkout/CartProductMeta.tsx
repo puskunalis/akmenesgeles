@@ -1,5 +1,6 @@
 import {
     Box,
+    Grid,
     HStack,
     Icon,
     Image,
@@ -19,7 +20,7 @@ import {
   export const CartProductMeta = (props: CartProductMetaProps) => {
     const { image, name, description } = props
     return (
-      <Stack direction="row" spacing="5" width="full">
+      <Grid templateColumns={"max-content auto"} gridColumnGap={"6px"} maxWidth={"100%"}  overflow={"hidden"} >
         <Image
           rounded="lg"
           width="120px"
@@ -30,14 +31,22 @@ import {
           draggable="false"
           loading="lazy"
         />
-        <Box pt="4">
+        <Box pt="4" maxWidth={"100%"} overflow={"hidden"}>
           <Stack spacing="0.5">
-            <Text fontWeight="medium">{name}</Text>
-            <Text color={mode('gray.600', 'gray.400')} fontSize="sm">
+            <Text fontWeight="medium"
+              overflow="hidden"            
+              textOverflow="ellipsis"  
+              whiteSpace="nowrap"
+            >{name}</Text>
+            <Text color={mode('gray.600', 'gray.400')} 
+              fontSize="sm" 
+              overflow="hidden"            
+              textOverflow="ellipsis"  
+              whiteSpace="nowrap">
               {description}
             </Text>
           </Stack>
         </Box>
-      </Stack>
+      </Grid>
     )
   }

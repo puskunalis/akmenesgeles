@@ -18,6 +18,7 @@ import {
   useToast,
   Spinner,
   FormErrorMessage,
+  Textarea,
 } from "@chakra-ui/react";
 import Select from 'react-select'
 import { useSelector } from "react-redux";
@@ -194,7 +195,7 @@ export const AddItemModal = (props: RegisterProps) => {
           </FormControl>
           <FormControl isRequired={true} isInvalid={itemDescriptionError === undefined ? false : itemDescriptionError !== ''}>
             <FormLabel>Aprašymas</FormLabel>
-            <Input placeholder="Aprašymas" onInput={handleItemDescriptionChange} />
+            <Textarea resize={"none"} placeholder="Aprašymas" onInput={handleItemDescriptionChange} />
             <FormErrorMessage>{itemDescriptionError}</FormErrorMessage>
           </FormControl>
           <FormControl isRequired={true} isInvalid={itemPriceError === undefined ? false : itemPriceError !== ''}>

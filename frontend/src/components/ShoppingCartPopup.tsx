@@ -89,7 +89,7 @@ export default function ShoppingCartPopup() {
           <ModalFooter id="modal-footer">
             <Text fontSize="lg" fontWeight="bold">Suma: {formatPrice(sumPrice())}</Text>
             <div className="modal-actions">
-              <Button variant='ghost'>Tęsti apsipirkimą</Button>
+              <Button variant='ghost' onClick={handleClose} >Tęsti apsipirkimą</Button>
               <Button colorScheme="green" onClick={handleToCheckout}>
                 Apmokėti
               </Button>

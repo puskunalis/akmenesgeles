@@ -18,6 +18,7 @@ import { PaymentPage } from "./containers/pages/order/PaymentPage";
 import Success from "./containers/pages/order/statusPages/Success";
 import SingleOrderPage from "./containers/pages/order/SingleOrderPage";
 import { AuthorizedPageWrapper } from "./containers/pages/AuthorizedPageWrapper"
+import Contacts from "./containers/pages/Contacts";
 
 export const App = () => {
   store.dispatch(fetchItems());

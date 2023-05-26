@@ -1,4 +1,4 @@
-import { Box, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, Button, Flex, FormControl, FormErrorMessage, FormLabel, useToast } from "@chakra-ui/react"
+import { Box, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, Input, Button, Flex, FormControl, FormErrorMessage, FormLabel, useToast, Textarea } from "@chakra-ui/react"
 import { Item } from "../../../types";
 import * as React from 'react';
 import { deleteItem, selectSingleItemStatus, updateItem } from "../../../state/items/ItemsSlice";
@@ -135,7 +135,7 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
                     
                     <FormControl isRequired={true} isInvalid={descriptionError !== ""}  mb={4} >
                         <FormLabel>Aprašymas</FormLabel>
-                            <Input defaultValue={editedDescription} onInput={(e) => handleDescriptionChange(e.currentTarget.value)} />
+                            <Textarea resize={"none"} defaultValue={editedDescription} onInput={(e) => handleDescriptionChange(e.currentTarget.value)} />
                         <FormErrorMessage>{descriptionError}</FormErrorMessage>
                     </FormControl>
 

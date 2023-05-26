@@ -1,4 +1,4 @@
-import { CloseButton, Flex, Link, Select, SelectProps, useColorModeValue } from '@chakra-ui/react';
+import { Box, CloseButton, Flex, Grid, Link, Select, SelectProps, useColorModeValue } from '@chakra-ui/react';
 import { PriceTag } from './PriceTag';
 import { CartProductMeta } from './CartProductMeta';
 import './CartItem.scss';
@@ -66,41 +66,45 @@ export const CartItem = (props: CartItemProps) => {
   }
 
   return (
-    <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="center" id="item-info-container">
+    // <Flex direction={{ base: 'column', md: 'row' }} justify="space-between" align="center" id="item-info-container">
+    <Grid templateColumns={"1fr auto"} id="item-info-container">
       <CartProductMeta
         name={title}
         description={description}
         image={imageUrl}
       />
 
-      <Flex width="full" justify="space-between" display={{ base: 'none', md: 'flex' }} className="actions-container">
-        <div className="amount-changer-container">
+      <Box>
+        <Flex width="full" justify="space-between" display={{ base: 'none', md: 'flex' }} className="actions-container">
+          <div className="amount-changer-container">
+            <ItemAmount
+                onChange={handleQuantityChange}
+                value={currentQuantity}
+            />
+          </div>
+          
+          <PriceTag price={price} currency={currency} />
+          <CloseButton aria-label={`Delete ${title} from cart`} onClick={onClickDelete} />
+        </Flex>
+
+        <Flex
+          mt="4"
+          align="center"
+          width="full"
+          justify="space-between"
+          display={{ base: 'flex', md: 'none' }}
+        >
+          <Link fontSize="sm" textDecor="underline">
+            Ištrinti
+          </Link>
           <ItemAmount
               onChange={handleQuantityChange}
               value={currentQuantity}
           />
-        </div>
-        
-        <PriceTag price={price} currency={currency} />
-        <CloseButton aria-label={`Delete ${title} from cart`} onClick={onClickDelete} />
-      </Flex>
-
-      <Flex
-        mt="4"
-        align="center"
-        width="full"
-        justify="space-between"
-        display={{ base: 'flex', md: 'none' }}
-      >
-        <Link fontSize="sm" textDecor="underline">
-          Ištrinti
-        </Link>
-        <ItemAmount
-            onChange={handleQuantityChange}
-            value={currentQuantity}
-        />
-        <PriceTag price={price} currency={currency} />
-      </Flex>
-    </Flex>
+          <PriceTag price={price} currency={currency} />
+        </Flex>
+      </Box>
+    {/* </Flex> */}
+    </Grid>
   )
 }
