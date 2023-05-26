@@ -13,13 +13,14 @@ import { OrderStatus, UserRole } from '../../../types';
 import axios from 'axios';
 import { getKeyByValue, getValueByKey } from './checkout/Payment';
 import { formatPrice } from './checkout/PriceTag';
+import { adjustTimeZone } from '../../../utils/DateUtils';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
     const order = useSelector(selectCurrentOrder);
     let orderDate: string;
     if (order) {
-       orderDate = new Date(order?.createdAt).toLocaleString("en-US", {hour12: false, timeZone:'UTC'});
+       orderDate = adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false});
     }
     const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
     const allStatuses = Object.values(OrderStatus);
