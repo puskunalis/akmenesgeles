@@ -27,7 +27,7 @@ export function UserPage() {
     }, [])
 
     React.useEffect(() => {
-      if (user){
+      if (user && user.role !== UserRole.ADMIN){
           store.dispatch(fetchOrdersByUserId(user.id));
       }
     }, [user])
@@ -35,7 +35,7 @@ export function UserPage() {
   return (
     <Grid templateColumns="1fr 1fr" gap={4} justifyItems="center">
         <Profile />
-        <PurchaseHistory orders={orders} />
+        {user?.role !== UserRole.ADMIN  && <PurchaseHistory orders={orders} />}
     </Grid>
   );
 };

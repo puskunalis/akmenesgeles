@@ -7,16 +7,18 @@ export interface ItemsPageProps {
     items: Item[]
 }
 
-
 export function ItemsPage(props: ItemsPageProps) {
     const { items } = props;
 
     const allItems = useMemo(() => {
-        return (
-            items?.map((item) => {
-                return (<Product product={item} key={item.id}/>)
-                })
-        );
+        if(items){
+            return (
+                items.map((item) => {
+                    return (<Product product={item} key={item.id}/>)
+                    })
+            );
+        }
+        return (<></>);
     }, [items]);
     
     return(

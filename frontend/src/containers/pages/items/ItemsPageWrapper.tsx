@@ -17,7 +17,7 @@ export const ItemsPageWrapper = () => {
         if (itemsStatus === AsyncStatus.IDLE){
             store.dispatch(fetchItems());
         }
-    }, [])
+    }, []);
 
     React.useEffect(() => {
         setSortedItems(items);
