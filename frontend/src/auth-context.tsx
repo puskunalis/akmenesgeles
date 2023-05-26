@@ -33,10 +33,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = async (username: string, password: string) => {
+  const login = async (email: string, password: string) => {
     try {
       const response = await axios.post("/api/v1/user/login", {
-        username,
+        email,
         password,
       });
       const token = response.data.accessToken;

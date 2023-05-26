@@ -19,13 +19,10 @@ export default function UserPage() {
         if (userStatus === AsyncStatus.IDLE){
             store.dispatch(fetchUser());
         }
-    }, []);
-
-    React.useEffect(() => {
-      if (user && user.role !== UserRole.ADMIN){
+        if (user && user.role !== UserRole.ADMIN){
           store.dispatch(fetchOrdersByUserId(user.id));
-      }
-    }, [user]);
+        }
+    }, []);
 
   return (
     <Grid templateColumns="1fr 1fr" gap={4} justifyItems="center">

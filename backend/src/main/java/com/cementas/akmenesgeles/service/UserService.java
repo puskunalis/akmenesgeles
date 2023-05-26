@@ -16,5 +16,5 @@ public interface UserService {
     List<User> getAll();
     Optional<User> getById(UUID id);
     String add(CreateUserDto createUserDto);
-    LoginResponseDto login(String username, String password);
+    LoginResponseDto login(String email, String password);
 }

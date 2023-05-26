@@ -79,14 +79,14 @@ export const LoginModal = (props: LoginProps) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Log in</ModalHeader>
+        <ModalHeader>Prisijungti</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
           <FormControl isRequired={true} isInvalid={usernameError === undefined ? false : usernameError !== ''}>
-            <FormLabel>Username</FormLabel>
+            <FormLabel>El. paštas</FormLabel>
             <Input
               ref={initialRef}
-              placeholder="Username"
+              placeholder="El. paštas"
               value={username}
               onChange={(e) => handleChangeUsername(e.target.value)}
             />
@@ -94,10 +94,10 @@ export const LoginModal = (props: LoginProps) => {
           </FormControl>
 
           <FormControl mt={4} isRequired={true} isInvalid={passwordError === undefined ? false : passwordError !== ''}>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Slaptažodis</FormLabel>
             <Input
               type="password"
-              placeholder="Password"
+              placeholder="*********"
               value={password}
               onChange={(e) => handleChangePassword(e.target.value)}
             />
@@ -107,9 +107,9 @@ export const LoginModal = (props: LoginProps) => {
 
         <ModalFooter>
           <Button colorScheme="green" mr={3} onClick={handleLogin} isDisabled={usernameError !== '' || passwordError !== ''}>
-            Log in
+            Prisijungti
           </Button>
-          <Button onClick={onCloseModal}>Cancel</Button>
+          <Button onClick={onCloseModal}>Atšaukti</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

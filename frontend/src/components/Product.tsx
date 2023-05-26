@@ -30,7 +30,7 @@ export default function ProductAddToCart({ product }: { product: Item }) {
             title: 'Prekė pridėta į krepšelį.',
             description: "Prekė buvo sėkmingai pridėta į krepšelį.",
             status: 'success',
-            duration: 3000,
+            duration: 1500,
             isClosable: true,
         });
       }
