@@ -12,6 +12,7 @@ import {
   ModalFooter,
   useToast,
   FormErrorMessage,
+  Textarea,
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { NewCategory, createCategory, selectAddCategoryStatus } from "../state/categories/CategoriesSlice";
@@ -108,7 +109,7 @@ export const AddCategoryModal = (props: ModalProps) => {
             </FormControl>
             <FormControl isRequired={true} isInvalid={descriptionError === undefined ? false : descriptionError !== ''}>
                 <FormLabel>Aprašymas</FormLabel>
-                <Input placeholder="Aprašymas" onInput={handleDescriptionChange} />
+                <Textarea resize={"none"} placeholder="Aprašymas" onInput={handleDescriptionChange} />
                 <FormErrorMessage>{descriptionError}</FormErrorMessage>
             </FormControl>
             </ModalBody>

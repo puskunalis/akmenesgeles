@@ -22,7 +22,6 @@ import UnauthorizedPage from "./containers/pages/UnauthorizedPage";
 import NotFoundPage from "./containers/pages/NotFoundPage";
 import HomePage from "./containers/pages/HomePage";
 
-
 export const App = () => {
   store.dispatch(fetchItems());
   
