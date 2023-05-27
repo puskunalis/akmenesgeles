@@ -4,4 +4,5 @@ export enum AsyncStatus {
     SUCCESS,
     FAILED,
     BADREQUEST,
+    CONFLICT,
 }

@@ -13,6 +13,7 @@ export interface OrderState {
     orders: Order[];
     ordersByStatus: Order[];
     status: AsyncStatus;
+    updateStatus: AsyncStatus;
     error: SerializedError;
     currentOrder: Order | undefined;
 }
@@ -69,11 +70,21 @@ export const updateOrderStatus = createAsyncThunk(
     }
 );
 
+export const retryUpdateOrderStatus = createAsyncThunk(
+    "orders/retryUpdateOrderStatus",
+    async (data: UpdateOrderStatusData) => {
+        const {orderId, status} = data;
+        const response = await axiosGet(`/api/v1/orders/${orderId}`);
+        return ({response: response, newStatus: status, orderId: orderId});
+    }
+);
+
 const initialState: OrderState = {
     userOrders: [],
     ordersByStatus: [],
     orders: [],
     status: AsyncStatus.IDLE,
+    updateStatus: AsyncStatus.IDLE,
     error: {},
     currentOrder: undefined,
 };
@@ -138,18 +149,24 @@ extraReducers(builder) {
         state.error = action.error;
     })
     .addCase(updateOrderStatus.pending, (state, _) => {
-        state.status = AsyncStatus.FETCHING;
+        state.updateStatus = AsyncStatus.FETCHING;
     })
     .addCase(updateOrderStatus.fulfilled, (state, action) => {
-        if(action.payload && action.payload.status < 300){
-            state.status = AsyncStatus.SUCCESS;
-        }
-        else {
-            state.status = AsyncStatus.BADREQUEST;
+        if(action.payload){
+            if(action.payload.status < 300)
+            {
+                state.updateStatus = AsyncStatus.SUCCESS;
+            }
+            else if(action.payload.status === 409){
+                state.updateStatus = AsyncStatus.CONFLICT
+            }
+            else {
+                state.updateStatus = AsyncStatus.BADREQUEST
+            }
         }
     })
     .addCase(updateOrderStatus.rejected, (state, action) => {
-        state.status = AsyncStatus.FAILED;
+        state.updateStatus = AsyncStatus.FAILED;
         state.error = action.error;
     })
     .addCase(fetchOrderById.pending, (state, _) => {
@@ -167,6 +184,20 @@ extraReducers(builder) {
     .addCase(fetchOrderById.rejected, (state, action) => {
         state.status = AsyncStatus.FAILED;
         state.error = action.error;
+    })
+    .addCase(retryUpdateOrderStatus.pending, (state, _) => {
+        state.status = AsyncStatus.FETCHING;
+    })
+    .addCase(retryUpdateOrderStatus.fulfilled, (state, action) => {
+        if(action.payload){
+            const {newStatus, orderId} = action.payload;
+            updateOrderStatus({orderId: orderId, status: newStatus});
+            state.status = AsyncStatus.SUCCESS;
+        }
+    })
+    .addCase(retryUpdateOrderStatus.rejected, (state, action) => {
+        state.status = AsyncStatus.FAILED;
+        state.error = action.error;
     });
 },
 });
@@ -181,6 +212,8 @@ export const selectOrders = (state: StoreState) =>
     state.order.orders;
 export const selectOrdersStatus = (state: StoreState) =>
     state.order.status;
+export const selectOrderUpdateStatus = (state: StoreState) =>
+    state.order.updateStatus;
 export const selectOrdersError = (state: StoreState) =>
     state.order.error;
   
