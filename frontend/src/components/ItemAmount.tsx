@@ -6,12 +6,11 @@ import {
   } from '@chakra-ui/react';
 
 interface AmountOfItemsProps {
-onChange: (value: number) => void;
-value: number
+    onChange: (value: number) => void;
+    value: number
 }
 
 export default function ItemAmount({onChange, value} : AmountOfItemsProps) {
-
     const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } =
         useNumberInput({
         step: 1,
@@ -22,15 +21,15 @@ export default function ItemAmount({onChange, value} : AmountOfItemsProps) {
         onChange: (valueString: string, valueNumber: number) => onChange(valueNumber)
         })
     
-    const inc = getIncrementButtonProps()
-    const dec = getDecrementButtonProps()
-    const input = getInputProps()
+    const inc = getIncrementButtonProps();
+    const dec = getDecrementButtonProps();
+    const input = getInputProps();
     
     return (
         <HStack maxW='320px'>
-        <Button {...dec}>-</Button>
-        <Input {...input} />
-        <Button {...inc}>+</Button>
+            <Button {...dec}>-</Button>
+            <Input {...input} />
+            <Button {...inc}>+</Button>
         </HStack>
     )
 }
