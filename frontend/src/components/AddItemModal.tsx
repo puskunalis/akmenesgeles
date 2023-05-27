@@ -11,12 +11,9 @@ import {
   FormLabel,
   Input,
   ModalFooter,
-  useDisclosure,
   InputGroup,
   InputLeftElement,
-  InputRightElement,
   useToast,
-  Spinner,
   FormErrorMessage,
   Textarea,
 } from "@chakra-ui/react";
@@ -24,12 +21,9 @@ import Select from 'react-select'
 import { useSelector } from "react-redux";
 import { selectCategories } from "../state/categories/CategoriesSlice";
 import { Category } from "../types";
-import { useEffect, useState } from "react";
-import { CheckIcon } from "@chakra-ui/icons";
-import { NewItem, createItem, selectAddItemStatus, selectItemsStatus } from "../state/items/ItemsSlice";
+import { NewItem, createItem, selectAddItemStatus } from "../state/items/ItemsSlice";
 import { store } from "../state/store";
-import { ImageUpload } from "./ImageUpload";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { AsyncStatus } from "../state/AsyncStatus";
 
 interface RegisterProps {
@@ -45,17 +39,19 @@ type OptionType = {
 export const AddItemModal = (props: RegisterProps) => {
   const {onClose, isOpen} = props;
   const categories = useSelector(selectCategories);
-  const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
-  const [itemName, setItemName] = useState<any>();
-  const [description, setDescription] = useState<any>();
-  const [price, setPrice] = useState<any>();
-  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [response, setResponse] = useState<AxiosResponse<any> | null>(null);
-  const toast = useToast()
+  const [selectedCategories, setSelectedCategories] = React.useState<any[]>([]);
+  const [itemName, setItemName] = React.useState<any>();
+  const [description, setDescription] = React.useState<any>();
+  const [price, setPrice] = React.useState<any>();
+  const [uploadedImageUrl, setUploadedImageUrl] = React.useState<string>("");
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const [itemPriceError, setItemPriceError] = React.useState<string | undefined>(undefined);
+  const [itemNameError, setItemNameError] = React.useState<string | undefined>(undefined);
+  const [itemDescriptionError, setItemDescriptionError] = React.useState<string | undefined>(undefined);
+  const [isLoading, setLoading] = React.useState(false);
+  const toast = useToast();
   const itemAddStatus = useSelector(selectAddItemStatus);
-  const [isLoading, setLoading] = useState(false);
-
+  
   const resetState = () => {
     setSelectedCategories([]);
     setItemName(undefined);
@@ -63,7 +59,6 @@ export const AddItemModal = (props: RegisterProps) => {
     setPrice(undefined);
     setUploadedImageUrl("");
     setSelectedFile(null);
-    setResponse(null);
     setLoading(false);
     setItemNameError(undefined);
     setItemDescriptionError(undefined);
@@ -100,7 +95,7 @@ export const AddItemModal = (props: RegisterProps) => {
       console.error(error);
     }
   }
-  useEffect(() => {
+  React.useEffect(() => {
     if (!uploadedImageUrl) {
       return;
     }
@@ -116,7 +111,7 @@ export const AddItemModal = (props: RegisterProps) => {
     store.dispatch(createItem(newItem));
   }, [uploadedImageUrl]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (itemAddStatus === AsyncStatus.SUCCESS && uploadedImageUrl) {
       toast({
         title: 'Prekė pridėta.',
@@ -139,7 +134,6 @@ export const AddItemModal = (props: RegisterProps) => {
   }
   const options: OptionType[] = categories.map((category) => getOption(category));
 
-  const [itemNameError, setItemNameError] = useState<string | undefined>(undefined);
   const handleItemNameChange = (e: any) => {
     const value = e.currentTarget.value;
     setItemName(value);
@@ -151,7 +145,6 @@ export const AddItemModal = (props: RegisterProps) => {
     }
   };
 
-  const [itemDescriptionError, setItemDescriptionError] = useState<string | undefined>(undefined);
   const handleItemDescriptionChange = (e: any) => {
     const value = e.currentTarget.value;
     setDescription(value);
@@ -163,7 +156,6 @@ export const AddItemModal = (props: RegisterProps) => {
     }
   };
 
-  const [itemPriceError, setItemPriceError] = useState<string | undefined>(undefined);
   const handleItemPriceChange = (e: any) => {
     const value = e.currentTarget.value;
     const newValue = value.replace(/,/g, '.');
@@ -208,11 +200,9 @@ export const AddItemModal = (props: RegisterProps) => {
                 children='$'
                 />
                 <Input placeholder='Kaina' onInput={handleItemPriceChange} required={true}/>
-                {/* <InputRightElement children={<CheckIcon color='green.500' />} /> */}
             </InputGroup>
             <FormErrorMessage>{itemPriceError}</FormErrorMessage>
           </FormControl>
-
             <FormLabel>Kategorijos</FormLabel>
             <Select
                 closeMenuOnSelect={false}
@@ -220,12 +210,10 @@ export const AddItemModal = (props: RegisterProps) => {
                 options={options} 
                 onChange={e => handleCategoriesChange(e)}
             />
-          
           <div>
               <input type="file" onChange={handleFileChange} />
           </div>
         </ModalBody>
-
         <ModalFooter>
           <Button
             isLoading={isLoading}

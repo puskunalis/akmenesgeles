@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { UserRole } from '../../../types';
 import { useSelector } from 'react-redux';
 import { fetchUser, selectUser, selectUserStatus } from '../../../state/users/UserSlice';
 import Profile from './Profile';
@@ -19,7 +18,7 @@ export default function UserPage() {
         if (userStatus === AsyncStatus.IDLE){
             store.dispatch(fetchUser());
         }
-        if (user && user.role !== UserRole.ADMIN){
+        if (user){
           store.dispatch(fetchOrdersByUserId(user.id));
         }
     }, []);
@@ -27,7 +26,7 @@ export default function UserPage() {
   return (
     <Grid templateColumns="1fr 1fr" gap={4} justifyItems="center">
         <Profile />
-        {user?.role !== UserRole.ADMIN  && <PurchaseHistory orders={orders} />}
+        <PurchaseHistory orders={orders} />
     </Grid>
   );
 };

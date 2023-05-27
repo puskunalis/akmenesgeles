@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { NewCategory, createCategory, selectAddCategoryStatus } from "../state/categories/CategoriesSlice";
-import { useEffect, useState } from "react";
+import * as React from "react";
 import { store } from "../state/store";
 import { AxiosResponse } from "axios";
 import { AsyncStatus } from "../state/AsyncStatus";
@@ -28,17 +28,17 @@ interface ModalProps {
 
 export const AddCategoryModal = (props: ModalProps) => {
     const {onClose, isOpen} = props;
-    const [name, setName] = useState<any>();
-    const [description, setDescription] = useState<any>();
-    const [response, setResponse] = useState<AxiosResponse<any> | null>(null);
+    const [name, setName] = React.useState<any>();
+    const [description, setDescription] = React.useState<any>();
+    const [isLoading, setLoading] = React.useState(false);
+    const [descriptionError, setDescriptionError] = React.useState<string | undefined>(undefined);
+    const [nameError, setNameError] = React.useState<string | undefined>(undefined);
     const toast = useToast()
     const categoryAddStatus = useSelector(selectAddCategoryStatus);
-    const [isLoading, setLoading] = useState(false);
 
     const resetState = () => {
         setName(undefined);
         setDescription(undefined);
-        setResponse(null);
         setLoading(false);
     };
 
@@ -67,8 +67,7 @@ export const AddCategoryModal = (props: ModalProps) => {
         }
         onCloseModal();
       };
-
-    const [nameError, setNameError] = useState<string | undefined>(undefined);
+    
     const handleNameChange = (e: any) => {
         const value = e.currentTarget.value;
         setName(value);
@@ -79,8 +78,7 @@ export const AddCategoryModal = (props: ModalProps) => {
             setNameError('');
         }
     };
-
-    const [descriptionError, setDescriptionError] = useState<string | undefined>(undefined);
+    
     const handleDescriptionChange = (e: any) => {
         const value = e.currentTarget.value;
         setDescription(value);
