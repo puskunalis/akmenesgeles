@@ -6,18 +6,17 @@ import {
     Link,
     Stack,
     useColorModeValue as mode,
-  } from '@chakra-ui/react'
-import { CartItem } from './CartItem'
-import { CartOrderSummary } from './CartOrderSummary'
-import { useSelector } from 'react-redux'
-import { selectCart } from '../../../../state/carts/CartsSlice'
-import Payment from './Payment'
-import { Step } from '../../../../components/steps/Step'
-import AddressDetailsPage from '../AddressDetailsPage'
+  } from '@chakra-ui/react';
+import { CartItem } from './CartItem';
+import { CartOrderSummary } from './CartOrderSummary';
+import { useSelector } from 'react-redux';
+import { selectCart } from '../../../../state/carts/CartsSlice';
+import { useNavigate } from 'react-router';
 
 
 export const CheckoutPage = () => {
     const cart = useSelector(selectCart);
+    const navigate = useNavigate();
 
     return(
         
@@ -52,7 +51,7 @@ export const CheckoutPage = () => {
             <CartOrderSummary cart={cart}/>
             <HStack mt="6" fontWeight="semibold">
             <p>arba</p>
-            <Link color={mode('blue.500', 'blue.200')}>Tęsti apsipirkimą</Link>
+            <Link color={mode('blue.500', 'blue.200')} onClick={() => navigate("/allItems")}>Tęsti apsipirkimą</Link>
             </HStack>
         </Flex>
         </Stack>

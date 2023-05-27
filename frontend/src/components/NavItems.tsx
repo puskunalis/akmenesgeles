@@ -20,7 +20,7 @@ export const GetNavItems = () => {
         if(categoryStatus === AsyncStatus.IDLE) {
             store.dispatch(fetchCategories());
         }
-    }, [categoryStatus, store.dispatch])
+    }, [categoryStatus])
 
 
     const createCategory = (category: Category) => {
