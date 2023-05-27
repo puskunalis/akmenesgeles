@@ -119,8 +119,8 @@ export const AddItemModal = (props: RegisterProps) => {
   useEffect(() => {
     if (itemAddStatus === AsyncStatus.SUCCESS && uploadedImageUrl) {
       toast({
-        title: 'Preke prideta.',
-        description: "Preke buvo sekmingai prideta.",
+        title: 'Prekė pridėta.',
+        description: "Prekė buvo sėkmingai pridėta.",
         status: 'success',
         duration: 3000,
         isClosable: true,

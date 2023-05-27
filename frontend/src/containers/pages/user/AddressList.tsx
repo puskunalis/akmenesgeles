@@ -34,7 +34,7 @@ const AddressList: React.FC<AddressListProps> = ({ addresses, onDelete }) => {
     if (id) {
       await store.dispatch(deleteAddress(id));
       toast({
-        title: 'Addressas pašalintas',
+        title: 'Adresas pašalintas',
         status: 'success',
         duration: 2000,
         isClosable: true,
