@@ -28,7 +28,7 @@ function AddCategoryModalButton() {
                 }}
                 onClick={() => setOpenAddCategory(true)}
             >
-            Pridėti kategorija
+            Pridėti kategoriją
             </Button>
         </div>
         
@@ -81,8 +81,8 @@ export function CategoryGrid(props: CategoryGridProps) {
                 <Thead>
                     <Tr>
                         <Th>Pavadinimas</Th>
-                        <Th>Aprasymas</Th>
-                        <Th>Prekiu kiekis</Th>
+                        <Th>Aprašymas</Th>
+                        <Th>Prekių kiekis</Th>
                         <Th>Pasirinkti</Th>
                     </Tr>
                 </Thead>
