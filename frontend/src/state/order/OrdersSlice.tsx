@@ -17,6 +17,7 @@ export interface OrderState {
     updateStatus: AsyncStatus;
     error: SerializedError;
     currentOrder: Order | undefined;
+    fetchOrderStatus: AsyncStatus;
 }
 
 export interface UpdateOrderStatusData {
@@ -97,6 +98,7 @@ const initialState: OrderState = {
     updateStatus: AsyncStatus.IDLE,
     error: {},
     currentOrder: undefined,
+    fetchOrderStatus: AsyncStatus.IDLE,
 };
 
 
@@ -143,19 +145,24 @@ extraReducers(builder) {
         state.error = action.error;
     })
     .addCase(fetchOrdersByStatus.pending, (state, _) => {
-        state.status = AsyncStatus.FETCHING;
+        state.fetchOrderStatus = AsyncStatus.FETCHING;
     })
     .addCase(fetchOrdersByStatus.fulfilled, (state, action) => {
-        if(action.payload && action.payload.status < 300){
-            state.status = AsyncStatus.SUCCESS;
-            state.ordersByStatus = action.payload.data;
-        }
-        else {
-            state.status = AsyncStatus.BADREQUEST;
+        if(action.payload){
+            if(action.payload.status < 300){
+                state.fetchOrderStatus = AsyncStatus.SUCCESS;
+                state.ordersByStatus = action.payload.data;
+            }
+            else if(action.payload.status === 404){
+                state.fetchOrderStatus = AsyncStatus.NOTFOUND;
+            }
+            else {
+                state.fetchOrderStatus = AsyncStatus.BADREQUEST;
+            }
         }
     })
     .addCase(fetchOrdersByStatus.rejected, (state, action) => {
-        state.status = AsyncStatus.FAILED;
+        state.fetchOrderStatus = AsyncStatus.FAILED;
         state.error = action.error;
     })
     .addCase(updateOrderStatus.pending, (state, _) => {
@@ -231,4 +238,6 @@ export const selectOrderUpdateStatus = (state: StoreState) =>
     state.order.updateStatus;
 export const selectOrdersError = (state: StoreState) =>
     state.order.error;
+export const selectOrderFetchStatus = (state: StoreState) =>
+    state.order.fetchOrderStatus;
   

@@ -2,13 +2,14 @@ import { Box, Center, Flex, Heading, Table, Tbody, Td, Th, Thead, Tr } from "@ch
 import * as React from 'react';
 import { formatPrice } from "../order/checkout/PriceTag";
 import { calculateTotalPrice, getPurchaseStatus } from "../user/PurchaseHistory";
-import { fetchOrdersByStatus, selectOrdersByStatus } from "../../../state/order/OrdersSlice";
+import { fetchOrdersByStatus, selectOrderFetchStatus, selectOrdersByStatus } from "../../../state/order/OrdersSlice";
 import { useSelector } from "react-redux";
 import { store } from "../../../state/store";
 import { OrderStatus } from "../../../types";
 import { getKeyByValue } from "../order/checkout/Payment";
 import { useNavigate } from "react-router-dom";
 import { adjustTimeZone } from "../../../utils/DateUtils";
+import { AsyncStatus } from "../../../state/AsyncStatus";
 
 
 interface statusSelectProps {
@@ -50,8 +51,8 @@ export interface adminItemsList{
 
 export function AdminOrders(props: adminItemsList) {
     const [selectedStatus, setSelectedStatus] = React.useState<OrderStatus | undefined>(undefined);
-    // const [isLoading, setIsLoading] = React.useState(false);
     const orders = useSelector(selectOrdersByStatus);
+    const orderFetchStatus = useSelector(selectOrderFetchStatus);
     const navigate = useNavigate();
 
     React.useEffect(() => {
@@ -59,6 +60,24 @@ export function AdminOrders(props: adminItemsList) {
             store.dispatch(fetchOrdersByStatus(getKeyByValue(selectedStatus) as OrderStatus));
         }
       }, [selectedStatus])
+
+    const allOrders = React.useMemo(() =>{
+        if(orders && orderFetchStatus === AsyncStatus.SUCCESS){
+            return (
+                <>
+                    {orders?.map((order) => (
+                        <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
+                            <Td>{adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false})}</Td>
+                            <Td>{formatPrice(calculateTotalPrice(order))}</Td>
+                            <Td>{getPurchaseStatus(order.status.toString())}</Td>
+                        </Tr>
+                    ))}
+                </>
+            )
+        }
+        
+        return (<></>);
+    }, [orderFetchStatus, orders]);
     
     return (
         <Box paddingX="56px">
@@ -78,13 +97,7 @@ export function AdminOrders(props: adminItemsList) {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {orders?.map((order) => (
-                            <Tr key={order.id} onClick={() => navigate(`/order/${order.id}`)}>
-                                <Td>{adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false})}</Td>
-                                <Td>{formatPrice(calculateTotalPrice(order))}</Td>
-                                <Td>{getPurchaseStatus(order.status.toString())}</Td>
-                            </Tr>
-                        ))}
+                        {allOrders}
                     </Tbody>
                 </Table>
             </Box>
