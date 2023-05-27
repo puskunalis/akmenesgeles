@@ -1,6 +1,5 @@
-import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import * as React from "react";
+import { useSelector } from "react-redux";
 import { AsyncStatus } from "../state/AsyncStatus";
 import { fetchCategories, selectCategories, selectCategoriesStatus } from "../state/categories/CategoriesSlice";
 import { store } from "../state/store";
@@ -17,7 +16,7 @@ export const GetNavItems = () => {
     const categories = useSelector(selectCategories);
     const categoryStatus = useSelector(selectCategoriesStatus)
 
-    useEffect(() => {
+    React.useEffect(() => {
         if(categoryStatus === AsyncStatus.IDLE) {
             store.dispatch(fetchCategories());
         }
@@ -34,7 +33,7 @@ export const GetNavItems = () => {
 
     const categoriesMenu = categories.map((category) => createCategory(category));
 
-    return useMemo(() => ([
+    return React.useMemo(() => ([
         {
         label: "Visos prekės",
         href: "/allItems",

@@ -18,7 +18,6 @@ import { useSelector } from "react-redux";
 import { NewCategory, createCategory, selectAddCategoryStatus } from "../state/categories/CategoriesSlice";
 import * as React from "react";
 import { store } from "../state/store";
-import { AxiosResponse } from "axios";
 import { AsyncStatus } from "../state/AsyncStatus";
 
 interface ModalProps {

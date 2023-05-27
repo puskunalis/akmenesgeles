@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import * as React from "react";
 import {
   Button,
   Modal,
@@ -25,7 +25,7 @@ import { useNavigate } from "react-router-dom";
 import { formatPrice } from "../containers/pages/order/checkout/PriceTag";
 
 export default function ShoppingCartPopup() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
   const handleClose = () => setIsOpen(false);
   const handleOpen = () => setIsOpen(true);
   const user = useSelector(selectUser);
@@ -33,7 +33,7 @@ export default function ShoppingCartPopup() {
   const cartStatus = useSelector(selectCartStatus);
   const navigate = useNavigate();
   const toast = useToast();
-  useEffect(() => {
+  React.useEffect(() => {
     if(user && cartStatus === AsyncStatus.IDLE) {
       store.dispatch(fetchCart(user.id));
     }
