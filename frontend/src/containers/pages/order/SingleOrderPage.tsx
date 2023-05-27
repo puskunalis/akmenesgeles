@@ -14,6 +14,7 @@ import { getKeyByValue, getValueByKey } from './checkout/Payment';
 import { AsyncStatus } from '../../../state/AsyncStatus';
 import { formatPrice } from './checkout/PriceTag';
 import { adjustTimeZone } from '../../../utils/DateUtils';
+import { version } from 'process';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
@@ -33,12 +34,13 @@ export const SingleOrderPage = () =>{
     const toast = useToast();
 
     React.useEffect(() => {
-        if(isUpdateInitiated && orderId && isStatusChanged) {
+        if(isUpdateInitiated && orderId && isStatusChanged && order) {
             setPreviousReceivedStatus(AsyncStatus.IDLE);
             store.dispatch(updateOrderStatus(
                 {
                     orderId: orderId, 
-                    status: newStatusValue
+                    status: newStatusValue,
+                    version: order?.version
                 }
             ));
         }
@@ -111,11 +113,12 @@ export const SingleOrderPage = () =>{
     }, []);
 
     const confirmChange = () => {
-        if(orderId){
+        if(orderId && order){
             store.dispatch(updateOrderStatus(
             {
                 orderId: orderId, 
-                status: newStatusValue
+                status: newStatusValue,
+                version: order.version
             }
             ));
             setShowConfirmationModal(false);

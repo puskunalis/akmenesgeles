@@ -1,5 +1,6 @@
 package com.cementas.akmenesgeles.service;
 
+import com.cementas.akmenesgeles.dto.Order.VersionDto;
 import com.cementas.akmenesgeles.model.Order;
 import com.cementas.akmenesgeles.model.OrderItem;
 import com.cementas.akmenesgeles.model.OrderStatus;
@@ -13,6 +14,6 @@ public interface OrderService {
     Order getOrderById(UUID id);
     List<Order> getOrdersByUserId(UUID userId);
     List<Order> getOrdersByStatus(OrderStatus status);
-    Order updateOrderStatus(UUID id, OrderStatus status);
+    Order updateOrderStatus(UUID id, OrderStatus status, VersionDto version);
     void deleteOrder(UUID id);
 }

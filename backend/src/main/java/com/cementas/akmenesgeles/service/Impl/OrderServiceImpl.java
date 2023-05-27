@@ -1,5 +1,6 @@
 package com.cementas.akmenesgeles.service.Impl;
 
+import com.cementas.akmenesgeles.dto.Order.VersionDto;
 import com.cementas.akmenesgeles.model.*;
 import com.cementas.akmenesgeles.repository.OrderRepository;
 import com.cementas.akmenesgeles.service.CartService;
@@ -7,6 +8,7 @@ import com.cementas.akmenesgeles.service.OrderService;
 import com.cementas.akmenesgeles.service.ShippingAddressService;
 import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,18 +87,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public Order updateOrderStatus(UUID id, OrderStatus status) {
-            Optional<Order> order = orderRepository.getOrderById(id);
-            if (order.isEmpty()) {
-                return null;
+    public Order updateOrderStatus(UUID id, OrderStatus status, VersionDto version) {
+            Order order = orderRepository.getOrderById(id).orElseThrow();
+            if (order.getVersion() != version.getVersion()) {
+                throw new OptimisticLockingFailureException("Optimistic lock exception");
             }
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-            }
-            order.get().setStatus(status);
-            orderRepository.save(order.get());
-            return order.get();
+
+            order.setStatus(status);
+            orderRepository.save(order);
+            return order;
     }
 
     @Override

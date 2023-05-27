@@ -1,5 +1,6 @@
 package com.cementas.akmenesgeles.controller;
 
+import com.cementas.akmenesgeles.dto.Order.VersionDto;
 import com.cementas.akmenesgeles.model.Order;
 import com.cementas.akmenesgeles.model.OrderStatus;
 import com.cementas.akmenesgeles.service.OrderService;
@@ -56,9 +57,13 @@ public class OrderController {
     }
 
     @PutMapping("/{id}/status/{status}")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable UUID id, @PathVariable OrderStatus status) {
+    public ResponseEntity<Order> updateOrderStatus(
+            @PathVariable UUID id,
+            @PathVariable OrderStatus status,
+            @RequestBody VersionDto version
+    ) {
         try {
-            Order order = orderService.updateOrderStatus(id, status);
+            Order order = orderService.updateOrderStatus(id, status, version);
 
             if (order == null) {
                 return ResponseEntity.notFound().build();
