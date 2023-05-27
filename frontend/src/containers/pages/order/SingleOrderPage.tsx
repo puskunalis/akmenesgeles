@@ -1,74 +1,133 @@
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, Spinner, Image, Select, useToast } from '@chakra-ui/react';
+import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, Spinner, Image, Select, useToast, Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { selectCurrentOrder, updateOrderStatus } from '../../../state/order/OrdersSlice';
+import { selectCurrentOrder, selectOrderUpdateStatus, updateOrderStatus } from '../../../state/order/OrdersSlice';
 import { fetchOrderById } from '../../../state/order/OrdersSlice';
 import { store } from '../../../state/store';
 import { calculateTotalPrice, getPurchaseStatus } from '../user/PurchaseHistory';
 import './SingleOrderPage.scss';
 import { selectUser } from '../../../state/users/UserSlice';
-import { SHIPPING_PRICE, User } from '../../../types';
+import { SHIPPING_PRICE } from '../../../types';
 import { OrderStatus, UserRole } from '../../../types';
-import axios from 'axios';
 import { getKeyByValue, getValueByKey } from './checkout/Payment';
+import { AsyncStatus } from '../../../state/AsyncStatus';
 import { formatPrice } from './checkout/PriceTag';
 import { adjustTimeZone } from '../../../utils/DateUtils';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
     const order = useSelector(selectCurrentOrder);
+    const orderUpdateStatus = useSelector(selectOrderUpdateStatus);
     let orderDate: string;
     if (order) {
        orderDate = adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false});
     }
-    const [totalOrderPrice, setTotalOrderPrice] = useState<number>(0);
+    const [totalOrderPrice, setTotalOrderPrice] = React.useState(0);
+    const [isStatusChanged, setIsStatusChanged] = React.useState(false);
+    const [previousReceivedStatus, setPreviousReceivedStatus] = React.useState(AsyncStatus.IDLE);
+    const [isUpdateInitiated, setIsUpdateInitiated] = React.useState(false);
+    const [showConfirmationModal, setShowConfirmationModal] = React.useState(false);
+    const [newStatusValue, setNewStatusValue] = React.useState<OrderStatus>(OrderStatus.PENDING);
     const allStatuses = Object.values(OrderStatus);
     const toast = useToast();
-    
-    
-    function onStatusChange (e: ChangeEvent<HTMLSelectElement>) {
-        if(orderId){
-            const status = e.target.value as OrderStatus;
-            if(status !== order?.status.toString()){
-                store.dispatch(updateOrderStatus(
-                    {
-                        orderId: orderId, 
-                        status: getKeyByValue(status) as OrderStatus
-                    }
-                ));
+
+    React.useEffect(() => {
+        if(isUpdateInitiated && orderId && isStatusChanged) {
+            setPreviousReceivedStatus(AsyncStatus.IDLE);
+            store.dispatch(updateOrderStatus(
+                {
+                    orderId: orderId, 
+                    status: newStatusValue
+                }
+            ));
+        }
+    }, [isUpdateInitiated, orderId, isStatusChanged, newStatusValue]);
+
+    React.useEffect(() => {
+        setPreviousReceivedStatus(orderUpdateStatus);
+    }, [orderUpdateStatus]);
+
+    React.useEffect(() => {
+        if(isUpdateInitiated && orderUpdateStatus === previousReceivedStatus) {
+            if (previousReceivedStatus === AsyncStatus.SUCCESS) { 
+                setPreviousReceivedStatus(AsyncStatus.IDLE);
+                setIsUpdateInitiated(false);
                 toast({
                     title: 'Statusas pakeistas',
-                    description: "Statusas buvo sėkmingai pridėta.",
+                    description: "Statusas buvo sėkmingai pakeistas.",
                     status: 'success',
                     duration: 3000,
                     isClosable: true,
                 });
+            } 
+            else if (previousReceivedStatus === AsyncStatus.CONFLICT) { 
+                setPreviousReceivedStatus(AsyncStatus.IDLE);
+                setIsUpdateInitiated(false);
+                setShowConfirmationModal(true);
+            } 
+            else if (previousReceivedStatus === AsyncStatus.BADREQUEST) { 
+                setPreviousReceivedStatus(AsyncStatus.IDLE);
+                setIsUpdateInitiated(false);
+                toast({
+                    title: 'Statusas nepakeistas',
+                    description: "Įvyko klaida",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
+            }
+        }
+    }, [orderUpdateStatus, isUpdateInitiated, previousReceivedStatus]);
+    
+    function onStatusChange (e: React.ChangeEvent<HTMLSelectElement>) {
+        if(orderId){
+            const status = e.target.value as OrderStatus;
+            if(status !== order?.status.toString()){
+                setIsStatusChanged(true);
+                const statusToSet = getKeyByValue(status) as OrderStatus;
+                setNewStatusValue(statusToSet);
             }
         }
     }
         
     const user = useSelector(selectUser);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (orderId) {
         store.dispatch(fetchOrderById(orderId));
+        setShowConfirmationModal(false);
         }
     }, [orderId]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (order) {
             setTotalOrderPrice(calculateTotalPrice(order));
         }
     }, [order]);
 
-    const statusElements = useMemo(() =>{
-        
+    React.useEffect(() => () => {
+        setIsStatusChanged(false);
+    }, []);
+
+    const confirmChange = () => {
+        if(orderId){
+            store.dispatch(updateOrderStatus(
+            {
+                orderId: orderId, 
+                status: newStatusValue
+            }
+            ));
+            setShowConfirmationModal(false);
+        }
+    }
+
+    const statusElements = React.useMemo(() =>{
         if(order){
             return (
-                allStatuses.map(status =>
+                allStatuses.map((status, index) =>
                 (<>
-                {getValueByKey(order.status) !== status  && <option>{status}</option>}
+                {getValueByKey(order.status) !== status  && <option key={`status-${index}`}>{status}</option>}
                 </>)) 
             );
         }
@@ -76,7 +135,7 @@ export const SingleOrderPage = () =>{
 
     }, [order]);
 
-    const orderContent = useMemo(() => {
+    const orderContent = React.useMemo(() => {
         if(order && order.id === orderId && user){
             return (
                 
@@ -93,10 +152,35 @@ export const SingleOrderPage = () =>{
                                 Užsakymo statusas: 
                             </strong>
                             {
-                                user.role == UserRole.ADMIN ?
-                                <Select placeholder={getValueByKey(order.status.toString())} width={"60%"} onChange={e => onStatusChange(e)}>
-                                    {statusElements}
-                                </Select> :
+                                user.role === UserRole.ADMIN ?
+                                (
+                                    <Flex flexDirection={"column"} gap="1em">
+                                        <Select placeholder={getValueByKey(order.status.toString())} width={"60%"} onChange={e => onStatusChange(e)}>
+                                            {statusElements}
+                                        </Select>
+                                        <Button colorScheme="blue" isDisabled={isStatusChanged} onClick={() => setIsUpdateInitiated(true)} width={"40%"}>Išsaugoti</Button>
+                                        {
+                                            showConfirmationModal && 
+                                            <Modal isOpen={true} onClose={() => setShowConfirmationModal(false)}>
+                                                <ModalOverlay />
+                                                <ModalContent>
+                                                    <ModalHeader>Nepavyko pakeisti statuso.</ModalHeader>
+                                                    <ModalCloseButton />
+                                                    <ModalBody>
+                                                        Prieš jus kažkas kitas pakeitė statusą. Ar tikrai norite jį pakeisti?
+                                                    </ModalBody>
+                                                    <ModalFooter>
+                                                        <Button colorScheme='blue' mr={3} onClick={() => setShowConfirmationModal(false)}>
+                                                        Atšaukti
+                                                        </Button>
+                                                        <Button colorScheme='green' onClick={confirmChange}>Patvirtinti</Button>
+                                                    </ModalFooter>
+                                                </ModalContent>
+                                            </Modal>
+                                        }
+                                    </Flex>
+                                    
+                                ) :
                                 <Text>{getPurchaseStatus(order.status.toString())}</Text>
                             }
                             
@@ -110,9 +194,7 @@ export const SingleOrderPage = () =>{
                             <Text>{order.address.city}</Text>
                             <Text>{order.address.postalCode}</Text>
                         </div>
-                        
                     </div>
-                    
                 
                     <Text as="h2" fontSize="xl" fontWeight="bold" mt="4" mb="2">
                         Prekė
@@ -181,7 +263,7 @@ export const SingleOrderPage = () =>{
                 </div>
             );
         }
-    }, [order, orderId, totalOrderPrice, user]);
+    }, [order, orderId, totalOrderPrice, user, showConfirmationModal]);
     return (orderContent);
 };
 
