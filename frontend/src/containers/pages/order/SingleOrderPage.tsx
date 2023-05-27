@@ -128,10 +128,10 @@ export const SingleOrderPage = () =>{
     const statusElements = React.useMemo(() =>{
         if(order){
             return (
-                allStatuses.map((status, index) =>
-                (<>
-                {getValueByKey(order.status) !== status  && <option key={`status-${index}`}>{status}</option>}
-                </>)) 
+                allStatuses.map((status) =>
+                (<React.Fragment key={status}>
+                {getValueByKey(order.status) !== status  && <option>{status}</option>}
+                </ React.Fragment>)) 
             );
         }
         return <></>;
