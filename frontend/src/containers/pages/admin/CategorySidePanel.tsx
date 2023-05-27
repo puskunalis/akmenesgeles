@@ -91,7 +91,7 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
     }
 
     const disableSaveButton = React.useMemo( () => {
-        return editedName === category?.name && editedDescription === category?.description ||
+        return (editedName === category?.name && editedDescription === category?.description) ||
             nameError !== "" || descriptionError !== ""; 
     }, [category, editedName, editedDescription, nameError, descriptionError])
 
