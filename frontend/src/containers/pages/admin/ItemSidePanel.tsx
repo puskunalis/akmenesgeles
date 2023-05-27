@@ -88,7 +88,7 @@ export function ItemSidePanel(props: ItemSidePanelProps) {
         if (itemEditStatus === AsyncStatus.SUCCESS) {
             toast({
                 title: 'Prekė pakeista.',
-                description: "Prekė buvo sekmingai pakeista.",
+                description: "Prekė buvo sėkmingai pakeista.",
                 status: 'success',
                 duration: 1000,
                 isClosable: true,

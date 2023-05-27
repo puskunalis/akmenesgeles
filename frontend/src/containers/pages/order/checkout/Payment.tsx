@@ -71,8 +71,8 @@ const PaymentCard = () => {
       } catch (error) {
         setLoading(false);
           toast({
-            title: 'Mokejimas nepavyko',
-            description: "Mokejimo kortelė buvo atmesta",
+            title: 'Mokėjimas nepavyko',
+            description: "Mokėjimo kortelė buvo atmesta",
             status: 'error',
             duration: 3000,
             isClosable: true,

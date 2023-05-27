@@ -58,8 +58,8 @@ export const AddCategoryModal = (props: ModalProps) => {
         setLoading(false);
         if (categoryAddStatus === AsyncStatus.SUCCESS) {
             toast({
-                title: 'Kategorija prideta.',
-                description: "Kategorija buvo sekmingai prideta.",
+                title: 'Kategorija pridėta.',
+                description: "Kategorija buvo sėkmingai pridėta.",
                 status: 'success',
                 duration: 3000,
                 isClosable: true,

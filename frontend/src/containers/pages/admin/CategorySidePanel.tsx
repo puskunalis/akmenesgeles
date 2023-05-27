@@ -64,7 +64,7 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
         if (categoryAddStatus === AsyncStatus.SUCCESS) {
             toast({
                 title: 'Kategorija pakeista.',
-                description: "Kategorija buvo sekmingai pakeista.",
+                description: "Kategorija buvo sėkmingai pakeista.",
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
