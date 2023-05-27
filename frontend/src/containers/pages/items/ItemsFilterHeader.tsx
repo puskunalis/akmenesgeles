@@ -1,14 +1,18 @@
 import * as React from 'react';
 import { Box, Flex, Input, Select, Spacer, Text } from '@chakra-ui/react';
 import { Item } from '../../../types';
+import { ItemsPage } from './ItemsPage';
+import { selectAllItems, selectItemsStatus } from '../../../state/items/ItemsSlice';
+import SpinnerWrapper from '../../../components/SpinnerWrapper';
+import { useSelector } from 'react-redux';
 
 export interface ItemsFilterHeaderProps {
-    sort: (func: any) => void,
-    filter: (value: string) => void,
 }
 
 export function ItemsFilterHeader(props: ItemsFilterHeaderProps){
-    const {sort, filter} = props;
+    const items = useSelector(selectAllItems);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [sortedItems, setSortedItems] = React.useState<Item[]>([]);
     const [sortValue, setSortValue] = React.useState<string>("asc")
     const [filterValue, setFilterValue] = React.useState('');
 
@@ -16,13 +20,26 @@ export function ItemsFilterHeader(props: ItemsFilterHeaderProps){
       setSortValue(e.target.value);
     };
 
+    React.useEffect(() => {
+        setSortedItems(items);
+        setIsLoading(false);
+      }, [items]);
+
+    const filter = React.useCallback((filterValue: string) => {
+      if (filterValue === '') {
+        setSortedItems(items);
+      } else {
+        setSortedItems(items.filter( item => item.title.startsWith(filterValue)))
+      }
+    }, []);
+
     React.useEffect( () => {
       if (sortValue === 'asc') {
-        sort((a: Item, b: Item) => a.price - b.price);
+        setSortedItems((prevState) => [...prevState].sort(((a: Item, b: Item) => a.price - b.price)));
       } else if (sortValue === 'desc') {
-        sort((a: Item, b: Item) => b.price - a.price);
+        setSortedItems((prevState) => [...prevState].sort(((a: Item, b: Item) => b.price - a.price)));
       }
-    }, [sortValue, filterValue]);
+    }, [sortValue, filterValue, items]);
 
     const handleFilterChange = (e: any) => {
       const newFilterValue: string = e.target.value;
@@ -33,7 +50,9 @@ export function ItemsFilterHeader(props: ItemsFilterHeaderProps){
     };
 
   return (
-    <Flex alignItems="center" justifyContent="center" mb={4} p={1}>
+    isLoading ? <SpinnerWrapper /> :
+    <>
+      <Flex alignItems="center" justifyContent="center" mb={4} p={1}>
         <Spacer />
         <Text fontSize="xl">Produktai</Text>
         <Spacer />
@@ -53,6 +72,8 @@ export function ItemsFilterHeader(props: ItemsFilterHeaderProps){
           <option value="asc">Kaina nuo mažiausios</option>
           <option value="desc">Kaina nuo didžiausios</option>
         </Select>
-    </Flex>
-    );
+      </Flex>
+      <ItemsPage items={sortedItems} />
+    </>
+  );
 };
