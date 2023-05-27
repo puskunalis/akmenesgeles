@@ -64,8 +64,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public LoginResponseDto login(String username, String password) {
-        Optional<User> user = userRepository.getUserByUsername(username);
+    public LoginResponseDto login(String email, String password) {
+        Optional<User> user = userRepository.getUserByEmail(email);
         if (user.isEmpty()) {
             return null;
         }

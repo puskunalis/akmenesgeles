@@ -27,15 +27,15 @@ export default function Profile() {
                     <Text>{user?.email}</Text>
                 </VStack>
             </Flex>
-            <HStack mt={4}>
-                <Button colorScheme='green'>Tvarkyti paskyrą</Button>
-                <Spacer />
+            <VStack mt={4}>
                 <AddAddressButton/>
-            </HStack>
-            <AddressList
+                <Spacer/>
+                <AddressList
                 addresses={addresses}
                 onDelete={() => {}}
             />
+            </VStack>
+            
         </Flex>
     </Box>
   );

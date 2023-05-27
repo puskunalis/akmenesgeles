@@ -63,7 +63,7 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() ->
                 new NotFoundException("Cart by id " + cartId + "not found."));
         if (cartItemRepository.existsByItemIdAndCart(cartItemDto.getItemId(), cart)){
-            CartItem existingCartItem = cartItemRepository.getCartItemByItemId(cartItemDto.getItemId());
+            CartItem existingCartItem = cartItemRepository.getCartItemByItemIdAndCartId(cartItemDto.getItemId(), cartId);
             existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemDto.getQuantity());
             cartItemRepository.save(existingCartItem);
         } else {
