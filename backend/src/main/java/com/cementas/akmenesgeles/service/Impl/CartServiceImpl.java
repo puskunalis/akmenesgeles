@@ -53,6 +53,7 @@ public class CartServiceImpl implements CartService {
         cartRepository.deleteCartById(cartId);
     }
 
+    @Transactional
     public Cart addItem(UUID cartId, CartItemDto cartItemDto) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() ->
                 new NotFoundException("Cart by id " + cartId + "not found."));
@@ -77,6 +78,7 @@ public class CartServiceImpl implements CartService {
         return cart.getItems();
     }
 
+    @Transactional
     public CartItem updateQuantity(UUID cartId, UUID itemId, int quantity) {
         Optional<Cart> cart = cartRepository.findById(cartId);
         if(cart.isPresent()) {

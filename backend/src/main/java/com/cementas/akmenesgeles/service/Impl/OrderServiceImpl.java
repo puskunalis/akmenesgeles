@@ -32,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final ShippingAddressService shippingAddressService;
 
     @Override
+    @Transactional
     public Order createOrder(UUID userId, UUID addressId) {
         Optional<User> user = userService.getById(userId);
         if (user.isEmpty()) {
@@ -99,6 +100,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(UUID id) {
         orderRepository.deleteById(id);
     }

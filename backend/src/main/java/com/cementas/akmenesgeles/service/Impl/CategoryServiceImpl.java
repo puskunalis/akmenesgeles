@@ -8,6 +8,7 @@ import com.cementas.akmenesgeles.service.CategoryService;
 import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +32,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category add(CreateCategoryDto createCategoryDto) {
         Category newCategory = Category.builder()
                 .id(UUID.randomUUID())
@@ -41,6 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category update(UUID id, UpdateCategoryDto updateCategoryDto) {
         Category category = categoryRepository.getCategoryById(id);
 
@@ -60,6 +63,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         categoryRepository.deleteById(id);
     }
