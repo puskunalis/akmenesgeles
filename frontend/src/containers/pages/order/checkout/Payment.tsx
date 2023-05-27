@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Flex, Text, Image, Button, Input, useToast, Heading, Container } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Input, useToast, Heading, Container } from "@chakra-ui/react";
 import { FiCreditCard } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -9,7 +9,6 @@ import { selectCurrentOrder, updateOrderStatus } from "../../../../state/order/O
 import { store } from "../../../../state/store";
 import { calculateTotalPrice } from "../../user/PurchaseHistory";
 import { formatPrice } from "./PriceTag";
-import { version } from "process";
 
 export function getKeyByValue(value: string) {
   const indexOfS = Object.values(OrderStatus).indexOf(value as unknown as OrderStatus);

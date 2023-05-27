@@ -6,7 +6,6 @@ import { Address } from "../../../types";
 import { store } from "../../../state/store";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../state/users/UserSlice";
-import { deleteCart, fetchCart, selectCart } from "../../../state/carts/CartsSlice";
 
 export interface AddressDetailsPageProps {
   isCheckout: boolean;
@@ -22,8 +21,6 @@ const AddressDetailsPage = (props: AddressDetailsPageProps) => {
   const [city, setCity] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const user = useSelector(selectUser);
-  
-
 
   const handleAddNewAddress = () => {
     const newAddress: Address = {

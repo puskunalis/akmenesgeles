@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, Spinner, Image, Select, useToast, Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { retryUpdateOrderStatus, selectCurrentOrder, selectOrderUpdateStatus, updateOrderStatus } from '../../../state/order/OrdersSlice';
+import { selectCurrentOrder } from '../../../state/order/OrdersSlice';
 import { fetchOrderById } from '../../../state/order/OrdersSlice';
 import { store } from '../../../state/store';
 import { calculateTotalPrice, getPurchaseStatus } from '../user/PurchaseHistory';
@@ -11,24 +11,18 @@ import { selectUser } from '../../../state/users/UserSlice';
 import { SHIPPING_PRICE } from '../../../types';
 import { OrderStatus, UserRole } from '../../../types';
 import { getKeyByValue, getValueByKey } from './checkout/Payment';
-import { AsyncStatus } from '../../../state/AsyncStatus';
 import { formatPrice } from './checkout/PriceTag';
 import { adjustTimeZone } from '../../../utils/DateUtils';
-import { version } from 'process';
 import { axiosPut } from '../../../state/AxiosRequests';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
     const order = useSelector(selectCurrentOrder);
-    const orderUpdateStatus = useSelector(selectOrderUpdateStatus);
     let orderDate: string | undefined;
     if (order) {
        orderDate = adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false});
     }
     const [totalOrderPrice, setTotalOrderPrice] = React.useState(0);
-    const [isStatusChanged, setIsStatusChanged] = React.useState(false);
-    const [previousReceivedStatus, setPreviousReceivedStatus] = React.useState(AsyncStatus.IDLE);
-    const [isUpdateInitiated, setIsUpdateInitiated] = React.useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = React.useState(false);
     const [newStatusValue, setNewStatusValue] = React.useState<OrderStatus>(OrderStatus.PENDING);
     const [isDisabled, setDisabled] = React.useState(true);
@@ -76,7 +70,6 @@ export const SingleOrderPage = () =>{
         if(orderId){
             const status = e.target.value as OrderStatus;
             if(status !== order?.status.toString()){
-                setIsStatusChanged(true);
                 const statusToSet = getKeyByValue(status) as OrderStatus;
                 setNewStatusValue(statusToSet);
             }
@@ -98,11 +91,6 @@ export const SingleOrderPage = () =>{
             setTotalOrderPrice(calculateTotalPrice(order));
         }
     }, [order]);
-
-    React.useEffect(() => () => {
-        setIsStatusChanged(false);
-    }, []);
-
 
     const statusElements = React.useMemo(() =>{
         if(order){

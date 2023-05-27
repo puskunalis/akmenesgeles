@@ -2,19 +2,16 @@ import {
     Button,
     Flex,
     Heading,
-    Link,
     Stack,
     Text,
     useColorModeValue as mode,
-  } from '@chakra-ui/react'
-  import { FaArrowRight } from 'react-icons/fa'
-  import { formatPrice } from './PriceTag'
-import { Cart, SHIPPING_PRICE } from '../../../../types'
-import { useNavigate } from 'react-router-dom'
-import { store } from '../../../../state/store'
-import { createOrder } from '../../../../state/order/OrdersSlice'
-import { useSelector } from 'react-redux'
-import { selectUser } from '../../../../state/users/UserSlice'
+  } from '@chakra-ui/react';
+  import { FaArrowRight } from 'react-icons/fa';
+  import { formatPrice } from './PriceTag';
+import { Cart, SHIPPING_PRICE } from '../../../../types';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectUser } from '../../../../state/users/UserSlice';
   
   type OrderSummaryItemProps = {
     label: string
@@ -43,7 +40,6 @@ import { selectUser } from '../../../../state/users/UserSlice'
   export const CartOrderSummary = (props: OrderSummaryProps) => {
     const {cart} = props;
     const user = useSelector(selectUser);
-    const shippingPrice = 3;
     const navigate = useNavigate();
 
     const handleOnClick = async () => {

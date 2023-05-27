@@ -2,14 +2,11 @@ import * as React from 'react';
 import { Box, Flex, Input, Select, Spacer, Text } from '@chakra-ui/react';
 import { Item } from '../../../types';
 import { ItemsPage } from './ItemsPage';
-import { selectAllItems, selectItemsStatus } from '../../../state/items/ItemsSlice';
+import { selectAllItems } from '../../../state/items/ItemsSlice';
 import SpinnerWrapper from '../../../components/SpinnerWrapper';
 import { useSelector } from 'react-redux';
 
-export interface ItemsFilterHeaderProps {
-}
-
-export function ItemsFilterHeader(props: ItemsFilterHeaderProps){
+export function ItemsFilterHeader(){
     const items = useSelector(selectAllItems);
     const [isLoading, setIsLoading] = React.useState(true);
     const [sortedItems, setSortedItems] = React.useState<Item[]>([]);

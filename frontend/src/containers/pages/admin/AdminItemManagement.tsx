@@ -1,16 +1,12 @@
 import { Grid } from "@chakra-ui/react";
-import { selectAllItems, selectItemsStatus } from "../../../state/items/ItemsSlice";
+import { selectAllItems } from "../../../state/items/ItemsSlice";
 import { useSelector } from "react-redux";
 import { ItemGrid } from "./ItemGrid";
 import { CategoryGrid } from "./CategoryGrid";
 import * as React from 'react';
 import SpinnerWrapper from "../../../components/SpinnerWrapper";
 
-export interface adminItemsList{
-
-}
-
-export function AdminItems(props: adminItemsList) {
+export function AdminItems() {
     const [selectedCategories, setSelectedCategories] = React.useState<string[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const items = useSelector(selectAllItems);

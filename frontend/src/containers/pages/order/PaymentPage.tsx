@@ -6,6 +6,5 @@ export const PaymentPage = () => {
         <Container centerContent padding={50}>
             <Payment/>
         </Container>
-        
     )
 }
