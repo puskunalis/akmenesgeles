@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public Order updateOrderStatus(UUID id, OrderStatus status, VersionDto version) {
             Order order = orderRepository.getOrderById(id).orElseThrow();
-            if (order.getVersion() != version.getVersion()) {
+            if (!order.getVersion().equals(version.getVersion())) {
                 throw new OptimisticLockingFailureException("Optimistic lock exception");
             }
 
