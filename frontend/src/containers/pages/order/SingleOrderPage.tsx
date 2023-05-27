@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Box, Text, Table, Thead, Tbody, Tr, Th, Td, Spinner, Image, Select, useToast, Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { useSelector } from 'react-redux';
-import { selectCurrentOrder, selectOrderUpdateStatus, updateOrderStatus } from '../../../state/order/OrdersSlice';
+import { retryUpdateOrderStatus, selectCurrentOrder, selectOrderUpdateStatus, updateOrderStatus } from '../../../state/order/OrdersSlice';
 import { fetchOrderById } from '../../../state/order/OrdersSlice';
 import { store } from '../../../state/store';
 import { calculateTotalPrice, getPurchaseStatus } from '../user/PurchaseHistory';
@@ -15,12 +15,13 @@ import { AsyncStatus } from '../../../state/AsyncStatus';
 import { formatPrice } from './checkout/PriceTag';
 import { adjustTimeZone } from '../../../utils/DateUtils';
 import { version } from 'process';
+import { axiosPut } from '../../../state/AxiosRequests';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
     const order = useSelector(selectCurrentOrder);
     const orderUpdateStatus = useSelector(selectOrderUpdateStatus);
-    let orderDate: string;
+    let orderDate: string | undefined;
     if (order) {
        orderDate = adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false});
     }
@@ -30,31 +31,17 @@ export const SingleOrderPage = () =>{
     const [isUpdateInitiated, setIsUpdateInitiated] = React.useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = React.useState(false);
     const [newStatusValue, setNewStatusValue] = React.useState<OrderStatus>(OrderStatus.PENDING);
+    const [isDisabled, setDisabled] = React.useState(true);
     const allStatuses = Object.values(OrderStatus);
     const toast = useToast();
 
-    React.useEffect(() => {
-        if(isUpdateInitiated && orderId && isStatusChanged && order) {
-            setPreviousReceivedStatus(AsyncStatus.IDLE);
-            store.dispatch(updateOrderStatus(
-                {
-                    orderId: orderId, 
-                    status: newStatusValue,
-                    version: order?.version
-                }
-            ));
-        }
-    }, [isUpdateInitiated, orderId, isStatusChanged, newStatusValue]);
-
-    React.useEffect(() => {
-        setPreviousReceivedStatus(orderUpdateStatus);
-    }, [orderUpdateStatus]);
-
-    React.useEffect(() => {
-        if(isUpdateInitiated && orderUpdateStatus === previousReceivedStatus) {
-            if (previousReceivedStatus === AsyncStatus.SUCCESS) { 
-                setPreviousReceivedStatus(AsyncStatus.IDLE);
-                setIsUpdateInitiated(false);
+    const handleSave = async () => {
+        if(orderId && order) { 
+            const versionData = {
+                version: order.version
+            }
+            const response = await axiosPut(`/api/v1/orders/${orderId}/status/${newStatusValue}`, versionData);
+            if(response && response.status === 200){
                 toast({
                     title: 'Statusas pakeistas',
                     description: "Statusas buvo sėkmingai pakeistas.",
@@ -62,25 +49,28 @@ export const SingleOrderPage = () =>{
                     duration: 3000,
                     isClosable: true,
                 });
-            } 
-            else if (previousReceivedStatus === AsyncStatus.CONFLICT) { 
-                setPreviousReceivedStatus(AsyncStatus.IDLE);
-                setIsUpdateInitiated(false);
-                setShowConfirmationModal(true);
-            } 
-            else if (previousReceivedStatus === AsyncStatus.BADREQUEST) { 
-                setPreviousReceivedStatus(AsyncStatus.IDLE);
-                setIsUpdateInitiated(false);
-                toast({
-                    title: 'Statusas nepakeistas',
-                    description: "Įvyko klaida",
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
+                setDisabled(true);
             }
+            else if (response && response.status === 409) {
+                setShowConfirmationModal(true);
+            }
+            await store.dispatch(fetchOrderById(orderId))
         }
-    }, [orderUpdateStatus, isUpdateInitiated, previousReceivedStatus]);
+        
+    }
+
+    const handleReSubmit = async () => {
+        if(orderId && order) { 
+            await store.dispatch(fetchOrderById(orderId))
+            handleSave();
+            setShowConfirmationModal(false);
+        }
+    }
+
+    const handleCancelReResubmit = () => {
+        setShowConfirmationModal(false);
+        window.location.reload();
+    }
     
     function onStatusChange (e: React.ChangeEvent<HTMLSelectElement>) {
         if(orderId){
@@ -90,6 +80,7 @@ export const SingleOrderPage = () =>{
                 const statusToSet = getKeyByValue(status) as OrderStatus;
                 setNewStatusValue(statusToSet);
             }
+            setDisabled(false);
         }
     }
         
@@ -112,18 +103,6 @@ export const SingleOrderPage = () =>{
         setIsStatusChanged(false);
     }, []);
 
-    const confirmChange = () => {
-        if(orderId && order){
-            store.dispatch(updateOrderStatus(
-            {
-                orderId: orderId, 
-                status: newStatusValue,
-                version: order.version
-            }
-            ));
-            setShowConfirmationModal(false);
-        }
-    }
 
     const statusElements = React.useMemo(() =>{
         if(order){
@@ -138,7 +117,6 @@ export const SingleOrderPage = () =>{
 
     }, [order]);
 
-    const orderContent = React.useMemo(() => {
         if(order && order.id === orderId && user){
             return (
                 
@@ -161,7 +139,7 @@ export const SingleOrderPage = () =>{
                                         <Select placeholder={getValueByKey(order.status.toString())} width={"60%"} onChange={e => onStatusChange(e)}>
                                             {statusElements}
                                         </Select>
-                                        <Button colorScheme="blue" isDisabled={isStatusChanged} onClick={() => setIsUpdateInitiated(true)} width={"40%"}>Išsaugoti</Button>
+                                        <Button colorScheme="blue" isDisabled={isDisabled} onClick={() => handleSave()} width={"40%"}>Išsaugoti</Button>
                                         {
                                             showConfirmationModal && 
                                             <Modal isOpen={true} onClose={() => setShowConfirmationModal(false)}>
@@ -173,10 +151,10 @@ export const SingleOrderPage = () =>{
                                                         Prieš jus kažkas kitas pakeitė statusą. Ar tikrai norite jį pakeisti?
                                                     </ModalBody>
                                                     <ModalFooter>
-                                                        <Button colorScheme='blue' mr={3} onClick={() => setShowConfirmationModal(false)}>
+                                                        <Button colorScheme='blue' mr={3} onClick={handleCancelReResubmit}>
                                                         Atšaukti
                                                         </Button>
-                                                        <Button colorScheme='green' onClick={confirmChange}>Patvirtinti</Button>
+                                                        <Button colorScheme='green' onClick={handleReSubmit}>Patvirtinti</Button>
                                                     </ModalFooter>
                                                 </ModalContent>
                                             </Modal>
@@ -266,8 +244,6 @@ export const SingleOrderPage = () =>{
                 </div>
             );
         }
-    }, [order, orderId, totalOrderPrice, user, showConfirmationModal]);
-    return (orderContent);
+    
 };
-
 export default SingleOrderPage;
