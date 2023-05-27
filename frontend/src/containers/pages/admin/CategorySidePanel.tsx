@@ -80,7 +80,6 @@ export function CategorySidePanel(props: CategorySidePanelProps) {
             
         }
         
-        
         handleCloseSidePanel();
     }
     

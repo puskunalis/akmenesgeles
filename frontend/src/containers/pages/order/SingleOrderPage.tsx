@@ -12,6 +12,8 @@ import { SHIPPING_PRICE } from '../../../types';
 import { OrderStatus, UserRole } from '../../../types';
 import { getKeyByValue, getValueByKey } from './checkout/Payment';
 import { AsyncStatus } from '../../../state/AsyncStatus';
+import { formatPrice } from './checkout/PriceTag';
+import { adjustTimeZone } from '../../../utils/DateUtils';
 
 export const SingleOrderPage = () =>{
     const { orderId } = useParams();
@@ -19,7 +21,7 @@ export const SingleOrderPage = () =>{
     const orderUpdateStatus = useSelector(selectOrderUpdateStatus);
     let orderDate: string;
     if (order) {
-       orderDate = new Date(order?.createdAt).toLocaleString();
+       orderDate = adjustTimeZone(new Date(order?.createdAt)).toLocaleString("en-US", {hour12: false});
     }
     const [totalOrderPrice, setTotalOrderPrice] = React.useState(0);
     const [isStatusChanged, setIsStatusChanged] = React.useState(false);
@@ -238,7 +240,7 @@ export const SingleOrderPage = () =>{
                             <strong>Prekių kaina: </strong>€ {totalOrderPrice.toFixed(2)}
                         </Text>
                         <Text>
-                            <strong>Pristatymas: </strong>€ {SHIPPING_PRICE}
+                            <strong>Pristatymas: </strong> {formatPrice(SHIPPING_PRICE)}
                         </Text>
                         <Text>
                             <strong>Iš viso: </strong>€ {(totalOrderPrice + SHIPPING_PRICE).toFixed(2)}

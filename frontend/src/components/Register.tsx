@@ -40,7 +40,7 @@ export const RegisterModal = (props: RegisterProps) => {
         email,
         password,
       });
-      login(username, password);
+      login(email, password);
       onCloseModal();
     } catch (error) {
       console.error("Registration failed:", error);
@@ -101,14 +101,14 @@ export const RegisterModal = (props: RegisterProps) => {
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create a new account</ModalHeader>
+        <ModalHeader>Susikurti naują paskyrą</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
           <FormControl isRequired={true} isInvalid={usernameError === undefined ? false : usernameError !== ''}>
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Vardas, Pavardė</FormLabel>
             <Input
               ref={initialRef}
-              placeholder="Username"
+              placeholder="Vardas, Pavardė"
               value={username}
               onChange={(e) => handleChangeUsername(e.target.value)}
             />
@@ -116,9 +116,9 @@ export const RegisterModal = (props: RegisterProps) => {
           </FormControl>
 
           <FormControl mt={4} isRequired={true} isInvalid={emailError === undefined ? false : emailError !== ''}>
-            <FormLabel>Email</FormLabel>
+            <FormLabel>El. paštas</FormLabel>
             <Input
-              placeholder="Email"
+              placeholder="El. paštas"
               value={email}
               onChange={(e) => handleChangeEmail(e.target.value)}
             />
@@ -126,10 +126,10 @@ export const RegisterModal = (props: RegisterProps) => {
           </FormControl>
 
           <FormControl mt={4} isRequired={true} isInvalid={passwordError === undefined ? false : passwordError !== ''}>
-            <FormLabel>Password</FormLabel>
+            <FormLabel>Slaptažodis</FormLabel>
             <Input
               type="password"
-              placeholder="Password"
+              placeholder="*********"
               value={password}
               onChange={(e) => handleChangePassword(e.target.value)}
             />
@@ -138,10 +138,10 @@ export const RegisterModal = (props: RegisterProps) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleRegister} isDisabled={usernameError !== '' || passwordError !== '' || emailError !== ''}>
-            Register
+          <Button colorScheme="green" mr={3} onClick={handleRegister} isDisabled={usernameError !== '' || passwordError !== '' || emailError !== ''}>
+            Užsiregistruoti
           </Button>
-          <Button onClick={onCloseModal}>Cancel</Button>
+          <Button onClick={onCloseModal}>Atšaukti</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
