@@ -8,6 +8,7 @@ import com.cementas.akmenesgeles.service.ShippingAddressService;
 import com.cementas.akmenesgeles.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -83,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order updateOrderStatus(UUID id, OrderStatus status) {
             Optional<Order> order = orderRepository.getOrderById(id);
             if (order.isEmpty()) {
