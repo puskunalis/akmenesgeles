@@ -57,6 +57,7 @@ export interface Order {
   status: OrderStatus,
   createdAt: string,
   address: Address,
+  version: number
 }
 
 export interface Address {

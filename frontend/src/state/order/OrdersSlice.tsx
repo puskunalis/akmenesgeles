@@ -5,8 +5,9 @@ SerializedError,
 } from "@reduxjs/toolkit";
 import { Order, OrderStatus } from "../../types";
 import { AsyncStatus } from "../AsyncStatus";
-import { StoreState } from "../store";
+import { store, StoreState } from "../store";
 import { axiosGet, axiosPost, axiosPut } from "../AxiosRequests";
+import { version } from "process";
 
 export interface OrderState {
     userOrders: Order[];
@@ -21,11 +22,15 @@ export interface OrderState {
 export interface UpdateOrderStatusData {
     orderId: string,
     status: OrderStatus
+    version: number
 }
 
 export interface CreateOrderData {
     userId: string,
     addressId: string
+}
+export interface UpdateWithVersion {
+    version: number
 }
 
 export const fetchOrdersByUserId = createAsyncThunk(
@@ -64,8 +69,13 @@ export const fetchOrdersByStatus = createAsyncThunk(
 export const updateOrderStatus = createAsyncThunk(
     "orders/updateOrderStatus",
     async (data: UpdateOrderStatusData) => {
-        const {orderId, status} = data;
-        const response = await axiosPut(`/api/v1/orders/${orderId}/status/${status}`, undefined);
+        const {orderId, status, version} = data;
+        const versionUpdate: UpdateWithVersion = {
+            version: version
+        } 
+        const response = await axiosPut(`/api/v1/orders/${orderId}/status/${status}`, versionUpdate);
+
+        await store.dispatch(fetchOrderById(orderId));
         return response;
     }
 );
@@ -156,6 +166,7 @@ extraReducers(builder) {
             if(action.payload.status < 300)
             {
                 state.updateStatus = AsyncStatus.SUCCESS;
+                state.currentOrder = action.payload.data;
             }
             else if(action.payload.status === 409){
                 state.updateStatus = AsyncStatus.CONFLICT
@@ -163,6 +174,7 @@ extraReducers(builder) {
             else {
                 state.updateStatus = AsyncStatus.BADREQUEST
             }
+            
         }
     })
     .addCase(updateOrderStatus.rejected, (state, action) => {
@@ -190,8 +202,11 @@ extraReducers(builder) {
     })
     .addCase(retryUpdateOrderStatus.fulfilled, (state, action) => {
         if(action.payload){
-            const {newStatus, orderId} = action.payload;
-            updateOrderStatus({orderId: orderId, status: newStatus});
+            const {newStatus, orderId, response} = action.payload;
+            if(response && response.data) {
+                updateOrderStatus({orderId: orderId, status: newStatus, version: response.data.version});
+            }
+            
             state.status = AsyncStatus.SUCCESS;
         }
     })

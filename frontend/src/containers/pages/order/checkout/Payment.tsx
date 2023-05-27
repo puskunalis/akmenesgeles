@@ -9,6 +9,7 @@ import { selectCurrentOrder, updateOrderStatus } from "../../../../state/order/O
 import { store } from "../../../../state/store";
 import { calculateTotalPrice } from "../../user/PurchaseHistory";
 import { formatPrice } from "./PriceTag";
+import { version } from "process";
 
 export function getKeyByValue(value: string) {
   const indexOfS = Object.values(OrderStatus).indexOf(value as unknown as OrderStatus);
@@ -81,7 +82,8 @@ const PaymentCard = () => {
       }
       store.dispatch(updateOrderStatus({
         orderId: order.id,
-        status: getKeyByValue(OrderStatus.PAID) as OrderStatus
+        status: getKeyByValue(OrderStatus.PAID) as OrderStatus,
+        version: order.version
       }));
 
       setLoading(false);

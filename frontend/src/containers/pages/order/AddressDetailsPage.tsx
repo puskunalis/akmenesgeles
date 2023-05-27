@@ -47,22 +47,22 @@ const AddressDetailsPage = (props: AddressDetailsPageProps) => {
 
       <FormControl mb={4}>
         <FormLabel>Pilnas vardas</FormLabel>
-        <Input placeholder="Enter your full name" value={fullName} onChange={(e) => setFullName(e.target.value)} />
+        <Input placeholder="Pilnas vardas" value={fullName} onChange={(e) => setFullName(e.target.value)} />
       </FormControl>
 
       <FormControl mb={4}>
         <FormLabel>Adresas</FormLabel>
-        <Textarea placeholder="Enter your street address" value={address} onChange={(e) => setAddress(e.target.value)} />
+        <Textarea placeholder="Adresas" value={address} onChange={(e) => setAddress(e.target.value)} />
       </FormControl>
 
       <FormControl mb={4}>
         <FormLabel>Miestas</FormLabel>
-        <Input placeholder="Enter your city" value={city} onChange={(e) => setCity(e.target.value)} />
+        <Input placeholder="Miestas" value={city} onChange={(e) => setCity(e.target.value)} />
       </FormControl>
 
       <FormControl mb={4}>
-        <FormLabel>Pašto adresas</FormLabel>
-        <Input placeholder="Enter your postal code" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
+        <FormLabel>Pašto kodas</FormLabel>
+        <Input placeholder="Pašto kodas" value={postalCode} onChange={(e) => setPostalCode(e.target.value)} />
       </FormControl>
 
       {isCheckout ? (
