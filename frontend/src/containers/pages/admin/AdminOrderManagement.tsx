@@ -45,11 +45,7 @@ function StatusSelect(props: statusSelectProps) {
     );
 }
 
-export interface adminItemsList{
-
-}
-
-export function AdminOrders(props: adminItemsList) {
+export function AdminOrders() {
     const [selectedStatus, setSelectedStatus] = React.useState<OrderStatus | undefined>(undefined);
     const orders = useSelector(selectOrdersByStatus);
     const orderFetchStatus = useSelector(selectOrderFetchStatus);

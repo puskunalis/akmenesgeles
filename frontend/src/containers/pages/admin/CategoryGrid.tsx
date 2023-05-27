@@ -1,4 +1,4 @@
-import { Center, Heading, Table, Thead, Tr, Th, Tbody, Td, Box, Checkbox, Button, Flex } from "@chakra-ui/react";
+import { Heading, Table, Thead, Tr, Th, Tbody, Td, Box, Checkbox, Button, Flex } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { selectCategories } from "../../../state/categories/CategoriesSlice";
 import { Dispatch, SetStateAction } from "react";
@@ -6,7 +6,6 @@ import * as React from "react";
 import { AddCategoryModal } from "../../../components/AddCategoryModal";
 import { Category, Item } from "../../../types";
 import { CategorySidePanel } from "./CategorySidePanel";
-import { selectCategoryItems } from "../../../state/items/ItemsSlice";
 
 function AddCategoryModalButton() {
     const [openAddCategory, setOpenAddCategory] = React.useState<boolean>(false);

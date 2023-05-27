@@ -1,6 +1,5 @@
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/react"
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from "@chakra-ui/react"
 import AddressDetailsPage from "../AddressDetailsPage";
-import React from "react";
 
 export interface AddressDetailsModalProps {
     isOpen: boolean;

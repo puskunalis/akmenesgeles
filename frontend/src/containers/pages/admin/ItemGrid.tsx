@@ -1,6 +1,4 @@
-import { Box, Button, Center, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, Flex, Heading, Spacer, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
-import { selectAllItems } from "../../../state/items/ItemsSlice";
+import { Box, Button, Flex, Heading, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { Item } from "../../../types";
 import * as React from "react";
 import { AddItemModal } from "../../../components/AddItemModal";

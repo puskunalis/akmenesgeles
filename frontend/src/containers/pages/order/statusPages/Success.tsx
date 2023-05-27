@@ -1,6 +1,5 @@
 import { Box, Heading, Link, Text, useColorModeValue as mode } from '@chakra-ui/react';
 import { CheckCircleIcon } from '@chakra-ui/icons';
-import { Router } from 'react-router-dom';
 import { Link as ReactRouterLink } from "react-router-dom";
 
 export default function Success() {

@@ -1,14 +1,11 @@
 import {
     Box,
     Grid,
-    HStack,
-    Icon,
     Image,
-    Link,
     Stack,
     Text,
     useColorModeValue as mode,
-  } from '@chakra-ui/react'
+  } from '@chakra-ui/react';
   
   export type CartProductMetaProps = {
     isGiftWrapping?: boolean
