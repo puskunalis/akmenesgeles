@@ -8,6 +8,7 @@ import com.cementas.akmenesgeles.repository.UserRepository;
 import com.cementas.akmenesgeles.service.ShippingAddressService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,7 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
     }
 
     @Override
+    @Transactional
     public ShippingAddress add(ShippingAddressDto shippingAddressDto) {
         User user = userRepository.getById(shippingAddressDto.getUserId());
 
@@ -52,6 +54,7 @@ public class ShippingAddressServiceImpl implements ShippingAddressService {
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         shippingAddressRepository.deleteById(id);
     }

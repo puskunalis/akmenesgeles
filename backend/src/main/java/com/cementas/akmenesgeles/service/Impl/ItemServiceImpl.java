@@ -10,6 +10,7 @@ import com.cementas.akmenesgeles.service.CategoryService;
 import com.cementas.akmenesgeles.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public Item add(CreateItemDto createItemDto) {
         Item newItem = Item.builder()
                 .id(UUID.randomUUID())
@@ -52,6 +54,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public Item addItemToCategory(UUID itemId, UUID categoryId) {
         Item item = itemRepository.getItemById(itemId).orElseThrow(() -> new NotFoundException("Item by id " + itemId + "not found."));
         Category newCategory = categoryRepository.getCategoryById(categoryId);
@@ -73,6 +76,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public Item update(UUID id, CreateItemDto createItemDto) {
         Item item = itemRepository.getItemById(id).orElseThrow();
 
