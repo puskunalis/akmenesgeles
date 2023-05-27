@@ -21,16 +21,14 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { RegisterModal } from "./Register";
 import { LoginModal } from "./Login";
 import { GetNavItems, NavItem } from "./NavItems";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { AddItemModal } from "./AddItemModal";
 import { useAuth } from "../auth-context";
 import { useSelector } from "react-redux";
-import { selectUser, selectUserStatus } from "../state/users/UserSlice";
-import { store } from "../state/store";
+import { selectUser } from "../state/users/UserSlice";
 import { UserRole } from "../types";
 import ShoppingCartPopup from "./ShoppingCartPopup";
 
