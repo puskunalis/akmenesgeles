@@ -5,16 +5,13 @@ import com.cementas.akmenesgeles.exception.NotFoundException;
 import com.cementas.akmenesgeles.model.Cart;
 import com.cementas.akmenesgeles.model.CartItem;
 import com.cementas.akmenesgeles.model.Item;
-import com.cementas.akmenesgeles.model.User;
 import com.cementas.akmenesgeles.repository.CartItemRepository;
 import com.cementas.akmenesgeles.repository.CartRepository;
 import com.cementas.akmenesgeles.repository.ItemRepository;
-import com.cementas.akmenesgeles.repository.UserRepository;
 import com.cementas.akmenesgeles.service.CartService;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +26,6 @@ public class CartServiceImpl implements CartService {
     private final CartItemRepository cartItemRepository;
 
     private final ItemRepository itemRepository;
-
-    private final UserRepository userRepository;
 
 
     public Cart initialCart() {
@@ -59,7 +54,6 @@ public class CartServiceImpl implements CartService {
     }
 
     public Cart addItem(UUID cartId, CartItemDto cartItemDto) {
-        System.out.println("exist");
         Cart cart = cartRepository.findById(cartId).orElseThrow(() ->
                 new NotFoundException("Cart by id " + cartId + "not found."));
         if (cartItemRepository.existsByItemIdAndCart(cartItemDto.getItemId(), cart)){
@@ -67,7 +61,6 @@ public class CartServiceImpl implements CartService {
             existingCartItem.setQuantity(existingCartItem.getQuantity() + cartItemDto.getQuantity());
             cartItemRepository.save(existingCartItem);
         } else {
-            System.out.println("else");
             Item item = itemRepository.getItemById(cartItemDto.getItemId()).orElseThrow(() ->
                     new NotFoundException("Item by id " + cartItemDto.getItemId() + "not found."));
             CartItem cartItem =
